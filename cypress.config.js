@@ -370,7 +370,7 @@ module.exports = defineConfig({
         },
         dBot: {
           ID: process.env.E2E_LOGIN_ID_PROD_DBOT,
-          PSWD: process.env.E2E_QA_ACCOUNT_PASSWORD,
+          PSWD: process.env.E2E_DBOTPROD_PASSWORD,
         },
         cashierWithdrawal: {
           ID: process.env.E2E_CASHIER_WITHDRAWAL_PROD,
