@@ -1,13 +1,13 @@
 describe('QATEST-98805 - Fiat deposit iframe access', () => {
   //Prerequisites: Fiat wallet account in backend prod staging with USD wallet
   beforeEach(() => {
-    cy.c_login({ user: 'wallets', backEndProd: true })
+    cy.c_login({ user: 'walletloginEmail' })
   })
 
   it('should be able to access doughflow iframe', () => {
     cy.log('Access Fiat Deposit Iframe')
     cy.c_visitResponsive('/', 'large')
-    cy.findByText(/Wallet/, { timeout: 10000 }).should('exist')
+    cy.findAllByText(/Wallet/, { timeout: 10000 }).should('exist')
     cy.findByText('Deposit').click()
     cy.get('iframe[class=wallets-deposit-fiat__iframe]').should('be.visible')
     cy.enter('iframe[class=wallets-deposit-fiat__iframe]').then((getBody) => {

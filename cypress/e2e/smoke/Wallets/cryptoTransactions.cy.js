@@ -73,7 +73,7 @@ describe('QATEST-98789 - Transfer to crypto accounts and QATEST-98794 View Crypt
     { scrollBehavior: false },
     () => {
       cy.log('Transfer from Crypto account')
-      cy.findByText(/Wallet/, { timeout: 10000 }).should('exist')
+      cy.findAllByText(/Wallet/, { timeout: 10000 }).should('exist')
       cy.c_visitResponsive('/', 'large')
       cy.c_setupTradeAccount('BTC', false)
       cy.c_switchWalletsAccount('BTC')
@@ -88,7 +88,7 @@ describe('QATEST-98789 - Transfer to crypto accounts and QATEST-98794 View Crypt
   it('should be able to view transactions of crypto account', () => {
     cy.log('View Transactions of Crypto account')
     cy.c_visitResponsive('/', 'large')
-    cy.findByText(/Wallet/, { timeout: 10000 }).should('exist')
+    cy.findAllByText(/Wallet/, { timeout: 10000 }).should('exist')
     cy.c_switchWalletsAccount('BTC')
     cy.contains('Transfer').click()
     cy.findByText('Transactions').first().click()

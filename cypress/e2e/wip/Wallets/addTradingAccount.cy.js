@@ -9,7 +9,7 @@ describe('QATEST-142456 - Add Trading account', () => {
     { scrollBehavior: false },
     () => {
       cy.c_visitResponsive('/', 'large')
-      cy.findByText(/Wallet/, { timeout: 10000 }).should('exist')
+      cy.findAllByText(/Wallet/, { timeout: 10000 }).should('exist')
       cy.c_setupTradeAccount('BTC')
       cy.c_setupTradeAccount('ETH')
       cy.c_setupTradeAccount('LTC')

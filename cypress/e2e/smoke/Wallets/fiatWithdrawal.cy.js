@@ -19,14 +19,19 @@ Cypress.Commands.add(
     cy.c_rateLimit({ waitTimeAfterError: 15000, maxRetries: 5 })
     cy.c_skipPasskeysV2()
     cy.get('iframe[class=wallets-withdrawal-fiat__iframe]').should('be.visible')
-    cy.enter('iframe[class=wallets-withdrawal-fiat__iframe]').then(
-      (getBody) => {
-        getBody().find('#prCurrentBalance').should('be.visible')
-        getBody().find('#prPayoutReview').should('be.visible')
-        getBody().find('#prAvailableBalance').should('be.visible')
-        getBody().find('#noPayoutOptionsMsg').should('be.visible')
+    cy.get('iframe.wallets-withdrawal-fiat__iframe').then(($iframe) => {
+      const iframe = $iframe.contents()
+      cy.wrap(iframe).find('#prCurrentBalance').should('be.visible')
+      cy.wrap(iframe).find('#prPayoutReview').should('be.visible')
+      cy.wrap(iframe).find('#prAvailableBalance').should('be.visible')
+      if (iframe.find('#payoutoptions').length > 0) {
+        cy.wrap(iframe).find('#payoutoptions').should('be.visible') // information message when payment option is available
+        cy.wrap(iframe).find('#amountTooltip').should('be.visible')
+        cy.wrap(iframe).find('.paymentmethodarea').should('be.visible')
+      } else {
+        cy.wrap(iframe).find('#noPayoutOptionsMsg').should('be.visible') // information message when payment option is not available
       }
-    )
+    })
   }
 )
 function performFiatWithdraw() {
@@ -42,17 +47,20 @@ function performFiatWithdraw() {
     cy.findByRole('button', { name: 'Send email' }).click({ force: true })
   }
   cy.findByText("We've sent you an email.")
-  cy.c_retrieveVerificationLinkUsingMailisk(
-    Cypress.env('credentials').production.wallets.ID.split('@')[0],
-    'withdrawal',
-    Math.floor((Date.now() - 500) / 1000)
+  cy.c_emailVerification(
+    '-CustomerIO_request_payment_withdraw.html',
+    Cypress.env('credentials').test.walletloginEmail.ID,
+    'QA script',
+    {
+      baseUrl: Cypress.env('configServer') + '/events',
+    }
   )
 }
 
 describe('QATEST-98812 - Fiat withdrawal access iframe from email verification link', () => {
   //Prerequisites: Fiat wallet account in backend prod staging with USD wallet
   beforeEach(() => {
-    cy.c_login({ user: 'wallets', backEndProd: true })
+    cy.c_login({ user: 'walletloginEmail' })
   })
 
   it('should be able to access doughflow iframe', () => {
