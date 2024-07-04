@@ -11,6 +11,7 @@ describe('QATEST-109419: Run custom strategy Even Odd', () => {
   size.forEach((size) => {
     it(`Run Even and Odd Purchase on ${size == 'small' ? 'mobile' : 'desktop'}`, () => {
       const isMobile = size == 'small' ? true : false
+      cy.clearAllLocalStorage()
       cy.c_login({ user: 'dBot' })
       cy.c_visitResponsive('appstore/traders-hub', size)
       //Wait for page to completely load
@@ -22,12 +23,13 @@ describe('QATEST-109419: Run custom strategy Even Odd', () => {
       cy.c_switchToDemoBot()
       botDashboard.importStrategy('EvenOdd')
       if (isMobile) {
-        botDashboard.moreActionButton.click({ force: true })
-        cy.findAllByTestId('dt_mobile_bot_list_action-open').click({
+        cy.findByRole('button', { name: 'Run' }).should('not.be.disabled')
+        botDashboard.moreActionButton.first().click({ force: true })
+        cy.findAllByTestId('dt_mobile_bot_list_action-open').first().click({
           force: true,
         })
       } else {
-        cy.findAllByTestId('dt_desktop_bot_list_action-open').click()
+        cy.findAllByTestId('dt_desktop_bot_list_action-open').first().click()
       }
       cy.c_skipTour()
       cy.c_runBot()
@@ -44,7 +46,6 @@ describe('QATEST-109419: Run custom strategy Even Odd', () => {
           cy.c_checkRunPanel(true)
         })
       })
-      //delete the uploaded strategy
       cy.c_deleteStrategy(isMobile)
     })
   })

@@ -65,12 +65,15 @@ Cypress.Commands.add('c_deleteStrategy', (isMobile = false) => {
   if (isMobile) {
     cy.get('.dc-drawer__toggle').click({ force: true })
     cy.findAllByText('Dashboard').click()
-    cy.findByRole('button', { name: 'Run' }).should('not.be.disabled')
-    cy.get('.bot-list__item__actions').click()
-    cy.findByTestId('dt_mobile_bot_list_action-delete').click()
+    cy.get('.bot-list__item__actions').first().click()
+    cy.findAllByTestId('dt_mobile_bot_list_action-delete').first().click({
+      force: true,
+    })
   } else {
     cy.findAllByText('Dashboard').click()
-    cy.findByTestId('dt_desktop_bot_list_action-delete').click()
+    cy.findByTestId('dt_desktop_bot_list_action-delete').first().click({
+      force: true,
+    })
   }
   cy.findByText('Yes, delete').click({ force: true })
 })
