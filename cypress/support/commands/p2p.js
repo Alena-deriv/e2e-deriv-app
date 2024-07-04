@@ -1190,7 +1190,14 @@ Cypress.Commands.add(
       cy.findByText('One last step before we close this order').should(
         'be.visible'
       )
-      cy.findByText(transactionText).should('be.visible')
+      cy.findByTestId('dt_modal_footer')
+        .prev()
+        .children()
+        .last()
+        .invoke('text')
+        .then((messageString) => {
+          expect(messageString).to.eq(transactionText)
+        })
       cy.findByRole('button', { name: 'Confirm' }).should('be.enabled').click()
       cy.findByText('How would you rate this transaction?').should('be.visible')
     })
