@@ -800,7 +800,7 @@ Cypress.Commands.add('c_openCurrencyAccountSelector', () => {
  * }
  */
 Cypress.Commands.add('c_selectCurrency', (currency, options = {}) => {
-  const { modalAlreadyOpened = false } = options
+  const { modalAlreadyOpened = false, closeModalAtEnd = false } = options
   cy.log(`Selecting ${currency.name} account.`)
   if (modalAlreadyOpened == false) {
     cy.c_openCurrencyAccountSelector()
@@ -808,6 +808,9 @@ Cypress.Commands.add('c_selectCurrency', (currency, options = {}) => {
   cy.get('.dc-modal').within(() => {
     cy.findByText(currency.name).click()
   })
+  if (closeModalAtEnd == true) {
+    cy.c_closeModal()
+  }
 })
 
 /**

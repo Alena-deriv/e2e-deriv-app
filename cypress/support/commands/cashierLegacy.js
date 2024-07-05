@@ -441,6 +441,6 @@ Cypress.Commands.add(
       }
     })
     cy.findByRole('button', { name: 'Make a new transfer' }).click()
-    cy.c_ratelimit()
+    cy.c_rateLimit()
   }
 )

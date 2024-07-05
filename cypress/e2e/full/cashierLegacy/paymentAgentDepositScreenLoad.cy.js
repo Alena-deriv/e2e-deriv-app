@@ -48,7 +48,10 @@ screenSizes.forEach((screenSize) => {
           cy.c_closeModal()
         }
       })
-      cy.c_selectCurrency(cryptoAccount, { modalAlreadyOpened: false })
+      cy.c_selectCurrency(cryptoAccount, {
+        modalAlreadyOpened: false,
+        closeModalAtEnd: true,
+      })
       cy.c_checkTotalAssetSummary()
       cy.c_verifyActiveCurrencyAccount(cryptoAccount)
       if (screenSize == 'small') {
