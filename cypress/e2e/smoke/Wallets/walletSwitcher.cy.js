@@ -45,7 +45,10 @@ function fiatWalletcheck() {
   cy.findAllByText('Options').eq(1).should('be.visible')
   cy.findByText('Add more Wallets').scrollIntoView().should('be.visible')
 
-  cy.findByText('USD Wallet').should('be.visible')
+  cy.findByTestId('dt-wallets-add-more')
+    .findByText(/USD Wallet/)
+    .scrollIntoView()
+    .should('be.visible')
   cy.get('[class*="wallets-add-more__content"]').then((el) => {
     cy.wrap(el)
       .find('.wallets-text')
