@@ -1,9 +1,10 @@
+import { generateRandomNumber } from '../../../support/helper/commonJsUtility'
 import { generateEpoch } from '../../../support/helper/utility'
 
 describe('QATEST-24427,5533,5827 - Cypress test for ROW account sign up', () => {
+  let nationalIDNumIDV
   const size = ['small', 'desktop']
   let countryIDV = Cypress.env('countries').KE
-  let nationalIDNumIDV = Cypress.env('nationalIDNum').KE
   let taxIDNumIDV = Cypress.env('taxIDNum').KE
   let countryOnfido = Cypress.env('countries').CO
   let nationalIDNumOnfido = Cypress.env('nationalIDNum').CO
@@ -47,7 +48,10 @@ describe('QATEST-24427,5533,5827 - Cypress test for ROW account sign up', () => 
         isMobile: isMobile,
       })
     })
+  })
+  size.forEach((size) => {
     it(`New account sign up ROW - IDV supported country on ${size == 'small' ? 'mobile' : 'desktop'}`, () => {
+      nationalIDNumIDV = generateRandomNumber()
       const isMobile = size == 'small' ? true : false
       const signUpEmail = `sanity${generateEpoch()}idv@deriv.com`
       cy.c_setEndpoint(signUpEmail, size)
@@ -77,6 +81,7 @@ describe('QATEST-24427,5533,5827 - Cypress test for ROW account sign up', () => 
       cy.c_closeNotificationHeader()
       cy.c_manageAccountsetting(countryIDV, {
         isMobile: isMobile,
+        isIDV: true,
       })
     })
   })

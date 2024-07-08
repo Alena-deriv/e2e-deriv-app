@@ -35,4 +35,13 @@ const nameGenerator = () => {
   return name
 }
 
-module.exports = { numbersGenerator, emailGenerator, nameGenerator }
+const generateRandomNumber = (length = 9) => {
+  return Math.random().toFixed(length).split('.')[1]
+}
+
+module.exports = {
+  numbersGenerator,
+  emailGenerator,
+  nameGenerator,
+  generateRandomNumber,
+}

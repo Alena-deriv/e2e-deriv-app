@@ -302,7 +302,7 @@ Cypress.Commands.add('c_addAccount', () => {
 })
 
 Cypress.Commands.add('c_manageAccountsetting', (CoR, options = {}) => {
-  const { isMobile = false, language = 'english' } = options
+  const { isMobile = false, isIDV = false, language = 'english' } = options
   cy.fixture('tradersHub/signupLanguageContent.json').then((langData) => {
     const lang = langData[language]
     if (isMobile) {
@@ -314,19 +314,28 @@ Cypress.Commands.add('c_manageAccountsetting', (CoR, options = {}) => {
       cy.get('.traders-hub-header__setting').click()
     }
     cy.findByRole('link', { name: lang.accountSettings.poiTxt }).click()
-    cy.findByText(lang.accountSettings.issuedCountryTxt).should('be.visible')
-    cy.findByRole('button', { name: lang.realAccountFormUtils.nextBtn }).should(
-      'be.disabled'
-    )
-    if (isMobile) cy.get(`select[name='country_input']`).select(CoR)
-    else {
-      cy.findByLabelText('Country').should('not.be.disabled').as('COR')
-      cy.get('@COR').type(CoR)
-      cy.findByText(CoR).click()
+    if (isIDV) {
+      cy.findByText('Your documents were submitted successfully').should(
+        'be.visible'
+      )
+      cy.findByText(
+        `We’ll review your documents and notify you of its status within 5 minutes.`
+      ).should('be.visible')
+    } else {
+      cy.findByText(lang.accountSettings.issuedCountryTxt).should('be.visible')
+      cy.findByRole('button', {
+        name: lang.realAccountFormUtils.nextBtn,
+      }).should('be.disabled')
+      if (isMobile) cy.get(`select[name='country_input']`).select(CoR)
+      else {
+        cy.findByLabelText('Country').should('not.be.disabled').as('COR')
+        cy.get('@COR').type(CoR)
+        cy.findByText(CoR).click()
+      }
+      cy.findByRole('button', {
+        name: lang.realAccountFormUtils.nextBtn,
+      }).should('not.be.disabled')
     }
-    cy.findByRole('button', { name: lang.realAccountFormUtils.nextBtn }).should(
-      'not.be.disabled'
-    )
   })
 })
 

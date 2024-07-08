@@ -1,6 +1,9 @@
 require('dotenv').config()
 const { defineConfig } = require('cypress')
 const {
+  generateRandomNumber,
+} = require('./cypress/support/helper/commonJsUtility')
+const {
   createAccountMF,
   createAccountCR,
   createAccountVirtual,
@@ -32,6 +35,7 @@ module.exports = defineConfig({
     supportFile: 'cypress/support/e2e.js',
     experimentalWebKitSupport: true,
     chromeWebSecurity: false,
+    experimentalRunAllSpecs: true,
     setupNodeEvents(on, config) {
       on('before:browser:launch', (browser = {}, launchOptions) => {
         if (browser.family === 'chromium') {
@@ -445,7 +449,7 @@ module.exports = defineConfig({
     },
     nationalIDNum: {
       ID: '1010101010101010',
-      KE: '10101010',
+      KE: generateRandomNumber(),
       ZA: '1234567890111',
     },
     taxIDNum: {
