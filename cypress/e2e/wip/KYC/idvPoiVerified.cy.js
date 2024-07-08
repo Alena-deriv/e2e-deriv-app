@@ -15,8 +15,11 @@ describe('QATEST-22037 IDV verified by Smile Identity provider', () => {
     cy.findByRole('button', { name: 'Verify' }).click()
     cy.findByText('Proof of address required').should('exist')
     cy.c_closeNotificationHeader()
-    cy.reload()
-    cy.contains('ID verification passed').should('be.visible')
+    cy.c_waitUntilElementIsFound({
+      cyLocator: () => cy.findByText('ID verification passed'),
+      timeout: 4000,
+      maxRetries: 5,
+    })
     cy.contains('a', 'Continue trading').should('be.visible')
   })
 })
