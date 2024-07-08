@@ -27,7 +27,7 @@ describe('QATEST-169019: Verify user can change currency after duplicate account
   }
 
   beforeEach(() => {
-    cy.c_createRealAccount().then(() => {
+    cy.c_createCRAccount().then(() => {
       setDuplicateAccountStatus()
     })
     cy.c_login()
