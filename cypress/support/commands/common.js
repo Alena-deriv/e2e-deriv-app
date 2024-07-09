@@ -133,7 +133,6 @@ Cypress.Commands.add('c_doOAuthLogin', (app, options = {}) => {
   cy.c_visitResponsive(Cypress.env('oAuthUrl'), 'large', {
     rateLimitCheck: rateLimitCheck,
   })
-  cy.c_fakeLinkPopUpCheck()
   cy.document().then((doc) => {
     const launchModal = doc.querySelector('[data-test-id="launch-modal"]')
     if (launchModal) {
@@ -721,21 +720,6 @@ Cypress.Commands.add(
     cy.findByRole('button', { name: 'Log in' }).click()
   }
 )
-
-Cypress.Commands.add('c_fakeLinkPopUpCheck', () => {
-  cy.getCookie('website_status').then((cookie) => {
-    if (cookie) cy.log('The website_status cookie value :' + cookie.value)
-    else cy.log(`website_status cookie not found`)
-    if (cookie?.value === expectedCookieValue) {
-      cy.findByText('Beware of fake links.').should('exist', { timeout: 12000 })
-      cy.findByRole('checkbox').check()
-      cy.findByRole('button', { name: 'OK, got it' }).click()
-      cy.findAllByText('Beware of fake links.').should('not.exist')
-    } else {
-      cy.log('The fake link pop up does not exist!')
-    }
-  })
-})
 
 /**
  * Method to perform Authorization and Create Application ID
