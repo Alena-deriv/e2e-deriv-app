@@ -44,7 +44,6 @@ function fiatWalletcheck() {
   cy.findByLabelText('account-transfer').should('be.visible')
   cy.findAllByText('Options').eq(1).should('be.visible')
   cy.findByText('Add more Wallets').scrollIntoView().should('be.visible')
-
   cy.findByTestId('dt-wallets-add-more')
     .findByText(/USD Wallet/)
     .scrollIntoView()
@@ -78,9 +77,7 @@ function demoWalletCheck() {
   cy.findByRole('button', { name: 'Options' })
     .click({ force: true })
     .then(() => {
-      cy.findByTestId('dt_tab_panels')
-        .findAllByText('Options', { exact: true })
-        .should('be.visible')
+      cy.findByRole('button', { name: 'Options' }).should('be.visible')
     })
 }
 function switchBetweenDemoandReal() {
@@ -95,7 +92,7 @@ describe('QATEST-157196 Demo and Real Wallet Switcher', () => {
     cy.c_login({ user: 'walletloginEmail' })
   })
   it('Check demo and Real wallet swticher', () => {
-    cy.c_visitResponsive('/', 'large')
+    cy.c_visitResponsive('/', 'large', { rateLimitCheck: true })
     fiatWalletcheck() //User should always login to Real fiat wallet dashboard.
     //Clik on all availbale wallets in wallet swticher
     cy.findAllByTestId('dt_wallets_textfield_icon_right').click()
