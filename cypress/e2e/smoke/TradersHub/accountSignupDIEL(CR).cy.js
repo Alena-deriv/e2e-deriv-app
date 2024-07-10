@@ -1,9 +1,10 @@
+import { generateRandomNumber } from '../../../support/helper/commonJsUtility'
 import { generateEpoch } from '../../../support/helper/utility'
 
 describe('QATEST-5554: Verify DIEL Signup flow - CR', () => {
+  let nationalIDNum
   const size = ['small', 'desktop']
   let country = Cypress.env('countries').ZA
-  let nationalIDNum = Cypress.env('nationalIDNum').ZA
   let taxIDNum = Cypress.env('taxIDNum').ZA
   let currency = Cypress.env('accountCurrency').USD
 
@@ -11,6 +12,7 @@ describe('QATEST-5554: Verify DIEL Signup flow - CR', () => {
     it(`Verify I can signup for a DIEL demo and real account on ${size == 'small' ? 'mobile' : 'desktop'}`, () => {
       const isMobile = size == 'small' ? true : false
       const signUpEmail = `sanity${generateEpoch()}diel@deriv.com`
+      nationalIDNum = generateRandomNumber(13)
       cy.c_setEndpoint(signUpEmail, size)
       Cypress.env('citizenship', country)
       cy.c_demoAccountSignup(country, signUpEmail, size)
@@ -36,7 +38,7 @@ describe('QATEST-5554: Verify DIEL Signup flow - CR', () => {
       cy.findByText('Regulation:').should('not.exist')
       cy.findByText('Non-EU').should('not.exist')
       cy.findByText('EU').should('not.exist')
-      cy.c_manageAccountsetting(country, { isMobile: isMobile })
+      cy.c_manageAccountsetting(country, { isMobile: isMobile, isIDV: true })
     })
   })
 })

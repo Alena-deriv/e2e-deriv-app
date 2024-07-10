@@ -450,7 +450,7 @@ module.exports = defineConfig({
     nationalIDNum: {
       ID: '1010101010101010',
       KE: generateRandomNumber(),
-      ZA: '1234567890111',
+      ZA: generateRandomNumber(13),
     },
     taxIDNum: {
       CO: '1234567890',
