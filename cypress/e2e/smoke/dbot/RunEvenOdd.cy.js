@@ -21,7 +21,10 @@ describe('QATEST-109419: Run custom strategy Even Odd', () => {
       if (isMobile) cy.findByTestId('close-icon', { timeout: 7000 }).click()
       cy.c_skipTour()
       cy.c_switchToDemoBot()
-      botDashboard.importStrategy('EvenOdd')
+      botBuilder.openBotBuilderTab()
+      cy.c_skipTour()
+      botBuilder.importStrategyFromToolbar('EvenOdd')
+      botDashboard.goToDashboard()
       if (isMobile) {
         cy.findByRole('button', { name: 'Run' }).should('not.be.disabled')
         botDashboard.moreActionButton.first().click({ force: true })
@@ -31,7 +34,6 @@ describe('QATEST-109419: Run custom strategy Even Odd', () => {
       } else {
         cy.findAllByTestId('dt_desktop_bot_list_action-open').first().click()
       }
-      cy.c_skipTour()
       cy.c_runBot()
       cy.c_stopBot(10000)
       runPanel.transactionsTab.click() //Switch to transactions tab

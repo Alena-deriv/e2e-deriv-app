@@ -1,8 +1,8 @@
-import BotDashboard from '../../../support/pageobjects/dbot/bot_dashboard_page'
 import RunPanel from '../../../support/pageobjects/dbot/run_panel'
+import BotBuilder from '../../../support/pageobjects/dbot/bot_builder_page'
 
 describe('QATEST-99420: Import and run custom strategy', () => {
-  const botDashboard = new BotDashboard()
+  const botBuilder = new BotBuilder()
   const runPanel = new RunPanel()
   let totalPL
 
@@ -16,10 +16,9 @@ describe('QATEST-99420: Import and run custom strategy', () => {
   })
 
   it('Run Martingale Old Strategy', () => {
-    botDashboard.importStrategy('MartingaleOld')
-    cy.findAllByTestId('dt_desktop_bot_list_action-open').first().click()
+    botBuilder.openBotBuilderTab()
     cy.c_skipTour()
-
+    botBuilder.importStrategyFromToolbar('MartingaleOld')
     //Enter Expected profit, expected Loss, and Trade Amount
     cy.window().then((win) => {
       const martingaleValues = ['5', '4', '1'] //Expected Profit, Expected Loss, Trade Amount

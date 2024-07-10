@@ -3,6 +3,7 @@ import { derivApp } from '../../../support/locators'
 describe('QATEST-136582: Redirection to other pages from dbot', () => {
   const size = ['small', 'desktop']
   beforeEach(() => {
+    Cypress.prevAppId = 0 //TODO:Update once BOT-1926 is done
     cy.c_login({ user: 'dBot', rateLimitCheck: true })
   })
 

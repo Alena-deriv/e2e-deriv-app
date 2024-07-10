@@ -1,8 +1,8 @@
-import BotDashboard from '../../../support/pageobjects/dbot/bot_dashboard_page'
 import RunPanel from '../../../support/pageobjects/dbot/run_panel'
+import BotBuilder from '../../../support/pageobjects/dbot/bot_builder_page'
 
 describe('QATEST-99419: Import and run custom strategy', () => {
-  const botDashboard = new BotDashboard()
+  const botBuilder = new BotBuilder()
   const runPanel = new RunPanel()
   let beforePurchaseBalanceString
   let beforePurchaseBalanceNumber
@@ -18,11 +18,10 @@ describe('QATEST-99419: Import and run custom strategy', () => {
   })
 
   it('Run Timely Balance Strategy', () => {
-    botDashboard.importStrategy('TimelyBalance')
-    cy.findAllByTestId('dt_desktop_bot_list_action-open').first().click()
-    cy.get('.bot-dashboard.bot').should('be.visible') //TODO:Update once BOT-1469 done
+    botBuilder.openBotBuilderTab()
     cy.c_skipTour()
-
+    botBuilder.importStrategyFromToolbar('TimelyBalance')
+    cy.findByTestId('dt_bot_dashboard').should('be.visible')
     cy.findByTestId('dt_balance').then(($el) => {
       beforePurchaseBalanceString = $el.text()
       beforePurchaseBalanceNumber = parseFloat(
