@@ -419,43 +419,6 @@ Cypress.Commands.add('c_loadingCheck', () => {
 })
 
 /**
- * Method to perform Authorization Call
- */
-Cypress.Commands.add('c_authorizeCall', () => {
-  try {
-    const oAuthNewToken = Cypress.env('oAuthToken')
-    cy.task('authorizeCallTask', oAuthNewToken)
-  } catch (e) {
-    console.error('An error occurred during the account creation process:', e)
-  }
-})
-
-/**
- * Method to perform Balance Call
- */
-Cypress.Commands.add('c_getBalance', () => {
-  try {
-    cy.task('checkBalanceTask').then((response) => {
-      const balance = response
-      Cypress.env('actualAmount', balance)
-    })
-  } catch (e) {
-    console.error('An error occurred during the account creation process:', e)
-  }
-})
-
-/**
- * Method to Register a New Application ID
- */
-Cypress.Commands.add('c_registerNewApplicationID', () => {
-  cy.task('registerNewAppIDTask').then((response) => {
-    const appId = response
-    cy.log('The Newly Generated App Id is: ', appId)
-    Cypress.env('updatedAppId', appId)
-  })
-})
-
-/**
  * Method to Logout from Application.
  * This will click on account dropdown and click on logout link
  */
