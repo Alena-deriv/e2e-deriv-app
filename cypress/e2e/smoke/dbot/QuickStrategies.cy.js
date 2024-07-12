@@ -15,7 +15,6 @@ describe('QATEST-4140: Verify Dashboard [Mobile]', () => {
       cy.c_visitResponsive('appstore/traders-hub', size)
       //Wait for page to completely load
       cy.findAllByTestId('dt_balance_text_container').should('have.length', '2')
-      if (isMobile) cy.c_skipPasskeysV2()
       cy.c_openDbotThub()
       if (isMobile) cy.findByTestId('close-icon', { timeout: 7000 }).click()
       cy.c_skipTour()

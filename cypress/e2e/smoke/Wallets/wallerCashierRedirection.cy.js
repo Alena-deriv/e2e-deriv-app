@@ -24,7 +24,6 @@ describe('QATEST-139905 - user should be redirected to correct wallet cashier by
     cy.log('check BTC wallet')
     cy.c_visitResponsive('/', 'small')
     cy.c_WaitUntilWalletsPageIsLoaded()
-    cy.c_skipPasskeysV2()
     cy.contains('Deposit', { timeout: 10000 }).should('exist')
     checkWalletName('BTC')
     checkWalletName('ETH')

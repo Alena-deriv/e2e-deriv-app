@@ -161,7 +161,6 @@ describe('QATEST-157196 Demo and Real Wallet Switcher', () => {
     () => {
       cy.c_visitResponsive('/', 'small')
       cy.c_WaitUntilWalletsPageIsLoaded()
-      cy.c_skipPasskeysV2()
       //User should always login to Real fiat wallet dashboard.
       verifyMobileHomePage()
       getTotalNumberOfWallets(

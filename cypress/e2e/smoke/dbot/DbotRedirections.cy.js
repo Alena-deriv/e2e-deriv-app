@@ -12,7 +12,6 @@ describe('QATEST-136582: Redirection to other pages from dbot', () => {
       const isMobile = size == 'small' ? true : false
       cy.c_visitResponsive('appstore/traders-hub', size)
       cy.findAllByTestId('dt_balance_text_container').should('have.length', '2')
-      if (isMobile) cy.c_skipPasskeysV2()
       cy.c_openDbotThub()
       cy.c_rateLimit()
       if (isMobile) cy.findByTestId('close-icon', { timeout: 7000 }).click()
@@ -34,7 +33,6 @@ describe('QATEST-136582: Redirection to other pages from dbot', () => {
       const isMobile = size == 'small' ? true : false
       cy.c_visitResponsive('appstore/traders-hub', size)
       cy.findAllByTestId('dt_balance_text_container').should('have.length', '2')
-      if (isMobile) cy.c_skipPasskeysV2()
       cy.c_openDbotThub()
       if (isMobile) cy.findByTestId('close-icon', { timeout: 7000 }).click()
       cy.c_skipTour()

@@ -22,8 +22,6 @@ describe('QATEST-5948: Verify platforms navigations on Options and Multipliers',
       cy.c_uiLogin(size)
       //Wait for page to completely load
       cy.findAllByTestId('dt_balance_text_container').should('have.length', '2')
-      if (isMobile) cy.c_skipPasskeysV2()
-
       //Open Dtrader
       cy.findByTestId('dt_trading-app-card_real_deriv-trader')
         .findByRole('button', { name: 'Open' })

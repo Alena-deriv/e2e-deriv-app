@@ -8,7 +8,7 @@ const expectedCookieValue = '{%22clients_country%22:%22br%22}'
  * Custom command that allows us to use baseUrl + path and detect whether this is a responsive run or not.
  */
 Cypress.Commands.add('c_visitResponsive', (path, size, options = {}) => {
-  const { rateLimitCheck = false, skipPassKeys = false } = options
+  const { rateLimitCheck = false, enablePasskey = false } = options
   if (size === undefined) size = Cypress.env('viewPortSize')
   if (size == 'small') cy.viewport('iphone-xr')
   else if (size == 'medium') cy.viewport('ipad-2')
@@ -28,11 +28,7 @@ Cypress.Commands.add('c_visitResponsive', (path, size, options = {}) => {
     })
   }
 
-  if (skipPassKeys == true && size == 'small') {
-    cy.c_skipPasskeysV2({ withoutContent: true })
-  }
-
-  //Wait for relevent elements to appear (based on page)
+  //Wait for relevant elements to appear (based on page)
   if (path.includes('region')) {
     cy.log('Home page Selected')
     cy.findByRole(
@@ -55,6 +51,10 @@ Cypress.Commands.add('c_visitResponsive', (path, size, options = {}) => {
     else cy.findAllByText("Trader's Hub").should('have.length', '2')
     cy.log('Trader Hub Selected')
   }
+
+  if (!enablePasskey) {
+    cy.c_disablePasskey()
+  }
 })
 
 Cypress.Commands.add('c_login', (options = {}) => {
@@ -63,6 +63,7 @@ Cypress.Commands.add('c_login', (options = {}) => {
     app = '',
     backEndProd = false,
     rateLimitCheck = false,
+    enablePasskey = false,
   } = options
   const { loginEmail, loginPassword } = setLoginUser(user, {
     backEndProd: backEndProd,
@@ -70,8 +71,43 @@ Cypress.Commands.add('c_login', (options = {}) => {
   if (!(loginEmail && loginPassword)) {
     throw new Error(`User/Password is not on file`)
   }
-  cy.c_visitResponsive('/endpoint', 'large', { rateLimitCheck: rateLimitCheck })
+  cy.c_visitResponsive('/endpoint', 'large', {
+    rateLimitCheck: rateLimitCheck,
+    enablePasskey: enablePasskey,
+  })
+  cy.c_setDerivAppEndpoint(app, backEndProd, user).then(() => {
+    if (Cypress.env('oAuthUrl') == '<empty>') {
+      getOAuthUrl(
+        (oAuthUrl) => {
+          Cypress.env('oAuthUrl', oAuthUrl)
+          const urlParams = new URLSearchParams(Cypress.env('oAuthUrl'))
+          const token = urlParams.get('token1')
 
+          Cypress.env('oAuthToken', token)
+          cy.c_doOAuthLogin(app, {
+            rateLimitCheck: rateLimitCheck,
+            enablePasskey: enablePasskey,
+          })
+        },
+        loginEmail,
+        loginPassword
+      )
+    } else {
+      cy.log('oAuthUrl is not empty')
+      cy.c_doOAuthLogin(app, {
+        rateLimitCheck: rateLimitCheck,
+        enablePasskey: enablePasskey,
+      })
+    }
+  })
+
+  if (!enablePasskey) {
+    cy.log('mean we stopping passkey')
+    cy.c_disablePasskey()
+  }
+})
+
+Cypress.Commands.add('c_setDerivAppEndpoint', (app, backEndProd, user) => {
   if (app == 'doughflow') {
     Cypress.env('configServer', Cypress.env('doughflowConfigServer'))
     Cypress.env('configAppId', Cypress.env('doughflowConfigAppId'))
@@ -110,28 +146,13 @@ Cypress.Commands.add('c_login', (options = {}) => {
     localStorage.setItem('config.server_url', Cypress.env('configServer'))
     localStorage.setItem('config.app_id', Cypress.env('configAppId'))
   }
-  if (Cypress.env('oAuthUrl') == '<empty>') {
-    getOAuthUrl(
-      (oAuthUrl) => {
-        Cypress.env('oAuthUrl', oAuthUrl)
-        const urlParams = new URLSearchParams(Cypress.env('oAuthUrl'))
-        const token = urlParams.get('token1')
-
-        Cypress.env('oAuthToken', token)
-        cy.c_doOAuthLogin(app, { rateLimitCheck: rateLimitCheck })
-      },
-      loginEmail,
-      loginPassword
-    )
-  } else {
-    cy.c_doOAuthLogin(app, { rateLimitCheck: rateLimitCheck })
-  }
 })
 
 Cypress.Commands.add('c_doOAuthLogin', (app, options = {}) => {
-  const { rateLimitCheck = false } = options
+  const { rateLimitCheck = false, enablePasskey = false } = options
   cy.c_visitResponsive(Cypress.env('oAuthUrl'), 'large', {
     rateLimitCheck: rateLimitCheck,
+    enablePasskey: enablePasskey,
   })
   cy.document().then((doc) => {
     const launchModal = doc.querySelector('[data-test-id="launch-modal"]')
@@ -659,6 +680,62 @@ Cypress.Commands.add('c_skipPasskeysV2', (options = {}) => {
         })
     })
   }
+})
+
+Cypress.Commands.add('c_disablePasskey', (options = {}) => {
+  cy.window().then((win) => {
+    cy.log('Checking for passkey in local storage')
+    const gbFeaturesCache = win.localStorage.getItem('gbFeaturesCache')
+
+    if (gbFeaturesCache) {
+      const parsedCache = JSON.parse(gbFeaturesCache)
+      const data = parsedCache[0][1].data.features
+
+      if (data.service_passkeys && data.web_passkeys) {
+        cy.log('Disabling passkey in local storage')
+        data.service_passkeys.defaultValue = false
+        data.web_passkeys.defaultValue = false
+
+        const updatedCache = JSON.stringify(parsedCache)
+        win.localStorage.setItem('gbFeaturesCache', updatedCache)
+
+        // make sure passkey in local storage is updated to false
+        cy.window().then((win) => {
+          const updatedCache = JSON.parse(
+            win.localStorage.getItem('gbFeaturesCache')
+          )
+          expect(
+            updatedCache[0][1].data.features.service_passkeys.defaultValue
+          ).to.equal(false)
+          expect(
+            updatedCache[0][1].data.features.web_passkeys.defaultValue
+          ).to.equal(false)
+        })
+      } else {
+        cy.log('No passkey detected in local storage data features')
+      }
+    } else {
+      cy.log('No gbFeaturesCache found in local storage')
+    }
+
+    cy.log('Checking for show_effortless_login_modal in local storage')
+    const effortlessLoginModal = win.localStorage.getItem(
+      'show_effortless_login_modal'
+    )
+
+    const key = 'show_effortless_login_modal'
+    const value = 'false'
+
+    if (window.localStorage.getItem(key) !== null) {
+      // Key exists, update its value
+      window.localStorage.setItem(key, value)
+      cy.log('key found, updated it')
+    } else {
+      // Key does not exist, add the key
+      window.localStorage.setItem(key, value)
+      cy.log('key not found, so added it')
+    }
+  })
 })
 
 Cypress.Commands.add(

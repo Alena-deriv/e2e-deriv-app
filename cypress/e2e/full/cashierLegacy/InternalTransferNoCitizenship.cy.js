@@ -60,7 +60,6 @@ screenSizes.forEach((screenSize) => {
       }
       cy.c_visitResponsive('appstore/traders-hub', screenSize, {
         rateLimitCheck: true,
-        skipPassKeys: true,
       })
       if (screenSize == 'small') {
         cy.findByRole('button', { name: 'CFDs' }).should('be.visible')
@@ -144,7 +143,6 @@ screenSizes.forEach((screenSize) => {
         }
         cy.c_visitResponsive('appstore/traders-hub', screenSize, {
           rateLimitCheck: true,
-          skipPassKeys: true,
         })
       }
       if (screenSize == 'small') {

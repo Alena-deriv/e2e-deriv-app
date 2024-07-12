@@ -12,7 +12,6 @@ describe('QATEST-5695: Create a Standard Demo CFD account', () => {
       const isMobile = size == 'small' ? true : false
       cy.c_visitResponsive('appstore/traders-hub', size)
       cy.findAllByTestId('dt_balance_text_container').should('have.length', '2')
-      if (isMobile) cy.c_skipPasskeysV2()
       cy.c_checkTradersHubHomePage(isMobile)
       cy.c_switchToDemo()
       if (isMobile) cy.findByRole('button', { name: 'CFDs' }).click()

@@ -23,9 +23,7 @@ describe('QATEST-24427,5533,5827 - Cypress test for ROW account sign up', () => 
       cy.findByRole('button', { name: 'Yes' }).click()
       cy.findByText('Add a Deriv account').should('not.exist')
       cy.findAllByTestId('dt_balance_text_container').should('have.length', '2')
-      if (isMobile) cy.c_skipPasskeysV2()
       cy.findByTestId('dt_dropdown_display').click()
-      if (isMobile) cy.c_skipPasskeysV2()
       cy.get('#real').click()
       cy.findByText('Add a Deriv account').should('be.visible')
       cy.c_generateRandomName().then((firstName) => {
@@ -76,7 +74,7 @@ describe('QATEST-24427,5533,5827 - Cypress test for ROW account sign up', () => 
       cy.c_completeFatcaDeclarationAgreement()
       cy.c_addAccount()
       cy.findAllByTestId('dt_balance_text_container').should('have.length', '2')
-      if (isMobile) cy.c_skipPasskeysV2()
+
       cy.c_checkTradersHubHomePage(isMobile)
       cy.c_closeNotificationHeader()
       cy.c_manageAccountsetting(countryIDV, {

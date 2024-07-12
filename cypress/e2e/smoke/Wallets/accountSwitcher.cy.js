@@ -1,14 +1,11 @@
 function goToAcctSwitcherFromTradepage(deviceType) {
   const derivAppProdUrl = `${Cypress.env('prodURL')}dtrader?chart_type=`
   const derivAppStagingUrl = `${Cypress.env('stagingUrl')}dtrader?chart_type=`
-  cy.c_skipPasskeysV2() // to check page is loaded completely
   if (deviceType == 'Mobile') {
-    cy.c_skipPasskeysV2()
     cy.findAllByText('Options').eq(1).click()
-    cy.c_skipPasskeysV2()
   } else {
     cy.get('.wallets-trading-account-card__content')
-      .contains('.wallets-text', 'Financial', { timeout: 3000 })
+    cy.contains('.wallets-text', 'Financial', { timeout: 3000 })
       .parent()
       .closest('.wallets-added-mt5__details, .wallets-available-mt5__details')
   }
@@ -67,7 +64,6 @@ describe('QATEST-129858 -  Validate account switcher ', () => {
     { scrollBehavior: false },
     () => {
       cy.c_visitResponsive('/', 'small')
-      cy.c_skipPasskeysV2()
       cy.findByText('Options').click()
       goToAcctSwitcherFromTradepage('Mobile')
       cy.get('#dt_positions_toggle').should('be.visible')

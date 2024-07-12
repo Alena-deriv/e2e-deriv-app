@@ -35,7 +35,6 @@ describe('QATEST-98815 - Demo reset balance', () => {
     cy.log('Reset Balance for Demo Account')
     cy.c_visitResponsive('/', 'small')
     cy.c_WaitUntilWalletsPageIsLoaded()
-    cy.c_skipPasskeysV2({ maxRetries: 5 })
     reset_balance_demo('mobile')
   })
 })

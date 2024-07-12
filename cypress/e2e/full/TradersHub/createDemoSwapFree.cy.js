@@ -10,7 +10,6 @@ describe('QATEST-5704 - Create a new Swap free demo accounts ', () => {
     it(`Should validate the signup of swap free demo account on ${size == 'small' ? 'mobile' : 'desktop'}`, () => {
       const isMobile = size == 'small' ? true : false
       cy.c_visitResponsive('appstore/traders-hub', size)
-      if (isMobile) cy.c_skipPasskeysV2()
       cy.c_checkTradersHubHomePage(isMobile)
       cy.c_closeNotificationHeader()
       cy.c_switchToDemo()

@@ -18,9 +18,7 @@ screenSizes.forEach((screenSize) => {
     beforeEach(() => {
       cy.clearAllSessionStorage()
       cy.c_login({ user: 'cashierLegacyPA' })
-      cy.c_visitResponsive('appstore/traders-hub', screenSize, {
-        skipPassKeys: true,
-      })
+      cy.c_visitResponsive('appstore/traders-hub', screenSize)
       if (screenSize == 'small') {
         cy.findByRole('button', { name: 'Options' }).should('be.visible')
       } else {

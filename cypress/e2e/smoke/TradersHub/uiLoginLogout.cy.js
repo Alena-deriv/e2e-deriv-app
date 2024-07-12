@@ -16,7 +16,6 @@ describe('QATEST-103970: Verify user can successfully login and logout', () => {
       cy.findAllByTestId('dt_balance_text_container').should('have.length', '2')
       //Verify home page has successfully loaded
       if (isMobile) {
-        cy.c_skipPasskeysV2()
         cy.findByRole('button', { name: 'Cashier' }).should('be.visible')
       } else cy.findByTitle('Cashier').should('be.visible')
       cy.findByText('Join over 2.5 million traders').should('not.exist')

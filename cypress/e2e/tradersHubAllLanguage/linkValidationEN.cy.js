@@ -15,7 +15,6 @@ describe('QATEST-125246 Verify the hyperlinks on Traders Hub', () => {
           'have.length',
           '2'
         )
-        cy.c_skipPasskeysV2()
         cy.c_checkTradersHubHomePage(isMobile)
       }
       cy.c_checkHyperLinks('EN', isMobile)

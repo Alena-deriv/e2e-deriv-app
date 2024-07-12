@@ -17,7 +17,6 @@ Cypress.Commands.add(
     }
     cy.c_loadingCheck()
     cy.c_rateLimit({ waitTimeAfterError: 15000, maxRetries: 5 })
-    cy.c_skipPasskeysV2()
     cy.get('iframe[class=wallets-withdrawal-fiat__iframe]').should('be.visible')
     cy.get('iframe.wallets-withdrawal-fiat__iframe').then(($iframe) => {
       const iframe = $iframe.contents()
@@ -35,7 +34,6 @@ Cypress.Commands.add(
   }
 )
 function performFiatWithdraw() {
-  cy.c_skipPasskeysV2()
   cy.findByText('Withdraw').parent().click()
   cy.findByText('Confirm your identity to make a withdrawal.').should(
     'be.visible'
@@ -66,9 +64,7 @@ describe('QATEST-98812 - Fiat withdrawal access iframe from email verification l
   it('should be able to access doughflow iframe', () => {
     cy.log('Access Fiat Withdrawal Iframe Through Email Link')
     cy.c_visitResponsive('/', 'large')
-    cy.c_skipPasskeysV2()
     cy.findAllByText(/Wallet/, { timeout: 10000 }).should('exist')
-    cy.c_skipPasskeysV2()
     cy.c_rateLimit({ waitTimeAfterError: 15000, maxRetries: 5 })
     performFiatWithdraw()
     cy.c_verifyWalletsWithdrawalScreenContentAfterLink('desktop')
@@ -77,7 +73,6 @@ describe('QATEST-98812 - Fiat withdrawal access iframe from email verification l
     cy.log('Access Fiat Withdrawal Iframe Through Email Link')
     cy.c_visitResponsive('/', 'small')
     cy.c_WaitUntilWalletsPageIsLoaded()
-    cy.c_skipPasskeysV2()
     cy.c_rateLimit({ waitTimeAfterError: 15000, maxRetries: 5 })
     performFiatWithdraw()
     cy.c_verifyWalletsWithdrawalScreenContentAfterLink('mobile')

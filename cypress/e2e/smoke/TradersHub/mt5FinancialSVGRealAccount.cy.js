@@ -11,7 +11,6 @@ describe('QATEST-6000: Create a Financial SVG account', () => {
       const isMobile = size == 'small' ? true : false
       cy.c_visitResponsive('appstore/traders-hub', size)
       cy.findAllByTestId('dt_balance_text_container').should('have.length', '2')
-      if (isMobile) cy.c_skipPasskeysV2()
       cy.c_checkTradersHubHomePage(isMobile)
       if (isMobile) cy.findByRole('button', { name: 'CFDs' }).click()
       cy.findByTestId('dt_trading-app-card_real_financial')

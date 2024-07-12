@@ -22,7 +22,6 @@ describe('QATEST-142456 - Add Trading account', () => {
     () => {
       cy.c_visitResponsive('/', 'small')
       cy.c_WaitUntilWalletsPageIsLoaded()
-      cy.c_skipPasskeysV2()
       cy.c_switchWalletsAccountResponsive('BTC')
       cy.c_setupTradeAccountResponsive('BTC')
       cy.c_switchWalletsAccountResponsive('ETH')

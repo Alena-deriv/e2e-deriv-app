@@ -96,7 +96,6 @@ describe('QATEST-98698 - Crypto withdraw success', () => {
 
       cy.c_visitResponsive('/', size)
       cy.findAllByText(/Wallet/, { timeout: 10000 }).should('exist')
-      cy.c_skipPasskeysV2()
       sendWithdrawEmail(size)
     })
 
@@ -105,7 +104,6 @@ describe('QATEST-98698 - Crypto withdraw success', () => {
 
       cy.c_visitResponsive('/', size)
       cy.findAllByText(/Wallet/, { timeout: 10000 }).should('exist')
-      cy.c_skipPasskeysV2()
       verifyEmailandPerformWithdraw(size)
     })
   })

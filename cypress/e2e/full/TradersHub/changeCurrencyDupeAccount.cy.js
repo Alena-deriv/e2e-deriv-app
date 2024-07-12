@@ -38,7 +38,6 @@ describe('QATEST-169019: Verify user can change currency after duplicate account
       const isMobile = size == 'small' ? true : false
       cy.c_visitResponsive('/', size)
       cy.findAllByTestId('dt_balance_text_container').should('have.length', '2')
-      cy.c_skipPasskeysV2()
       cy.c_switchToReal()
       cy.findByText('Add a Deriv account').should('be.visible')
       if (isMobile)

@@ -13,7 +13,6 @@ describe("QATEST-5930 - Validate the hyperlinks on Trader's hub", () => {
       cy.findByTestId('dt_trading-app-card_real_deriv-trader')
         .findByText('Deriv Trader')
         .should('be.visible')
-      if (isMobile) cy.c_skipPasskeysV2()
       cy.c_closeNotificationHeader()
       cy.findAllByRole('link', { name: 'Learn more' })
         .first()

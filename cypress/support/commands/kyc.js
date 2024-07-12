@@ -13,7 +13,6 @@ Cypress.Commands.add('c_navigateToPoiResponsive', (country, options = {}) => {
   const { runFor = '' } = options
   if (runFor == 'p2p') {
     cy.c_visitResponsive('/appstore/traders-hub', 'small')
-    cy.c_skipPasskeysV2()
   }
   cy.c_visitResponsive('/account/proof-of-identity', 'small')
   cy.c_closeNotificationHeader()

@@ -205,7 +205,6 @@ describe('QATEST-20010 Withdrawal Request: Fiat - Different language', () => {
         'small',
         {
           rateLimitCheck: true,
-          skipPassKeys: true,
         }
       )
       cy.c_visitResponsive(

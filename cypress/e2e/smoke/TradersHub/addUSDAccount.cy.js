@@ -17,7 +17,6 @@ describe('QATEST-5813: Add USD account for existing BTC account', () => {
       cy.c_visitResponsive('/', size)
       //Wait for page to completely load
       cy.findAllByTestId('dt_balance_text_container').should('have.length', '2')
-      if (isMobile) cy.c_skipPasskeysV2()
       cy.c_checkTradersHubHomePage(isMobile)
       cy.c_closeNotificationHeader()
       cy.findAllByTestId('dt_balance_text_container')

@@ -238,7 +238,6 @@ describe('QATEST-98504 - User Onboarding on Desktop for Fiat Wallets and Launch 
   it('User onboarding for mobile', () => {
     cy.c_visitResponsive('/', 'small')
     cy.c_WaitUntilWalletsPageIsLoaded()
-    cy.c_skipPasskeysV2()
     const walletCanBeAdded = sessionStorage.getItem('c_walletExist')
     setupTest()
     mobileSteps.forEach((step, index) => {
@@ -258,7 +257,6 @@ describe('QATEST-98504 - User Onboarding on Desktop for Fiat Wallets and Launch 
   it('User onboarding from USD wallet cashier in responsive', () => {
     cy.c_visitResponsive('/', 'small')
     cy.c_WaitUntilWalletsPageIsLoaded()
-    cy.c_skipPasskeysV2()
     const walletCanBeAdded = sessionStorage.getItem('c_walletExist')
     cy.findByText('Deposit').parent().should('be.visible').click()
     cy.get('iframe[class=wallets-deposit-fiat__iframe]').should('be.visible')
@@ -280,7 +278,6 @@ describe('QATEST-98504 - User Onboarding on Desktop for Fiat Wallets and Launch 
   it('User onboarding from BTC wallet tradershub in responsive', () => {
     cy.c_visitResponsive('/', 'small')
     cy.c_WaitUntilWalletsPageIsLoaded()
-    cy.c_skipPasskeysV2()
     const walletCanBeAdded = sessionStorage.getItem('c_walletExist')
     setupTest()
     mobileSteps.forEach((step, index) => {
@@ -300,7 +297,6 @@ describe('QATEST-98504 - User Onboarding on Desktop for Fiat Wallets and Launch 
   it('User onboarding from BTC wallet cashier in responsive', () => {
     cy.c_visitResponsive('/', 'small')
     cy.c_WaitUntilWalletsPageIsLoaded()
-    cy.c_skipPasskeysV2()
     cy.c_switchWalletsAccountResponsive('BTC')
     const walletCanBeAdded = sessionStorage.getItem('c_walletExist')
     setupTest()
@@ -322,7 +318,6 @@ describe('QATEST-98504 - User Onboarding on Desktop for Fiat Wallets and Launch 
   it('User onboarding from BTC wallet compare account in responsive', () => {
     cy.c_visitResponsive('/', 'small')
     cy.c_WaitUntilWalletsPageIsLoaded()
-    cy.c_skipPasskeysV2()
     const walletCanBeAdded = sessionStorage.getItem('c_walletExist')
     cy.c_switchWalletsAccountResponsive('BTC')
     cy.findByText('Compare accounts').click()

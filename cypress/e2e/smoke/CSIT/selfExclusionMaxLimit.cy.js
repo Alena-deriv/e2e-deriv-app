@@ -47,10 +47,6 @@ screenSizes.forEach((screenSize) => {
         cy.c_login({ user: 'selfExclusion', rateLimitCheck: true })
       }
 
-      if (screenSize == 'small') {
-        cy.log('NEED TO SKIP PASSKEYS OPTIONS FOR MOBILE')
-        cy.c_skipPasskeysV2()
-      }
       cy.c_visitResponsive('account/self-exclusion', screenSize, {
         rateLimitCheck: true,
       })

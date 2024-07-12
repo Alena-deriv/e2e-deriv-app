@@ -34,7 +34,6 @@ describe('QATEST-146444: Verify Sign-up Flow in ES Language', () => {
       'have.text',
       '0.00USD'
     )
-    cy.c_skipPasskeysV2({ withoutContent: true })
     cy.c_manageAccountsetting(country, { isMobile: true, language: language })
   })
 })
