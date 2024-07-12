@@ -225,7 +225,7 @@ module.exports = defineConfig({
       test: {
         masterUser: {
           ID: process.env.E2E_DERIV_LOGIN,
-          PSWD: process.env.E2E_DERIV_PASSWORD,
+          PSWD: process.env.E2E_QA_ACCOUNT_PASSWORD,
         },
         dBot: {
           ID: process.env.E2E_LOGIN_ID_DBOT,

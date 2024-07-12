@@ -53,7 +53,7 @@ Make sure to adapt these settings according to your project's needs.
 
 Create a .env file within the e2e-deriv-app folder and save the following environment variables (where you see [abcd], add your own credentials; where empty, leave empty):<br>
 E2E_DERIV_LOGIN=[Your Deriv Login]<br>
-E2E_DERIV_PASSWORD=[Your Deriv Password]<br>
+E2E_QA_ACCOUNT_PASSWORD=[Test Account Password]<br>
 E2E_DERIV_LOGIN_PROD=[Your Deriv Prod Login]<br>
 E2E_DERIV_PASSWORD_PROD=[Your Deriv Prod Password]<br>
 E2E_MT5_LOGIN=[Your MT5 Login]<br>
@@ -68,7 +68,6 @@ E2E_OAUTH_URL=<empty><br>
 E2E_OAUTH_TOKEN=<br>
 E2E_HMAC_KEY=[Your Challenge Key]<br>
 E2E_MT5_BASEURL=https://mt5-demo-web.deriv.com<br>
-E2E_QA_ACCOUNT_PASSWORD=[Test Account Password]<br>
 E2E_QABOX_LOGIN=[QA Box Login ID]<br>
 E2E_QABOX_PASSWORD=[QA Box Password]<br>
 

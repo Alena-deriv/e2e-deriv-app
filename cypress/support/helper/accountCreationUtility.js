@@ -64,7 +64,7 @@ const verifyEmail = async (api) => {
 const createAccountVirtual = async (api, clientData = {}) => {
   const {
     country_code = defaultVRCountryCode,
-    client_password = process.env.E2E_DERIV_PASSWORD,
+    client_password = process.env.E2E_QA_ACCOUNT_PASSWORD,
     type = defaultAccountType,
   } = clientData
   try {
