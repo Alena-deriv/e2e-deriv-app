@@ -2,7 +2,7 @@ import BotBuilder from '../../../support/pageobjects/dbot/bot_builder_page'
 import QuickStrategy from '../../../support/pageobjects/dbot/quick_strategy'
 import RunPanel from '../../../support/pageobjects/dbot/run_panel'
 
-describe('QATEST-4140: Verify Dashboard [Mobile]', () => {
+describe('QATEST-4212: Verify Martingale Quick Strategy', () => {
   const size = ['small', 'desktop']
   const runPanel = new RunPanel()
   const botBuilder = new BotBuilder()
@@ -36,7 +36,7 @@ describe('QATEST-4140: Verify Dashboard [Mobile]', () => {
       quickStrategy.fillUpContractSize()
       quickStrategy.fillUpLossProfitTreshold()
       quickStrategy.runBotQuickStrategy()
-      cy.get('.bot-dashboard.bot').should('be.visible') //TODO:Update once BOT-1469 done
+      cy.findByTestId('dt_bot_dashboard').should('be.visible')
       //waiting for the bot to stop
       cy.findByRole('button', { name: 'Run' }, { timeout: 120000 }).should(
         'be.visible'
@@ -51,6 +51,22 @@ describe('QATEST-4140: Verify Dashboard [Mobile]', () => {
         })
         runPanel.transactionAfterFirstLoss()
       }
+      if (isMobile) cy.get('.dc-drawer__toggle').click({ force: true })
+      quickStrategy.clickQuickStrategies()
+      cy.findByTestId('dt_qs_tradetype')
+        .invoke('val')
+        .should('not.be.empty')
+        .then((value) => {
+          cy.log(`Trade type ${value} is visible`)
+          cy.findByTestId('dt_qs_durationtype')
+            .scrollIntoView()
+            .should('be.visible')
+            .invoke('val')
+            .should('not.be.empty')
+            .then((value2) => {
+              cy.log(`Duration ${value2} is visible`)
+            })
+        })
     })
   })
 })

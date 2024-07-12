@@ -40,6 +40,9 @@ class QuickStrategy {
   clickQuickStrategies = () => {
     this.quickStrategyBotBuilder.click()
     this.quickStrategyMarketDropdown.should('be.visible')
+    cy.findAllByTestId('dt_qs_durationtype')
+      .scrollIntoView()
+      .should('be.visible')
   }
 
   /**  Click on strategy title from qstrategy modal
