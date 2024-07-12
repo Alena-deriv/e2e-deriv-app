@@ -1,7 +1,7 @@
 import BotBuilder from '../../../support/pageobjects/dbot/bot_builder_page'
 import BotDashboard from '../../../support/pageobjects/dbot/bot_dashboard_page'
 
-describe('QATEST-99418: Verify toolbar on bot builder page', () => {
+describe('QATEST-4233, QATEST-4238, QATEST-4228: Verify toolbar on bot builder page', () => {
   const size = ['small', 'desktop']
   const botDashboard = new BotDashboard()
   const botBuilder = new BotBuilder()
@@ -32,11 +32,12 @@ describe('QATEST-99418: Verify toolbar on bot builder page', () => {
       botBuilder.openBotBuilderTab()
       botBuilder.importStrategyFromToolbar('MartingaleOld')
       cy.c_loadingCheck()
-      //TODO:Update once BOT-1469 done
-      cy.get('.notification-content').should(
-        'have.text',
-        'You’ve successfully imported a bot.'
-      )
+      cy.findByText('You’ve successfully imported a bot.').should('be.visible')
+      cy.log('Reset Workspace from Toolbar')
+      cy.findByTestId('dt_toolbar_reset_button').click()
+      cy.findByRole('button', { name: 'OK' }).click()
+      cy.c_loadingCheck()
+      cy.findAllByText('Martingale').should('not.exist')
     })
   })
 })
