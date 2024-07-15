@@ -5,3 +5,4 @@ screenshots
 .env
 cypress/downloads
 test.cy.js
+Record_Key.txt
