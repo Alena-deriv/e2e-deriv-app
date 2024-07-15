@@ -823,9 +823,14 @@ Cypress.Commands.add(
   'c_verifyPaymentConfirmationScreenContent',
   (sendAmount, nickname) => {
     cy.findByText('Payment confirmation').should('be.visible')
-    cy.findByText(
-      `Please make sure that you\'ve paid ${sendAmount} to ${nickname}, and upload the receipt as proof of your payment`
-    ).should('be.visible')
+    const POTText = `Please make sure that you\'ve paid ${sendAmount} to ${nickname}, and upload the receipt as proof of your payment`
+    cy.get('.dc-modal-body')
+      .find('.dc-text')
+      .eq(0)
+      .invoke('text')
+      .then((POTMessageCheck) => {
+        expect(POTMessageCheck).to.eq(POTText)
+      })
     cy.findByText(
       'Sending forged documents will result in an immediate and permanent ban.'
     ).should('be.visible')
@@ -1014,7 +1019,8 @@ Cypress.Commands.add(
 
 Cypress.Commands.add(
   'c_createBuyOrder',
-  (sellerNickname, minOrder, maxOrder, fiatCurrency) => {
+  (sellerNickname, minOrder, maxOrder, fiatCurrency, options = {}) => {
+    const { rateType = 'float' } = options
     cy.findByText('Buy / Sell').should('be.visible').click()
     cy.findByPlaceholderText('Search')
       .should('be.visible')
@@ -1026,7 +1032,9 @@ Cypress.Commands.add(
       .find('button[type="submit"]')
       .should('be.visible')
       .click()
-    cy.findByText('Floating').should('be.visible')
+    if (rateType == 'float') {
+      cy.findByText('Floating').should('be.visible')
+    }
     cy.findByText('Seller').next('p').should('have.text', sellerNickname)
     cy.findByText(
       `Limit: ${minOrder.toFixed(2)}–${maxOrder.toFixed(2)} ${fiatCurrency}`

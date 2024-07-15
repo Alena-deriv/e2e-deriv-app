@@ -259,6 +259,14 @@ module.exports = defineConfig({
           ID: process.env.E2E_P2P_FLOATING,
           PSWD: process.env.E2E_QA_ACCOUNT_PASSWORD,
         },
+        p2pFixedRatePKBuyOrder1: {
+          ID: process.env.E2E_LOGIN_ID_P2P_FIXEDRATE_BUYAD_1,
+          PSWD: process.env.E2E_QA_ACCOUNT_PASSWORD,
+        },
+        p2pFixedRatePKBuyOrder2: {
+          ID: process.env.E2E_LOGIN_ID_P2P_FIXEDRATE_BUYAD_2,
+          PSWD: process.env.E2E_QA_ACCOUNT_PASSWORD,
+        },
         p2pFloatingAdCrossBorder1: {
           ID: process.env.E2E_P2P_FLOATINGRATE_SELLORDER_1_CROSSBORDER,
           PSWD: process.env.E2E_QA_ACCOUNT_PASSWORD,
