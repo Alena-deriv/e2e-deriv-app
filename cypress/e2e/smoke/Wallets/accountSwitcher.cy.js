@@ -1,6 +1,7 @@
 function goToAcctSwitcherFromTradepage(deviceType) {
   const derivAppProdUrl = `${Cypress.env('prodURL')}dtrader?chart_type=`
   const derivAppStagingUrl = `${Cypress.env('stagingUrl')}dtrader?chart_type=`
+  const derivAppTestLinkUrl = `${Cypress.env('baseUrl')}dtrader?chart_type=`
   if (deviceType == 'Mobile') {
     cy.findAllByText('Options').eq(1).click()
   } else {
@@ -12,10 +13,13 @@ function goToAcctSwitcherFromTradepage(deviceType) {
   cy.findByText('Deposit').should('be.visible')
   cy.findByText('Deriv Trader').click() //Navigate to Trade page
   cy.findByText('Accumulators', { timeout: 3000 }).should('be.visible') // to check page is loaded
-  if (Cypress.config().baseUrl.includes('staging'))
+  if (Cypress.config().baseUrl.includes('staging')) {
     cy.url().should('include', derivAppStagingUrl)
-  else cy.url().should('include', derivAppProdUrl)
+  } else if (Cypress.config().baseUrl.includes('deriv-app')) {
+    cy.url().should('include', derivAppTestLinkUrl)
+  } else cy.url().should('include', derivAppProdUrl)
 }
+
 function validateAccountSwitcher(CFDbanner) {
   cy.findByTestId('dt_acc_info')
     .should('be.visible')
