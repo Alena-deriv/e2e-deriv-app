@@ -40,9 +40,23 @@ describe('QATEST-169019: Verify user can change currency after duplicate account
       cy.findAllByTestId('dt_balance_text_container').should('have.length', '2')
       cy.c_switchToReal()
       cy.findByText('Add a Deriv account').should('be.visible')
+      if (isMobile) {
+        cy.findByText('Step 1: Account currency (1 of 4)').should('be.visible')
+        cy.findByTestId('dt_dc_mobile_dialog_close_btn').click()
+      } else {
+        cy.findByText('Select your preferred currency').should('be.visible')
+        cy.findByTestId('dt_modal_close_icon').click()
+      }
+      cy.findByText('Take me to Demo account').should('be.visible')
+      cy.findByText('I will setup my real account later.').should('be.visible')
+      cy.findByRole('button', { name: 'Yes' }).click()
+      cy.findAllByTestId('dt_balance_text_container').should('have.length', '2')
+      cy.c_switchToReal()
+      cy.findByText('Add a Deriv account').should('be.visible')
       if (isMobile)
         cy.findByText('Step 1: Account currency (1 of 4)').should('be.visible')
       else cy.findByText('Select your preferred currency').should('be.visible')
+
       cy.findByText(
         'If you want to change your account currency, please contact us via '
       ).should('not.exist')
