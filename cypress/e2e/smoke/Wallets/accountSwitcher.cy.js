@@ -9,6 +9,7 @@ function goToAcctSwitcherFromTradepage(deviceType) {
       .parent()
       .closest('.wallets-added-mt5__details, .wallets-available-mt5__details')
   }
+  cy.findByText('Deposit').should('be.visible')
   cy.findByText('Deriv Trader').click() //Navigate to Trade page
   cy.findByText('Accumulators', { timeout: 3000 }).should('be.visible') // to check page is loaded
   if (Cypress.config().baseUrl.includes('staging'))
