@@ -25,7 +25,7 @@ describe('QATEST-5729: CFDs - Create a Swap-free demo account using existing MT5
         'You can use this password for all your Deriv MT5 accounts.'
       ).should('be.visible')
       cy.findByTestId('dt_mt5_password').type(
-        Cypress.env('credentials').test.mt5User.PSWD,
+        Cypress.env('credentials').test.masterUser.PSWD,
         {
           log: false,
         }
@@ -56,7 +56,7 @@ describe('QATEST-5729: CFDs - Create a Swap-free demo account using existing MT5
       cy.findByRole('button', { name: 'Forgot password?' }).should('be.visible')
       //Validate Bad Password
       cy.findByTestId('dt_mt5_password').type(
-        Cypress.env('credentials').test.masterUser.PSWD,
+        Cypress.env('credentials').production.masterUser.PSWD,
         {
           log: false,
         }
