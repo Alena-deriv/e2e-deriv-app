@@ -64,12 +64,16 @@ Cypress.Commands.add('c_login', (options = {}) => {
     backEndProd = false,
     rateLimitCheck = false,
     enablePasskey = false,
+    relogin = false,
   } = options
   const { loginEmail, loginPassword } = setLoginUser(user, {
     backEndProd: backEndProd,
   })
   if (!(loginEmail && loginPassword)) {
     throw new Error(`User/Password is not on file`)
+  }
+  if (relogin) {
+    Cypress.env('oAuthUrl', '<empty>')
   }
   cy.c_visitResponsive('/endpoint', 'large', {
     rateLimitCheck: rateLimitCheck,
