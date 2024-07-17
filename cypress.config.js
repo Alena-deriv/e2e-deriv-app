@@ -263,6 +263,10 @@ module.exports = defineConfig({
           ID: process.env.E2E_LOGIN_ID_P2P_FIXEDRATE_BUYAD_1,
           PSWD: process.env.E2E_QA_ACCOUNT_PASSWORD,
         },
+        p2pCopyAdFixedRateSellAd: {
+          ID: process.env.E2E_LOGIN_ID_P2P_FIXEDRATE_COPY_SELLAD,
+          PSWD: process.env.E2E_QA_ACCOUNT_PASSWORD,
+        },
         p2pFixedRatePKBuyOrder2: {
           ID: process.env.E2E_LOGIN_ID_P2P_FIXEDRATE_BUYAD_2,
           PSWD: process.env.E2E_QA_ACCOUNT_PASSWORD,

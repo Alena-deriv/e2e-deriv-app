@@ -319,7 +319,7 @@ Cypress.Commands.add(
         .invoke('val')
         .then((offerAmountFromCopyAdScreen) => {
           cy.log(
-            'Offer amounts match:',
+            'Offer amount match: ',
             offerAmount === offerAmountFromCopyAdScreen
           )
         })
@@ -328,7 +328,7 @@ Cypress.Commands.add(
           .invoke('val')
           .then((rateValueFromCopyAdScreen) => {
             cy.log(
-              'Offer amounts match:',
+              'Rate value match: ',
               rateValue === rateValueFromCopyAdScreen
             )
           })
@@ -337,7 +337,7 @@ Cypress.Commands.add(
           .invoke('val')
           .then((rateValueFromCopyAdScreen) => {
             cy.log(
-              'Offer amounts match:',
+              'Rate value match: ',
               rateValue === rateValueFromCopyAdScreen
             )
           })
@@ -349,7 +349,7 @@ Cypress.Commands.add(
           .invoke('text')
           .then((contactDetailsFromCopyAdScreen) => {
             cy.log(
-              'Offer amounts match:',
+              'Contact details match: ',
               contactDetails === contactDetailsFromCopyAdScreen
             )
           })
@@ -360,7 +360,7 @@ Cypress.Commands.add(
         .invoke('text')
         .then((instructionsFromCopyAdScreen) => {
           cy.log(
-            'Offer amounts match:',
+            'Instructions match: ',
             instructions === instructionsFromCopyAdScreen
           )
         })
@@ -370,7 +370,7 @@ Cypress.Commands.add(
         .invoke('text')
         .then((orderCompletionTimeFromCopyAds) => {
           cy.log(
-            'Offer amounts match:',
+            'Order completion time match: ',
             orderCompletionTime === orderCompletionTimeFromCopyAds
           )
         })
@@ -397,6 +397,11 @@ Cypress.Commands.add(
         .clear()
         .type(parseFloat(offerAmount) + 1)
         .should('have.value', parseFloat(offerAmount) + 1)
+      cy.findByRole('button', { name: 'Cancel' }).should('be.enabled').click()
+      cy.findByText(
+        "If you choose to cancel, the details you've entered will be lost."
+      ).should('be.visible')
+      cy.findByRole('button', { name: 'Go back' }).should('be.enabled').click()
       cy.findByRole('button', { name: 'Create ad' })
         .should('be.enabled')
         .click()

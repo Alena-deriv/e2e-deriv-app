@@ -2,26 +2,24 @@ let fixedRate = 1.25
 let minOrder = 6
 let maxOrder = 10
 
-describe('QATEST-145618 - Copy Ad - Fixed Rate - Buy Ad', () => {
+describe('QATEST-145642 - Copy Ad - Fixed Rate - Sell Ad', () => {
   beforeEach(() => {
-    cy.c_login({ user: 'p2pFixedRate', rateLimitCheck: true })
+    cy.c_login({ user: 'p2pCopyAdFixedRateSellAd', rateLimitCheck: true })
     cy.c_visitResponsive('/appstore/traders-hub', 'small')
   })
 
-  it('Should be able to copy an already existing buy type advert successfully.', () => {
+  it('Should be able to copy an already existing sell type advert successfully.', () => {
     cy.c_navigateToP2P()
     cy.c_clickMyAdTab()
     cy.c_checkForExistingAds().then((adExists) => {
       if (adExists == false) {
-        cy.c_createNewAd('buy')
-        cy.c_inputAdDetails(fixedRate, minOrder, maxOrder, 'Buy', 'fixed', {
-          paymentMethod: 'Alipay',
-        })
+        cy.c_createNewAd('sell')
+        cy.c_inputAdDetails(fixedRate, minOrder, maxOrder, 'Sell', 'fixed')
       }
-      cy.c_getExistingAdDetailsForValidation('Buy')
+      cy.c_getExistingAdDetailsForValidation('Sell')
       cy.then(() => {
         cy.get('.wizard__main-step').prev().children().last().click()
-        cy.contains('span[class="dc-text"]', 'Buy USD')
+        cy.contains('span[class="dc-text"]', 'Sell USD')
           .siblings('.dc-dropdown-container')
           .should('be.visible')
           .click()
@@ -31,7 +29,7 @@ describe('QATEST-145618 - Copy Ad - Fixed Rate - Buy Ad', () => {
           sessionStorage.getItem('c_rateValue'),
           sessionStorage.getItem('c_instructions'),
           sessionStorage.getItem('c_orderCompletionTime'),
-          null
+          sessionStorage.getItem('c_contactInfo')
         )
         cy.c_deleteCopiedAd()
       })
