@@ -1,3 +1,4 @@
+// When triggered multiple times, tests fail due to unverified account details, requiring manual checks; moving to WIP for a proper workaround.
 describe('QATEST-22808 IDV Expired scenario', () => {
   beforeEach(() => {
     cy.c_createCRAccount({ country_code: 'ke' })
