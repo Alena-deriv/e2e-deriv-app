@@ -854,3 +854,28 @@ Cypress.Commands.add('c_visitBackOffice', (options = {}) => {
     cy.findByText('Please login.').click()
   }
 })
+
+Cypress.Commands.add('c_validateLogin', (email, password, oldPassword) => {
+  cy.origin(
+    Cypress.env('stdConfigServer'),
+    {
+      args: [email, password, oldPassword],
+    },
+    ([email, password, oldPassword]) => {
+      Cypress.on('uncaught:exception', (err) => {
+        if (err.message.includes(`Unexpected token ','`)) return false
+      })
+      //Validate I cannot login with old password
+      cy.get(`input[type='email']`).clear().type(email)
+      cy.get(`input[type='password']`).clear().type(oldPassword, { log: false })
+      cy.get(`button[name='login']`).click()
+      cy.contains(
+        'Your email and/or password is incorrect. Perhaps you signed up with a social account?'
+      ).should('be.visible')
+      //Successful login
+      cy.get(`input[type='email']`).clear().type(email)
+      cy.get(`input[type='password']`).clear().type(password, { log: false })
+      cy.get(`button[name='login']`).click()
+    }
+  )
+})

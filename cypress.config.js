@@ -38,6 +38,7 @@ module.exports = defineConfig({
     experimentalWebKitSupport: true,
     chromeWebSecurity: false,
     experimentalRunAllSpecs: true,
+    experimentalModifyObstructiveThirdPartyCode: true,
     setupNodeEvents(on, config) {
       on('before:browser:launch', (browser = {}, launchOptions) => {
         if (browser.family === 'chromium') {

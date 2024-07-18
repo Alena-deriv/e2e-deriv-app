@@ -9,5 +9,12 @@ export const tradersHubPageLocators = {
   },
   sharedLocators: {
     legacyAccountInfo: () => cy.get('.header__acc-info'),
+    resetPasswordModal: () => cy.findByRole('dialog'),
+    resetPasswordInputField: () =>
+      cy.findByRole('dialog').findByLabelText('Create a password'),
+    resetPasswordButton: () =>
+      cy
+        .findByRole('dialog')
+        .findByRole('button', { name: 'Reset my password' }),
   },
 }
