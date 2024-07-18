@@ -19,7 +19,7 @@ const loginWithNewUser = (userAccount, isSellAdUserAccount) => {
   isSellAdUser = isSellAdUserAccount
 }
 
-describe('QATEST-50478, QATEST-2709, QATEST-2542, QATEST-2769, QATEST-2610  - Advertise floating-type sell ad, search for advertiser and place buy order with same currency, confirm order with 2FA and give rating recommendation for both buyer and seller', () => {
+describe('QATEST-50478, QATEST-2709, QATEST-2542, QATEST-2769, QATEST-2610, QATEST-2791, QATEST-2800 - Advertise floating-type sell ad, search for advertiser and place buy order with same currency, confirm order with 2FA and give rating recommendation for both buyer and seller, Chat Functionality Active, Chat functionality Closed', () => {
   before(() => {
     cy.clearAllSessionStorage()
   })
@@ -84,11 +84,6 @@ describe('QATEST-50478, QATEST-2709, QATEST-2542, QATEST-2769, QATEST-2610  - Ad
         )
         cy.c_uploadPOT('cypress/fixtures/P2P/orderCompletion.png')
         cy.findByText('Waiting for the seller to confirm').should('be.visible')
-        cy.findByTestId('testid').should('be.visible').click()
-        cy.findByPlaceholderText('Enter message').should('be.visible')
-        cy.findByText(
-          "Hello! This is where you can chat with the counterparty to confirm the order details.Note: In case of a dispute, we'll use this chat as a reference."
-        ).should('be.visible')
       })
     })
   })
@@ -152,5 +147,6 @@ describe('QATEST-50478, QATEST-2709, QATEST-2542, QATEST-2769, QATEST-2610  - Ad
       .click()
     cy.findByText('How would you rate this transaction?').should('be.visible')
     cy.c_giveRating('seller')
+    cy.c_validateBuyerSellerClosedChat()
   })
 })

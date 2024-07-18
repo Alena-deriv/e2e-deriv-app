@@ -1078,6 +1078,7 @@ Cypress.Commands.add(
           orderCompletionTime.trim()
         )
       })
+
     return cy.then(() => {
       cy.findByRole('button', { name: 'Cancel' })
         .scrollIntoView()
@@ -1085,6 +1086,8 @@ Cypress.Commands.add(
       cy.findByRole('button', { name: 'Confirm' })
         .should('not.be.disabled')
         .click()
+      cy.c_validateBuyerChattoSeller()
+      cy.findAllByTestId('dt_mobile_full_page_return_icon').eq(1).click()
       cy.findByRole('button', { name: "I've paid" }).should('be.visible')
       cy.findByText('Send')
         .next('span')
@@ -1178,6 +1181,8 @@ Cypress.Commands.add(
     cy.findByText(
       "Don't risk your funds with cash transactions. Use bank transfers or e-wallets instead."
     ).should('be.visible')
+    cy.c_validateSellerChatToBuyer()
+    cy.findAllByTestId('dt_mobile_full_page_return_icon').eq(1).click()
     cy.then(() => {
       cy.findByRole('button', { name: "I've received payment" })
         .should('be.enabled')
@@ -1388,3 +1393,86 @@ Cypress.Commands.add(
     cy.findByText(`${(minOrder + 1).toFixed(2)} - ${maxOrder.toFixed(2)} USD`)
   }
 )
+
+Cypress.Commands.add('c_validateBuyerChattoSeller', () => {
+  cy.findByTestId('testid').should('be.visible').click()
+  cy.findByText(
+    "Hello! This is where you can chat with the counterparty to confirm the order details.Note: In case of a dispute, we'll use this chat as a reference."
+  ).should('be.visible')
+  cy.get('.chat-footer-icon-container').click()
+  cy.c_enterMessageFieldText()
+  cy.get('input[type="file"]').selectFile(
+    'cypress/fixtures/P2P/orderCompletion.png',
+    { force: true }
+  )
+  cy.get('.chat-footer-icon-container').click()
+  cy.get('.chat-messages-item--outgoing').should('have.length', 2)
+  cy.get('.order-chat__messages-item-timestamp').should('have.length', 2)
+})
+
+Cypress.Commands.add('c_validateBuyerSellerClosedChat', () => {
+  cy.findByTestId('testid').click()
+  cy.get('.chat-messages-item-image').should('have.length', 3)
+  cy.get('.chat-messages-item--incoming').should('have.length', 2)
+  cy.get('.order-chat__messages-item-timestamp').should('have.length', 5)
+  cy.findByText('This conversation is closed.').should('be.visible')
+  cy.findByPlaceholderText('Enter message').should('not.exist')
+})
+
+Cypress.Commands.add('c_validateSellerChatToBuyer', () => {
+  cy.findByTestId('testid').click()
+  cy.findByText(
+    "Hello! This is where you can chat with the counterparty to confirm the order details.Note: In case of a dispute, we'll use this chat as a reference."
+  ).should('be.visible')
+  cy.get('.chat-messages-item--incoming').should('have.length', 3)
+  cy.get('.order-chat__messages-item-timestamp').should('have.length', 3)
+  cy.get('.chat-messages-item-image').should('have.length', 2)
+  cy.get('.chat-footer-icon-container').click()
+  cy.get('input[type="file"]').selectFile(
+    'cypress/fixtures/P2P/orderCompletion.png',
+    { force: true }
+  )
+  cy.c_enterMessageFieldText()
+  cy.get('.chat-footer-icon-container').click()
+  cy.get('.chat-messages-item--outgoing').should('have.length', 2)
+  cy.get('.chat-messages-item-image').should('have.length', 3)
+})
+
+Cypress.Commands.add('c_enterMessageFieldLength', (textLength) => {
+  cy.findByPlaceholderText('Enter message')
+    .parents('.dc-input__wrapper')
+    .find('.dc-input__footer .dc-input__counter')
+    .should('contain.text', `${textLength}/5000`)
+})
+
+Cypress.Commands.add('c_enterMessageFieldText', () => {
+  cy.findByPlaceholderText('Enter message')
+    .invoke('val')
+    .then((text) => {
+      let textLength = text.length
+      cy.c_enterMessageFieldLength(textLength)
+    })
+  cy.findByPlaceholderText('Enter message').clear()
+  cy.findByPlaceholderText('Enter message')
+    .clear()
+    .type('abc')
+    .should('have.value', 'abc')
+  cy.c_enterMessageFieldLength('abc'.length)
+  let textLimitCheck = generateAccountNumberString(5000)
+  cy.findByPlaceholderText('Enter message')
+    .clear()
+    .type(textLimitCheck)
+    .should('have.value', textLimitCheck)
+  cy.c_enterMessageFieldLength(textLimitCheck.length)
+  cy.findByPlaceholderText('Enter message')
+    .clear()
+    .type(textLimitCheck + '1')
+    .should('have.value', textLimitCheck)
+  cy.c_enterMessageFieldLength(textLimitCheck.length)
+  let textForField = generateAccountNumberString(20)
+  cy.findByPlaceholderText('Enter message')
+    .clear()
+    .type(textForField)
+    .should('have.value', textForField)
+  cy.c_enterMessageFieldLength(textForField.length)
+})
