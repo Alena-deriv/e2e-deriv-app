@@ -10,7 +10,9 @@ describe('QATEST-5569: Verify MF Signup flow', () => {
   size.forEach((size) => {
     it(`Verify I can signup for an MF demo and real account on ${size == 'small' ? 'mobile' : 'desktop'}`, () => {
       const isMobile = size == 'small' ? true : false
-      const signUpEmail = `sanity${generateEpoch()}mf@deriv.com`
+      const signUpEmail = `sanity${generateEpoch()}mf${
+        Cypress.isProd ? '@cypressderivapp.mailisk.net' : '@deriv.com'
+      }`
       cy.c_setEndpoint(signUpEmail, size)
       cy.c_demoAccountSignup(country, signUpEmail, size)
       cy.c_generateRandomName().then((firstName) => {

@@ -312,7 +312,7 @@ Cypress.Commands.add('c_manageAccountsetting', (CoR, options = {}) => {
       cy.get('.traders-hub-header__setting').click()
     }
     cy.findByRole('link', { name: lang.accountSettings.poiTxt }).click()
-    if (isIDV) {
+    if (isIDV & !Cypress.isProd) {
       cy.findByText('Your documents were submitted successfully').should(
         'be.visible'
       )
@@ -423,6 +423,7 @@ Cypress.Commands.add('c_addAccountMF', (type, options = {}) => {
     }).click()
     cy.findByRole('heading', {
       name: lang.addRealAccountTexts.depositeBtn,
+      timeout: 20000,
     }).should('be.visible')
     if (isMobile) {
       cy.findByTestId('dt_page_overlay_header_close').click()
@@ -458,19 +459,28 @@ Cypress.Commands.add(
     const { language = 'english' } = options
     cy.fixture('tradersHub/signupLanguageContent.json').then((langData) => {
       const lang = langData[language]
-      cy.c_emailVerification('account_opening_new.html', accountEmail)
+      if (Cypress.isProd)
+        cy.c_retrieveVerificationLinkUsingMailisk(
+          accountEmail.split('@')[0],
+          'One more step to create your account',
+          Math.floor((Date.now() - 3000) / 1000),
+          60000
+        )
+      else cy.c_emailVerification('account_opening_new.html', accountEmail)
+
       cy.then(() => {
         cy.c_visitResponsive(Cypress.env('verificationUrl'), size).then(() => {
-          cy.window().then((win) => {
-            win.localStorage.setItem(
-              'config.server_url',
-              Cypress.env('stdConfigServer')
-            )
-            win.localStorage.setItem(
-              'config.app_id',
-              Cypress.env('stdConfigAppId')
-            )
-          })
+          if (!Cypress.isProd)
+            cy.window().then((win) => {
+              win.localStorage.setItem(
+                'config.server_url',
+                Cypress.env('stdConfigServer')
+              )
+              win.localStorage.setItem(
+                'config.app_id',
+                Cypress.env('stdConfigAppId')
+              )
+            })
         })
         cy.get('h1')
           .contains(lang.demoAccountSignUp.selectCountryDropdown)
@@ -492,21 +502,33 @@ Cypress.Commands.add(
       const lang = langData[language]
       cy.visit(`${Cypress.env('derivComProdURL')}${lang.urlCode}/`, {
         onBeforeLoad(win) {
-          win.localStorage.setItem(
-            'config.server_url',
-            Cypress.env('configServer')
-          )
-          win.localStorage.setItem('config.app_id', Cypress.env('configAppId'))
+          if (!Cypress.isProd) {
+            win.localStorage.setItem(
+              'config.server_url',
+              Cypress.env('configServer')
+            )
+            win.localStorage.setItem(
+              'config.app_id',
+              Cypress.env('configAppId')
+            )
+          }
         },
       })
+
       cy.findByRole(
         'button',
         { name: 'whatsapp icon' },
         { timeout: 30000 }
       ).should('be.visible')
       cy.c_visitResponsive(`/endpoint?lang=${lang.urlCode}`, size)
-      localStorage.setItem('config.server_url', Cypress.env('stdConfigServer'))
-      localStorage.setItem('config.app_id', Cypress.env('stdConfigAppId'))
+      if (!Cypress.isProd) {
+        localStorage.setItem(
+          'config.server_url',
+          Cypress.env('stdConfigServer')
+        )
+        localStorage.setItem('config.app_id', Cypress.env('stdConfigAppId'))
+      }
+
       cy.findByRole('button', { name: lang.signUpForm.signUpBtn }).should(
         'not.be.disabled'
       )

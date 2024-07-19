@@ -2,7 +2,7 @@ import { getOAuthUrl, setLoginUser } from '../helper/loginUtility'
 
 Cypress.prevAppId = 0
 Cypress.prevUser = ''
-const expectedCookieValue = '{%22clients_country%22:%22br%22}'
+Cypress.isProd = Cypress.config().baseUrl === Cypress.env('prodURL')
 
 /**
  * Custom command that allows us to use baseUrl + path and detect whether this is a responsive run or not.
@@ -116,13 +116,10 @@ Cypress.Commands.add('c_setDerivAppEndpoint', (app, backEndProd, user) => {
     Cypress.env('configServer', Cypress.env('doughflowConfigServer'))
     Cypress.env('configAppId', Cypress.env('doughflowConfigAppId'))
   } //Use production server and app id for production base url
-  else if (Cypress.config().baseUrl == Cypress.env('prodURL')) {
+  else if (Cypress.isProd) {
     Cypress.env('configServer', Cypress.env('prodServer'))
     Cypress.env('configAppId', Cypress.env('prodAppId'))
-  } else if (
-    Cypress.config().baseUrl != Cypress.env('prodURL') &&
-    backEndProd == true
-  ) {
+  } else if (!Cypress.isProd && backEndProd == true) {
     Cypress.env('configServer', Cypress.env('prodServer'))
     Cypress.env('configAppId', Cypress.env('stgAppId'))
   } else {
@@ -146,7 +143,7 @@ Cypress.Commands.add('c_setDerivAppEndpoint', (app, backEndProd, user) => {
   cy.log('appId: ' + Cypress.env('configAppId'))
 
   //Do not set the server for production as it uses two servers: green & blue
-  if (Cypress.config().baseUrl != Cypress.env('prodURL')) {
+  if (!Cypress.isProd) {
     localStorage.setItem('config.server_url', Cypress.env('configServer'))
     localStorage.setItem('config.app_id', Cypress.env('configAppId'))
   }
@@ -424,12 +421,13 @@ Cypress.Commands.add(
 
 Cypress.Commands.add(
   'c_retrieveVerificationLinkUsingMailisk',
-  (account, subject, timestamp) => {
+  (account, subject, timestamp, timeout) => {
     cy.mailiskSearchInbox(Cypress.env('mailiskNamespace'), {
       to_addr_prefix: account,
-      subject_includes: subject,
+      subject_includes: subject.toLowerCase(),
       wait: true,
       ...(timestamp ? { from_timestamp: timestamp } : {}),
+      ...(timeout ? { timeout: timeout } : {}),
     }).then((response) => {
       const email = response.data[0]
       const verificationLink = email.text.match(/https?:\/\/\S*redirect\?\S*/)

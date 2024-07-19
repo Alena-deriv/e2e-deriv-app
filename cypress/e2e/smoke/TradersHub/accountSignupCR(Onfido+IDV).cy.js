@@ -14,7 +14,9 @@ describe('QATEST-24427,5533,5827 - Cypress test for ROW account sign up', () => 
   size.forEach((size) => {
     it(`New account sign up ROW - Onfido supported country on ${size == 'small' ? 'mobile' : 'desktop'}`, () => {
       const isMobile = size == 'small' ? true : false
-      const signUpEmail = `sanity${generateEpoch()}onfido@deriv.com`
+      const signUpEmail = `sanity${generateEpoch()}onfido${
+        Cypress.isProd ? '@cypressderivapp.mailisk.net' : '@deriv.com'
+      }`
       cy.c_setEndpoint(signUpEmail, size)
       cy.c_demoAccountSignup(countryOnfido, signUpEmail, size)
       if (isMobile) cy.findByTestId('dt_dc_mobile_dialog_close_btn').click()
@@ -51,7 +53,9 @@ describe('QATEST-24427,5533,5827 - Cypress test for ROW account sign up', () => 
     it(`New account sign up ROW - IDV supported country on ${size == 'small' ? 'mobile' : 'desktop'}`, () => {
       nationalIDNumIDV = generateRandomNumber()
       const isMobile = size == 'small' ? true : false
-      const signUpEmail = `sanity${generateEpoch()}idv@deriv.com`
+      const signUpEmail = `sanity${generateEpoch()}idv${
+        Cypress.isProd ? '@cypressderivapp.mailisk.net' : '@deriv.com'
+      }`
       cy.c_setEndpoint(signUpEmail, size)
       cy.c_demoAccountSignup(countryIDV, signUpEmail, size)
       if (isMobile) cy.findByTestId('dt_dc_mobile_dialog_close_btn').click()
