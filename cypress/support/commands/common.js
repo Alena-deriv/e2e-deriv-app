@@ -374,7 +374,7 @@ Cypress.Commands.add(
               .then((href) => {
                 if (href) {
                   Cypress.env('verificationUrl', href)
-                  const code = href.match(/code=([A-Za-z0-9]{8})/)
+                  const code = href.match(/code=([A-Za-z0-9]{6})/)
                   verification_code = code[1]
                   isViaAPI
                     ? cy.task('setVerificationCode', verification_code)
