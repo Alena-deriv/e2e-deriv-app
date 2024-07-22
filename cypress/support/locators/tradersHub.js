@@ -16,5 +16,13 @@ export const tradersHubPageLocators = {
       cy
         .findByRole('dialog')
         .findByRole('button', { name: 'Reset my password' }),
+    mt5StandardDemoSignupCard: () =>
+      cy.findByTestId('dt_trading-app-card_demo_standard'),
+    mt5StandardDemoAccountCard: () =>
+      cy.findByTestId('dt_trading-app-card_demo_standard_svg'),
+    mt5FinancialDemoSignupCard: () =>
+      cy.findByTestId('dt_trading-app-card_demo_financial'),
+    mt5FinancialDemoAccountCard: () =>
+      cy.findByTestId('dt_trading-app-card_demo_financial_svg'),
   },
 }

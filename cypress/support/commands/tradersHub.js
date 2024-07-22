@@ -1005,3 +1005,98 @@ Cypress.Commands.add('c_checkTotalAssetSummary', () => {
     .scrollIntoView()
     .should('be.visible')
 })
+
+Cypress.Commands.add('c_createMT5DemoAccount', (accountType, options = {}) => {
+  const {
+    useExistingPswd = false,
+    validateCreatedAccount = true,
+    password = Cypress.env('credentials').test.mt5User.PSWD,
+  } = options
+  const badPassword = Cypress.env('credentials').production.masterUser.PSWD
+  let signupCard, accountCard, accountIndex
+  cy.log(`Creating demo >>${accountType}<< account`)
+  if (accountType.toLowerCase() === 'standard') {
+    accountType = 'Standard'
+    if (useExistingPswd) accountIndex = 0
+    signupCard =
+      derivApp.tradersHubPage.sharedLocators.mt5StandardDemoSignupCard
+    accountCard =
+      derivApp.tradersHubPage.sharedLocators.mt5StandardDemoAccountCard
+  } else if (accountType.toLowerCase() === 'financial') {
+    accountType = 'Financial'
+    if (useExistingPswd) accountIndex = 1
+    signupCard =
+      derivApp.tradersHubPage.sharedLocators.mt5FinancialDemoSignupCard
+    accountCard =
+      derivApp.tradersHubPage.sharedLocators.mt5FinancialDemoAccountCard
+  }
+  signupCard().findByTestId('dt_platform-name').should('have.text', accountType)
+  signupCard().findByRole('button', { name: 'Get' }).click()
+  if (!useExistingPswd) {
+    cy.findByText('Create a Deriv MT5 password').should('be.visible')
+    cy.findByText(
+      'You can use this password for all your Deriv MT5 accounts.'
+    ).should('be.visible')
+  } else {
+    cy.findByText('Enter your Deriv MT5 password').should('be.visible')
+    cy.findByText(
+      `Enter your Deriv MT5 password to add a MT5 Demo ${accountType} account.`
+    ).should('be.visible')
+    cy.findByRole('button', { name: 'Add account' }).should('be.disabled')
+    cy.findByRole('button', { name: 'Forgot password?' })
+      .should('be.visible')
+      .and('be.enabled')
+  }
+  if (useExistingPswd) {
+    cy.findByTestId('dt_mt5_password').type(badPassword, {
+      log: false,
+    })
+    cy.findByRole('button', { name: 'Add account' }).click()
+    cy.findByText('That password is incorrect. Please try again.').should(
+      'be.visible'
+    )
+    cy.findByText(
+      'Hint: You may have entered your Deriv password, which is different from your Deriv MT5 password.'
+    ).should('be.visible')
+    cy.findByRole('button', { name: 'Add account' }).should('be.disabled')
+    cy.findByRole('button', { name: 'Forgot password?' }).should('be.enabled')
+  }
+  cy.findByTestId('dt_mt5_password').type(password, {
+    log: false,
+  })
+  if (!useExistingPswd)
+    cy.findByRole('button', {
+      name: 'Create Deriv MT5 password',
+    }).click()
+  else cy.findByRole('button', { name: 'Add account' }).click()
+  cy.findByRole('heading', { name: 'Success!' }).should('be.visible')
+  cy.get('.dc-modal-body').should(
+    'contain.text',
+    `Success!Your demo Deriv MT5 ${accountType} account is ready.`
+  )
+  cy.findByRole('button', { name: 'Continue' }).click()
+  accountCard()
+    .findByTestId('dt_cfd-account-name')
+    .should('have.text', accountType)
+  if (!useExistingPswd) {
+    cy.findByText('10,000.00 USD').should('be.visible')
+    cy.findByRole('button', { name: 'Top up' }).should('exist')
+  } else {
+    cy.findAllByText('10,000.00 USD').eq(accountIndex).should('be.visible')
+    cy.findAllByRole('button', { name: 'Top up' })
+      .eq(accountIndex)
+      .should('exist')
+  }
+  if (validateCreatedAccount) {
+    accountCard().findByRole('button', { name: 'Open' }).click({ force: true })
+    cy.get('div.cfd-trade-modal-container')
+      .findByText(accountType)
+      .should('be.visible')
+    cy.get('div.cfd-trade-modal-container')
+      .findByText('Demo')
+      .should('be.visible')
+    cy.get('div.cfd-trade-modal-container')
+      .findByText('Deriv.com Limited')
+      .should('be.visible')
+  }
+})
