@@ -35,13 +35,15 @@ describe('QATEST-116798 Self Exclusion Session and login limits', () => {
       cy.findByRole('button', { name: 'Yes, log me out immediately' }).click()
 
       /* Checks self exclusion is saved on FE */
-      cy.c_login()
+      cy.c_login({ relogin: true })
       cy.c_visitResponsive('/appstore/traders-hub', size)
       cy.findByTestId('dt_dropdown_display', { timeout: 10000 }).should('exist')
       cy.findByTestId('dt_dropdown_display').click()
       cy.get('#real', { timeout: 10000 }).should('exist')
       cy.get('#real').click()
-      cy.findAllByTestId('dt_balance_text_container').should('have.length', '2') // waits until Real account is loaded
+      cy.findAllByTestId('dt_balance_text_container', {
+        timeout: 20000,
+      }).should('have.length', '2') // waits until Real account is loaded
       cy.c_visitResponsive('/account/self-exclusion', size)
       cy.get('input[name="timeout_until"]').should('not.be.empty')
 
@@ -62,7 +64,7 @@ describe('QATEST-116798 Self Exclusion Session and login limits', () => {
         'You can use this password for all your Deriv MT5 accounts.'
       ).should('be.visible')
       cy.findByTestId('dt_mt5_password').type(
-        Cypress.env('credentials').test.diel.PSWD
+        Cypress.env('credentials').test.mt5User.PSWD
       )
       cy.findByRole('button', { name: 'Create Deriv MT5 password' }).click()
       cy.get('.dc-dialog__dialog').should(
@@ -138,7 +140,7 @@ describe('QATEST-116798 Self Exclusion Session and login limits', () => {
       cy.findByText('St. Vincent & Grenadines').click()
       cy.findByRole('button', { name: 'Next' }).click()
       cy.findByTestId('dt_mt5_password').type(
-        Cypress.env('credentials').test.diel.PSWD
+        Cypress.env('credentials').test.mt5User.PSWD
       )
       cy.findByRole('button', { name: 'Add account' }).click()
       cy.get('.dc-modal-body').should(
@@ -147,7 +149,7 @@ describe('QATEST-116798 Self Exclusion Session and login limits', () => {
       )
 
       /* Checks Deposit is not locked */
-      cy.c_visitResponsive('/cashier/deposit', size)
+      cy.c_visitResponsive('/cashier/deposit', size, { rateLimitCheck: true })
       cy.findByText('Deposit via bank wire, credit card, and e-wallet').should(
         'be.visible'
       )

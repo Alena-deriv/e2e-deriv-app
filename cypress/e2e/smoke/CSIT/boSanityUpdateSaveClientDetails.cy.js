@@ -1,4 +1,4 @@
-import { generateRandomName } from '../../../support/helper/loginUtility'
+import { generateRandomName } from '../../../support/helper/utility'
 
 const firstName = generateRandomName(5)
 const lastName = generateRandomName(7)
