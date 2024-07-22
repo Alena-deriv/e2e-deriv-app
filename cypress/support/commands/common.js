@@ -374,8 +374,10 @@ Cypress.Commands.add(
               .then((href) => {
                 if (href) {
                   Cypress.env('verificationUrl', href)
-                  const code = href.match(/code=([A-Za-z0-9]{6})/)
-                  verification_code = code[1]
+                  const code = href.match(/code=([A-Za-z0-9]{8})|code=([A-Za-z0-9]{6})/)
+                  if(code){
+                    verification_code = code[1] || code[2]
+                  }
                   isViaAPI
                     ? cy.task('setVerificationCode', verification_code)
                     : Cypress.env('walletsWithdrawalCode', verification_code)
