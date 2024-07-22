@@ -97,7 +97,8 @@ describe('QATEST-50478, QATEST-2709, QATEST-2542, QATEST-2769, QATEST-2610, QATE
     cy.c_confirmOrder(
       nicknameAndAmount,
       'buy',
-      Cypress.env('credentials').test.p2pFloatingSellAd1.ID
+      Cypress.env('credentials').test.p2pFloatingSellAd1.ID,
+      { checkChat: 'true' }
     )
     cy.c_giveRating('buyer')
     cy.findByText('Completed').should('be.visible')

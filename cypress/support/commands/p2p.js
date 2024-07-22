@@ -1176,13 +1176,16 @@ Cypress.Commands.add('c_waitForPayment', () => {
 
 Cypress.Commands.add(
   'c_confirmOrder',
-  (nicknameAndAmount, orderType, emailAddress) => {
+  (nicknameAndAmount, orderType, emailAddress, options = {}) => {
+    const { checkChat = 'false' } = options
     cy.findByText('Confirm payment').should('be.visible').click()
     cy.findByText(
       "Don't risk your funds with cash transactions. Use bank transfers or e-wallets instead."
     ).should('be.visible')
-    cy.c_validateSellerChatToBuyer()
-    cy.findAllByTestId('dt_mobile_full_page_return_icon').eq(1).click()
+    if (checkChat == 'true') {
+      cy.c_validateSellerChatToBuyer()
+      cy.findAllByTestId('dt_mobile_full_page_return_icon').eq(1).click()
+    }
     cy.then(() => {
       cy.findByRole('button', { name: "I've received payment" })
         .should('be.enabled')
