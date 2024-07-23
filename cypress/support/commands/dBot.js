@@ -76,3 +76,13 @@ Cypress.Commands.add('c_deleteStrategy', (isMobile = false) => {
   }
   cy.findByText('Yes, delete').click({ force: true })
 })
+
+Cypress.Commands.add('c_journalCheck', () => {
+  cy.findByText('Journal').click()
+  cy.findByText('Filters').click()
+  cy.findByText('Notifications').click()
+  cy.get('div.journal__text journal__text--warn').should('not.exist')
+  cy.findByText('System').click()
+  cy.findByText('Errors').click()
+  cy.findByText('There are no messages to display').should('be.visible')
+})

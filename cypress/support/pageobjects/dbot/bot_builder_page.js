@@ -1,6 +1,5 @@
 import { DOWNLOAD_PATH, FILEPATH } from './constants'
 class BotBuilder {
-  marketIndex = 1
   previewTabName = 'Local'
 
   get openStrategyButton() {
@@ -38,13 +37,15 @@ class BotBuilder {
   }
 
   get blocklyMarket() {
-    return cy.xpath(
-      `((//*[@class='blocklyText' and text()='Market:']/..)/*[@class='blocklyEditableText'])[${this.marketIndex}]`
-    )
+    return cy
+      .contains('text[class="blocklyText"]', 'Market:')
+      .parent()
+      .siblings('.blocklyEditableText')
+      .eq(this.marketIndex)
   }
 
   get blocklyDropdown() {
-    return cy.get('.goog-menuitem.goog-option')
+    return cy.get('.blocklyMenuItem.goog-menuitem')
   }
 
   get toolbarImportButton() {

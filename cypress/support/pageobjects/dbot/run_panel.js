@@ -1,6 +1,6 @@
 class RunPanel {
   get transactionsTab() {
-    return cy.get("li[id='db-run-panel-tab__transactions']")
+    return cy.findByText('Transactions')
   }
 
   get totalProfitLoss() {
