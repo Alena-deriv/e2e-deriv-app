@@ -19,5 +19,39 @@
         "transferSubmitButton":"[data-testid='dt_account_transfer_form_submit']",
         "closeButton":"[class='account-transfer-receipt__crypto--form-submit']",
         "transferButtonOnTradersHub":"button:contains('Transfer')"
+    },
+    "fiatAccountUSD" : {
+        "type": "Fiat currencies",
+        "name": "US Dollar",
+        "code": "USD",
+        "delta": "0.01"
+    },
+    "fiatAccountAUD" : {
+        "type": "Fiat currencies",
+        "name": "Australian Dollar",
+        "code": "AUD",
+        "delta": "0.01"
+    },
+    "fiatAccountEUR" : {
+        "type": "Fiat currencies",
+        "name": "Euro",
+        "code": "EUR",
+        "delta": "0.01"
+    },
+      "fiatAccountGBP" : {
+        "type": "Fiat currencies",
+        "name": "Pound Sterling",
+        "code": "GBP",
+        "delta": "0.01"
+    },
+    "derivedSVG_Mt5Account" : {
+        "type": "Deriv MT5",
+        "subType": "Standard",
+        "jurisdiction": "SVG",
+        "fullJurisdiction": "St. Vincent & Grenadines",
+        "name": "Standard SVG",
+        "code": "USD",
+        "delta": "1.0",
+        "accurateDelta": "0.5"
     }
 } 

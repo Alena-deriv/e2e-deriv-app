@@ -420,6 +420,22 @@ module.exports = defineConfig({
           ID: process.env.E2E_MT5_LOGIN,
           PSWD: process.env.E2E_QA_ACCOUNT_PASSWORD,
         },
+        cfdfundTransferUSD: {
+          ID: process.env.E2E_CFD_FUND_TRANSFER_USD_LOGIN,
+          PSWD: process.env.E2E_QA_ACCOUNT_PASSWORD,
+        },
+        cfdfundTransferEUR: {
+          ID: process.env.E2E_CFD_FUND_TRANSFER_EUR_LOGIN,
+          PSWD: process.env.E2E_QA_ACCOUNT_PASSWORD,
+        },
+        cfdfundTransferAUD: {
+          ID: process.env.E2E_CFD_FUND_TRANSFER_AUD_LOGIN,
+          PSWD: process.env.E2E_QA_ACCOUNT_PASSWORD,
+        },
+        cfdfundTransferGBP: {
+          ID: process.env.E2E_CFD_FUND_TRANSFER_GBP_LOGIN,
+          PSWD: process.env.E2E_QA_ACCOUNT_PASSWORD,
+        },
       },
       production: {
         masterUser: {
@@ -456,6 +472,7 @@ module.exports = defineConfig({
     qaBoxLoginPassword: process.env.E2E_QABOX_PASSWORD,
     qaBOEndpoint: '/d/backoffice/login.cgi',
     mt5BaseUrl: process.env.E2E_MT5_BASEURL,
+    mt5Password: process.env.E2E_QA_ACCOUNT_PASSWORD,
     configServer: process.env.E2E_CONFIG_SERVER,
     configAppId: process.env.E2E_CONFIG_APPID,
     doughflowConfigServer: process.env.E2E_DOUGHFLOW_CONFIG_SERVER,
