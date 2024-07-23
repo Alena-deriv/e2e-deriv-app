@@ -1,4 +1,3 @@
-const BO_URL = `https://${Cypress.env('configServer')}${Cypress.env('qaBOEndpoint')}`
 describe('QATEST-4760 Onfido Expired document.', () => {
   beforeEach(() => {
     cy.c_createCRAccount({ country_code: 'co' })
@@ -30,8 +29,7 @@ describe('QATEST-4760 Onfido Expired document.', () => {
     })
     /* Access BO */
     cy.c_visitResponsive('/', 'large')
-    cy.visit(BO_URL)
-    cy.findByText('Please login.').click()
+    cy.c_visitBackOffice({ login: true })
     cy.findByText('Client Management').click()
     cy.findByPlaceholderText('email@domain.com')
       .should('exist')

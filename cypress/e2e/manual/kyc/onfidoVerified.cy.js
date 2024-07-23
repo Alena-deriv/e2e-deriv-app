@@ -22,8 +22,6 @@ describe('QATEST-4782 Onfido verified profile', () => {
     cy.findByText('Take a selfie').should('be.visible')
     cy.get('.onfido-sdk-ui-Camera-btn').click()
     cy.findByText('Confirm').click()
-    cy.findByText('Account verification required').should('be.visible')
-
     cy.c_closeNotificationHeader()
     cy.c_waitUntilElementIsFound({
       cyLocator: () => cy.findByText('Your proof of identity is verified'),

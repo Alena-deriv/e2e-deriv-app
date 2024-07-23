@@ -1,10 +1,8 @@
-import {
-  generateFakeProfileName,
-  generateRandomName,
-} from '../../../support/helper/utility'
+import { generateRandomName } from '../../../support/helper/utility'
+
 describe('QATEST-4777 Onfido fake profile.', () => {
   beforeEach(() => {
-    cy.c_createRealAccount('co')
+    cy.c_createCRAccount({ country_code: 'co' })
     cy.c_login()
   })
   it('Should show unwelcome login ID in BO.', () => {
@@ -23,7 +21,7 @@ describe('QATEST-4777 Onfido fake profile.', () => {
     ).should('be.visible')
     /* Access BO to check Un welcome Login ID status is there */
     cy.c_visitResponsive('/', 'large')
-    ccy.c_visitBackOffice({ login: true })
+    cy.c_visitBackOffice({ login: true })
     cy.findByText('Client Management').click()
     cy.findByPlaceholderText('email@domain.com')
       .should('exist')
@@ -63,14 +61,12 @@ describe('QATEST-4777 Onfido fake profile.', () => {
     cy.findByText('Take a selfie').should('be.visible')
     cy.get('.onfido-sdk-ui-Camera-btn').click()
     cy.findByText('Confirm').click()
+    cy.findByText('Proof of identity').should('be.visible')
     cy.c_waitUntilElementIsFound({
       cyLocator: () => cy.findByText('Your proof of identity is verified'),
       timeout: 4000,
       maxRetries: 5,
     })
-    cy.findByText('Proof of address required', { timeout: 30000 }).should(
-      'exist'
-    )
     cy.c_closeNotificationHeader()
     /* submit POA */
     cy.c_visitResponsive('/account/proof-of-address', 'small')

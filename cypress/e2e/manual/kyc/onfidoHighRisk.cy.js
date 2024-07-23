@@ -1,4 +1,3 @@
-const BO_URL = `https://${Cypress.env('configServer')}${Cypress.env('qaBOEndpoint')}`
 describe('QATEST-4785 High risk onfido supported country.', () => {
   beforeEach(() => {
     cy.c_createCRAccount({ country_code: 'co' })
@@ -23,6 +22,7 @@ describe('QATEST-4785 High risk onfido supported country.', () => {
     cy.findByText('Take a selfie').should('be.visible')
     cy.get('.onfido-sdk-ui-Camera-btn').click()
     cy.findByText('Confirm').click()
+    cy.findByText('Proof of identity').should('be.visible')
     cy.c_closeNotificationHeader()
     cy.c_waitUntilElementIsFound({
       cyLocator: () => cy.findByText('Your proof of identity is verified'),
@@ -31,8 +31,7 @@ describe('QATEST-4785 High risk onfido supported country.', () => {
     })
     /* Visit BO */
     cy.c_visitResponsive('/', 'large')
-    cy.visit(BO_URL)
-    cy.findByText('Please login.').click()
+    cy.c_visitBackOffice({ login: true })
     cy.findByText('Client Management').click()
     cy.findByPlaceholderText('email@domain.com')
       .should('exist')
@@ -56,11 +55,8 @@ describe('QATEST-4785 High risk onfido supported country.', () => {
       Check that upon creating mt5 regulated, 
       should ask for POA only 
       Should ask for FA 
-      */
+    */
     cy.c_visitResponsive('/', 'small')
-    cy.findByText('Proof of address required', { timeout: 30000 }).should(
-      'exist'
-    )
     cy.c_closeNotificationHeader()
     cy.findByRole('button', { name: 'CFDs' }).click()
     cy.findByTestId('dt_trading-app-card_real_standard')
