@@ -47,6 +47,8 @@ function fiatWalletcheck() {
   cy.findByTestId('dt-wallets-add-more')
     .findByText(/USD Wallet/)
     .scrollIntoView()
+  cy.findByTestId('dt-wallets-add-more')
+    .findByText(/USD Wallet/)
     .should('be.visible')
   cy.get('[class*="wallets-add-more__content"]').then((el) => {
     cy.wrap(el)
@@ -95,47 +97,52 @@ describe('QATEST-157196 Demo and Real Wallet Switcher', () => {
     cy.c_visitResponsive('/', 'large', { rateLimitCheck: true })
     fiatWalletcheck() //User should always login to Real fiat wallet dashboard.
     //Clik on all availbale wallets in wallet swticher
-    cy.findAllByTestId('dt_wallets_textfield_icon_right').click()
-    getTotalNumberOfWallets('[role=listbox]', '[role=option]').then(
-      (listItems) => {
-        for (let i = 1; i < listItems; i++) {
-          cy.get('.wallets-list-card-dropdown__item-content')
-            .eq(i)
-            .find('span')
-            .first()
-            .invoke('text')
-            .then((text) => {
-              let walletsTextValue = text.trim()
-              cy.get('.wallets-list-card-dropdown__item-content', {
-                timeout: 10000,
-              })
-                .should('be.visible')
-                .eq(i)
-                .click({ force: true })
-                .then(() => {
-                  return new Promise((resolve) => {
-                    setTimeout(resolve, 1000)
-                  })
-                })
-                .then(() => {
-                  cy.get(
-                    '.wallets-textfield__field.wallets-textfield__field--listcard'
-                  ).should('have.value', walletsTextValue)
-                  cy.log('the wallet text value is' + walletsTextValue)
-                  cy.get('.wallets-balance__container', { timeout: 20000 })
-                    .should('be.visible')
-                    .find('span')
-                    .invoke('text')
-                    .should('contain', walletsTextValue.split(' ')[0])
-                  cy.findByTestId('dt_desktop_accounts_list')
-                    .findByRole('button', { name: 'Transfer' })
-                    .should('be.visible')
-                  cy.get('.wallets-dropdown').click({ force: true })
-                })
+    cy.findByTestId('dt_wallets_textfield_icon_right')
+      .findByRole('button')
+      .click()
+    getTotalNumberOfWallets(
+      '.wallets-listcard-dropdown__items',
+      '.wallets-listcard-dropdown__item'
+    ).then((listItems) => {
+      for (let i = 1; i < listItems; i++) {
+        cy.get('.wallets-listcard-dropdown__item')
+          .eq(i)
+          .find('span')
+          .first()
+          .invoke('text')
+          .then((text) => {
+            let walletsTextValue = text.trim()
+            cy.get('.wallets-listcard-dropdown__item', {
+              timeout: 10000,
             })
-        }
+              .should('be.visible')
+              .eq(i)
+              .click({ force: true })
+              .then(() => {
+                return new Promise((resolve) => {
+                  setTimeout(resolve, 1000)
+                })
+              })
+              .then(() => {
+                cy.get(
+                  '.wallets-textfield__field.wallets-textfield__field--listcard'
+                ).should('have.value', walletsTextValue)
+                cy.log('the wallet text value is' + walletsTextValue)
+                cy.get('.wallets-balance__container', { timeout: 20000 })
+                  .should('be.visible')
+                  .find('span')
+                  .invoke('text')
+                  .should('contain', walletsTextValue.split(' ')[0])
+                cy.findByTestId('dt_desktop_accounts_list')
+                  .findByRole('button', { name: 'Transfer' })
+                  .should('be.visible')
+                cy.findByTestId('dt_wallets_textfield_icon_right')
+                  .findByRole('button')
+                  .click({ force: true })
+              })
+          })
       }
-    )
+    })
     //Switch to Demo wallet
     switchBetweenDemoandReal()
     cy.findByText('USD Demo Wallet').should('be.visible')

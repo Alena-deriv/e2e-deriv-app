@@ -66,10 +66,10 @@ function addcryptowallet(platform) {
     })
 }
 function checkWalletAccountSwitcher(walletname) {
-  cy.get('.wallets-dropdown__button', { timeout: 10000 })
+  cy.get('.wallets-listcard-dropdown', { timeout: 10000 })
     .scrollIntoView()
     .should('be.visible')
-  cy.get('.wallets-dropdown__button').click()
+  cy.get('.wallets-listcard-dropdown').click()
   cy.contains(`${walletname}`).should('exist')
 }
 

@@ -60,10 +60,8 @@ function verifyDemoCreationsMessage(accountType) {
 }
 
 function expandDemoWallet() {
-  cy.get('.wallets-dropdown__button').click()
-  cy.get('.wallets-list-card-dropdown__item-content')
-    .contains('USD Demo Wallet')
-    .click()
+  cy.get('wallets-listcard-dropdown').click()
+  cy.get('.wallets-listcard-dropdown__item').contains('USD Demo Wallet').click()
   cy.contains('USD Demo Wallet').should('be.visible')
 }
 function closeModal() {
