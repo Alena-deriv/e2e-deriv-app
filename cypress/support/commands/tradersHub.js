@@ -66,12 +66,6 @@ Cypress.Commands.add('c_enterValidEmail', (signUpMail, options = {}) => {
   cy.fixture('tradersHub/signupLanguageContent.json').then((langData) => {
     const lang = langData[language]
     cy.visit(`${Cypress.env('derivComProdURL')}${lang.urlCode}/signup/`)
-    //Wait for the signup page to load completely
-    cy.findByRole(
-      'button',
-      { name: 'whatsapp icon' },
-      { timeout: 30000 }
-    ).should('be.visible')
     cy.findByPlaceholderText(lang.signUpForm.emailTxtBox)
       .as('email')
       .should('be.visible')
@@ -488,6 +482,25 @@ Cypress.Commands.add(
         cy.c_selectCountryOfResidence(country, options)
         cy.c_selectCitizenship(country, options)
         cy.c_enterPassword(options)
+        cy.window().then((win) => {
+          const gbFeaturesCache = win.localStorage.getItem('gbFeaturesCache')
+          if (gbFeaturesCache) {
+            const parsedCache = JSON.parse(gbFeaturesCache)
+            const data = parsedCache[0][1].data.features
+            if (data.show_setup_real_or_go_demo?.defaultValue) {
+              cy.findByText(
+                lang.accounSignupModal.startYourJourneyHeading
+              ).then(($el) => {
+                if ($el.length) {
+                  cy.log('Proceeding via account signup modal flow')
+                  cy.findByRole('button', {
+                    name: lang.accounSignupModal.realAccountCreationBtn,
+                  }).click()
+                }
+              })
+            }
+          }
+        })
       })
     })
   }
@@ -514,12 +527,6 @@ Cypress.Commands.add(
           }
         },
       })
-
-      cy.findByRole(
-        'button',
-        { name: 'whatsapp icon' },
-        { timeout: 30000 }
-      ).should('be.visible')
       cy.c_visitResponsive(`/endpoint?lang=${lang.urlCode}`, size)
       if (!Cypress.isProd) {
         localStorage.setItem(

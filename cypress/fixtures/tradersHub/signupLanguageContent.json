@@ -6,7 +6,7 @@
             "signUpBtn": "Iniciar sesión",
             "emailTxtBox": "Correo electrónico",
             "createDemoAccTxt": "Crear cuenta demo",
-            "checkMailTxt": "Revise su correo electrónico"
+            "checkMailTxt": "Compruebe su correo electrónico"
         },
         "demoAccountSignUp": {
             "selectCountryDropdown": "Seleccione su país y su ciudadanía:",
@@ -43,6 +43,10 @@
             "accountSettingsTxt": "Configuración de cuenta",
             "poiTxt": "Prueba de identidad",
             "issuedCountryTxt": "¿En qué país se emitió su documento?"
+        },
+        "accounSignupModal": {
+            "startYourJourneyHeading": "Comience su viaje de trading",
+            "realAccountCreationBtn": "Configura su cuenta real"
         }
     },
     "english": {
@@ -89,6 +93,10 @@
             "accountSettingsTxt": "Account Settings",
             "poiTxt": "Proof of identity",
             "issuedCountryTxt": "In which country was your document issued?"
+        },
+        "accounSignupModal": {
+            "startYourJourneyHeading": "Start your trading journey",
+            "realAccountCreationBtn": "Set up your real account"
         }
     }
 }

@@ -18,12 +18,9 @@ describe("QATEST-5930 - Validate the hyperlinks on Trader's hub", () => {
         .first()
         .c_clickToOpenInSamePage()
       cy.findByRole('heading', {
-        name: 'Digital options available on Deriv',
+        name: 'Trade over 50 assets with Options',
       }).should('be.visible')
-      cy.url().should(
-        'contain',
-        '/trade-types/options/digital-options/up-and-down/'
-      )
+      cy.url().should('contain', '/trade/options')
       cy.go('back')
       if (isMobile) {
         cy.findByRole('button', { name: 'CFDs' }).click()
@@ -31,8 +28,10 @@ describe("QATEST-5930 - Validate the hyperlinks on Trader's hub", () => {
       cy.findAllByRole('link', { name: 'Learn more' })
         .last()
         .c_clickToOpenInSamePage()
-      cy.findByRole('heading', { name: 'CFD trading' }).should('be.visible')
-      cy.url().should('contain', '/trade-types/cfds/')
+      cy.findByRole('heading', {
+        name: 'Trade global markets with CFDs',
+      }).should('be.visible')
+      cy.url().should('contain', '/trade/cfds')
       cy.go('back')
       if (isMobile) {
         cy.findByRole('button', { name: 'CFDs' }).click()

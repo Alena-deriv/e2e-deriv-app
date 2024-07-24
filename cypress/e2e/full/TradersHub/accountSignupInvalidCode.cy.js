@@ -10,16 +10,19 @@ describe('QATEST-5547: Verify signup with invalid verification code', () => {
       cy.c_setEndpoint(signUpEmail, size)
       cy.c_emailVerification('account_opening_new.html', signUpEmail)
       cy.then(() => {
-        cy.c_visitResponsive('https://deriv.com/signup-success/')
+        cy.c_visitResponsive(
+          `${Cypress.env('derivComProdURL')}signup-success/?email=${signUpEmail}`,
+          size
+        )
         cy.findByText(new RegExp(signUpEmail)).should('be.visible')
         cy.findByRole('link', {
-          name: `Didn't receive your email?`,
+          name: `Didn’t receive the email?`,
         }).click()
         cy.findByText(
           `If you don't see an email from us within a few minutes, a few things could have happened:`
         ).should('be.visible')
-        cy.findByRole('link', {
-          name: 'Re-enter your email and try again',
+        cy.findByRole('button', {
+          name: 'Try again',
         }).click()
         cy.c_setEndpoint(signUpEmail, size)
         cy.c_visitResponsive(Cypress.env('verificationUrl'), size).then(() => {
