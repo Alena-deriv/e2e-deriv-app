@@ -2,7 +2,7 @@ import fundTransferPageObjects from '../../Pages/fundTransferPageObjects'
 import mt5_tradershub from '../../Pages/mt5PageObjects'
 const locators = require('../../PageElements/mt5TransferLocators.json')
 
-describe('QATEST-37216 - MT5 Deposit & withdrawal for different fiat currencies (AUD-USD)', () => {
+describe('QATEST-37228 - MT5 Deposit & withdrawal for different fiat currencies (AUD-USD)', () => {
   beforeEach(() => {
     cy.clearCookies()
     cy.clearLocalStorage()
