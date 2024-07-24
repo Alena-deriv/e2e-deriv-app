@@ -41,6 +41,26 @@ Cypress.Commands.add('c_submitIdv', () => {
   cy.findByRole('button', { name: 'Verify' }).click()
 })
 
+Cypress.Commands.add('c_SubmitPoiThroughManual', (country) => {
+  cy.contains('button', 'Next').click()
+  cy.findByText('Passport').should('be.visible').click()
+  cy.findByLabelText('Passport number*').type('232344')
+  cy.get('.dc-datepicker__native').type('2025-09-20')
+  cy.findByRole('button', { name: 'Next' }).should('not.be.enabled')
+  cy.c_uploadDocument()
+  cy.findByRole('button', { name: 'Next' }).should('be.enabled').click()
+  cy.findByRole('button', { name: 'Confirm and upload' }).should(
+    'not.be.enabled'
+  )
+  cy.c_uploadDocument()
+  cy.findByRole('button', { name: 'Confirm and upload' })
+    .should('be.enabled')
+    .click()
+  cy.findByText('Your documents were submitted successfully').should(
+    'be.visible'
+  )
+})
+
 Cypress.Commands.add('c_submitOnfidoPoiPage', () => {
   cy.findByTestId('date_of_birth').type('1990-01-01')
   cy.findByText('Choose document').should('be.visible')
@@ -73,6 +93,41 @@ Cypress.Commands.add('c_onfidoSecondRun', (country) => {
   cy.findByText('Confirm').click()
 })
 
+Cypress.Commands.add('c_SubmitOnfidoMt5', () => {
+  cy.get('.dc-checkbox__box').click()
+  cy.contains('button', 'Next').click()
+  cy.findByTestId('date_of_birth').clear().type('1990-01-01')
+  cy.get('.dc-checkbox__box').click()
+  cy.findByText('Passport').click()
+  cy.findByText('Submit passport photo pages').should('be.visible')
+  cy.findByText('or upload photo – no scans or photocopies').click()
+  cy.findByText('Upload passport photo page').should('be.visible')
+  cy.c_uploadDocument()
+  cy.findByText('Confirm').click()
+  cy.findByText('Continue').click()
+  cy.findByText('Take a selfie').should('be.visible')
+  cy.get('.onfido-sdk-ui-Camera-btn').click()
+  cy.findByText('Confirm').click()
+  cy.c_uploadDocument()
+  cy.findByRole('button', { name: 'Continue' }).click()
+})
+
+Cypress.Commands.add('c_financialAssessmentForm', () => {
+  cy.get('select[name="income_source"]').select('Salaried Employee')
+  cy.get('select[name="employment_status"]').select('Employed')
+  cy.get('select[name="employment_industry"]').select('Construction')
+  cy.get('select[name="occupation"]').select('Managers')
+  cy.get('select[name="source_of_wealth"]').select('Cash Business')
+  cy.get('select[name="education_level"]').select('Tertiary')
+  cy.get('select[name="net_income"]').select('$25,000 - $50,000')
+  cy.get('select[name="estimated_worth"]').select('$100,000 - $250,000')
+  cy.get('select[name="account_turnover"]').select('Less than $25,000')
+  cy.contains('button', 'Submit').should('be.enabled').click()
+  cy.findByText('Financial assessment submitted successfully').should(
+    'be.visible'
+  )
+})
+
 Cypress.Commands.add('c_resetData', (options = {}) => {
   const { size = 'desktop' } = options
   cy.c_visitResponsive('/', { size: size })
@@ -88,6 +143,13 @@ Cypress.Commands.add('c_resetData', (options = {}) => {
     .clear()
     .type(generateRandomName())
     .type('{enter}')
+})
+
+Cypress.Commands.add('c_uploadDocument', () => {
+  cy.get('input[type=file]').selectFile(
+    'cypress/fixtures/kyc/testDriversLicense.jpeg',
+    { force: true }
+  )
 })
 
 Cypress.Commands.add('c_verifyAccount', (options = {}) => {

@@ -428,6 +428,14 @@ module.exports = defineConfig({
           ID: process.env.E2E_MT5_LOGIN,
           PSWD: process.env.E2E_QA_ACCOUNT_PASSWORD,
         },
+        kycUserWithFundsCR: {
+          ID: process.env.E2E_KYC_ACC_FUNDS_CR_LOGIN,
+          PSWD: process.env.E2E_QA_ACCOUNT_PASSWORD,
+        },
+        kycUserWithFundsMF: {
+          ID: process.env.E2E_KYC_ACC_FUNDS_MF_LOGIN,
+          PSWD: process.env.E2E_QA_ACCOUNT_PASSWORD,
+        },
         cfdfundTransferUSD: {
           ID: process.env.E2E_CFD_FUND_TRANSFER_USD_LOGIN,
           PSWD: process.env.E2E_QA_ACCOUNT_PASSWORD,
