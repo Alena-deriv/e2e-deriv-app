@@ -14,10 +14,7 @@ describe('QATEST-4835 POA Verified/Rejected', () => {
     cy.findByRole('button', { name: 'Save and submit' }).should(
       'not.be.enabled'
     )
-    cy.get('input[type=file]').selectFile(
-      'cypress/fixtures/kyc/testDocument.jpg',
-      { force: true }
-    )
+    cy.c_uploadDocument()
     cy.findByRole('button', { name: 'Save and submit' })
       .should('be.enabled')
       .click()
@@ -37,7 +34,7 @@ describe('QATEST-4835 POA Verified/Rejected', () => {
     cy.findByRole('button', { name: /View \/ Edit/i }).click()
     cy.get('.link').eq(1).should('be.visible').click()
 
-    /* Rejecting POA from BO */
+    /* Verifying POA from BO */
     cy.get(
       '#documents_wrapper table tbody tr td input[name^="issue_date_"]'
     ).type(CURRENT_DATE)
@@ -60,10 +57,7 @@ describe('QATEST-4835 POA Verified/Rejected', () => {
     cy.findByRole('button', { name: 'Save and submit' }).should(
       'not.be.enabled'
     )
-    cy.get('input[type=file]').selectFile(
-      'cypress/fixtures/kyc/testDocument.jpg',
-      { force: true }
-    )
+    cy.c_uploadDocument()
     cy.findByRole('button', { name: 'Save and submit' })
       .should('be.enabled')
       .click()

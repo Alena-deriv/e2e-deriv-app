@@ -52,10 +52,7 @@ describe('QATEST-4777 Onfido fake profile.', () => {
     cy.findByText('Submit passport photo pages').should('be.visible')
     cy.findByText('or upload photo – no scans or photocopies').click()
     cy.findByText('Upload passport photo page').should('be.visible')
-    cy.get('input[type=file]').selectFile(
-      'cypress/fixtures/kyc/testDriversLicense.jpeg',
-      { force: true }
-    )
+    cy.c_uploadDocument()
     cy.findByText('Confirm').click()
     cy.findByText('Continue').click()
     cy.findByText('Take a selfie').should('be.visible')
@@ -73,10 +70,7 @@ describe('QATEST-4777 Onfido fake profile.', () => {
     cy.findByRole('button', { name: 'Save and submit' }).should(
       'not.be.enabled'
     )
-    cy.get('input[type=file]').selectFile(
-      'cypress/fixtures/kyc/testDocument.jpg',
-      { force: true }
-    )
+    cy.c_uploadDocument()
     cy.findByRole('button', { name: 'Save and submit' })
       .should('be.enabled')
       .click()

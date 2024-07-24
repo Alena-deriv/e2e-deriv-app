@@ -13,10 +13,7 @@ describe('QATEST-4782 Onfido verified profile', () => {
     cy.findByText('Submit passport photo pages').should('be.visible')
     cy.findByText('or upload photo – no scans or photocopies').click()
     cy.findByText('Upload passport photo page').should('be.visible')
-    cy.get('input[type=file]').selectFile(
-      'cypress/fixtures/kyc/testDriversLicense.jpeg',
-      { force: true }
-    )
+    cy.c_uploadDocument()
     cy.findByText('Confirm').click()
     cy.findByText('Continue').click()
     cy.findByText('Take a selfie').should('be.visible')

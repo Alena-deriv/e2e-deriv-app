@@ -12,10 +12,7 @@ describe('QATEST-127508 - Onfido (2 attempts) failed clients are redirected to m
     cy.findByText('Submit passport photo pages').should('be.visible')
     cy.findByText('or upload photo – no scans or photocopies').click()
     cy.findByText('Upload passport photo page').should('be.visible')
-    cy.get('input[type=file]').selectFile(
-      'cypress/fixtures/kyc/testDriversLicense.jpeg',
-      { force: true }
-    )
+    cy.c_uploadDocument()
     cy.findByText('Confirm').click()
     cy.findByText('Continue').click()
     cy.findByText('Take a selfie').should('be.visible')
@@ -34,7 +31,6 @@ describe('QATEST-127508 - Onfido (2 attempts) failed clients are redirected to m
     cy.findByText('Your documents were submitted successfully').should(
       'be.visible'
     )
-
     cy.c_waitUntilElementIsFound({
       cyLocator: () =>
         cy.findByText('Please upload one of the following documents:'),

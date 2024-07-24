@@ -2,7 +2,6 @@ describe('QATEST-160108 Cashier lock when POI expire CR - Low', () => {
   beforeEach(() => {
     cy.c_createCRAccount({ country_code: 'aq' })
     cy.c_login()
-    cy.findByTestId('dt_traders_hub').should('be.visible')
     cy.c_navigateToPoiResponsive('Antarctica')
   })
 
@@ -12,10 +11,7 @@ describe('QATEST-160108 Cashier lock when POI expire CR - Low', () => {
     cy.findByLabelText('Passport number*').type('232344')
     cy.get('.dc-datepicker__native').type('2025-09-20')
     cy.findByRole('button', { name: 'Next' }).should('not.be.enabled')
-    cy.get('input[type=file]').selectFile(
-      'cypress/fixtures/kyc/testDriversLicense.jpeg',
-      { force: true }
-    )
+    cy.c_uploadDocument()
     cy.findByRole('button', { name: 'Next' }).should('be.enabled').click()
     cy.findByRole('button', { name: 'Confirm and upload' }).should(
       'not.be.enabled'

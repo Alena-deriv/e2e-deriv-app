@@ -10,19 +10,28 @@ Cypress.Commands.add('c_navigateToPoi', (country) => {
 })
 
 Cypress.Commands.add('c_navigateToPoiResponsive', (country, options = {}) => {
-  const { runFor = '' } = options
-  if (runFor == 'p2p') {
-    cy.c_visitResponsive('/appstore/traders-hub', { size: 'mobile' })
-  }
-  cy.c_visitResponsive('/account/proof-of-identity', { size: 'mobile' })
+  const { size = 'mobile' } = options
+  cy.c_visitResponsive('/account/proof-of-identity', { size: size })
   cy.c_closeNotificationHeader()
   cy.get('select[name="country_input"]').select(country)
   cy.contains('button', 'Next').click()
 })
 
-Cypress.Commands.add('c_navigateToPoaResponsive', () => {
-  cy.c_visitResponsive('/account/proof-of-address', { size: 'mobile' })
+Cypress.Commands.add('c_navigateToPoaResponsive', (options = {}) => {
+  const { size = 'mobile' } = options
+  cy.c_visitResponsive('/account/proof-of-address', { size: size })
   cy.c_closeNotificationHeader()
+})
+
+Cypress.Commands.add('c_submitPoa', () => {
+  cy.findByRole('button', { name: 'Save and submit' }).should('not.be.enabled')
+  cy.c_uploadDocument()
+  cy.findByRole('button', { name: 'Save and submit' })
+    .should('be.enabled')
+    .click()
+  cy.findByText('Your documents were submitted successfully').should(
+    'be.visible'
+  )
 })
 
 Cypress.Commands.add('c_submitIdv', () => {
@@ -32,16 +41,32 @@ Cypress.Commands.add('c_submitIdv', () => {
   cy.findByRole('button', { name: 'Verify' }).click()
 })
 
+Cypress.Commands.add('c_submitOnfidoPoiPage', () => {
+  cy.findByTestId('date_of_birth').type('1990-01-01')
+  cy.findByText('Choose document').should('be.visible')
+  cy.get('.dc-checkbox__box').click()
+  cy.findByText('Passport').click()
+  cy.findByText('Submit passport photo pages').should('be.visible')
+  cy.findByText('or upload photo – no scans or photocopies').click()
+  cy.findByText('Upload passport photo page').should('be.visible')
+  cy.c_uploadDocument()
+  cy.findByText('Confirm').click()
+  cy.findByText('Continue').click()
+  cy.findByText('Take a selfie').should('be.visible')
+  cy.get('.onfido-sdk-ui-Camera-btn').click()
+  cy.findByText('Confirm').click()
+  cy.findByText('Your documents were submitted successfully').should(
+    'be.visible'
+  )
+})
+
 Cypress.Commands.add('c_onfidoSecondRun', (country) => {
   cy.get('select[name="country_input"]').select(country)
   cy.findByRole('button', { name: 'Next' }).click()
   cy.get('.dc-checkbox__box').click()
   cy.findByText('Passport').click()
   cy.findByText('or upload photo – no scans or photocopies').click()
-  cy.get('input[type=file]').selectFile(
-    'cypress/fixtures/kyc/testDriversLicense.jpeg',
-    { force: true }
-  )
+  cy.c_uploadDocument()
   cy.findByText('Confirm').click()
   cy.findByText('Continue').click()
   cy.get('.onfido-sdk-ui-Camera-btn').click()
@@ -83,4 +108,11 @@ Cypress.Commands.add('c_verifyAccount', (options = {}) => {
   cy.c_visitResponsive('/account/proof-of-identity', { size: size })
   cy.contains('ID verification passed').should('be.visible')
   cy.contains('a', 'Continue trading').should('be.visible')
+})
+
+Cypress.Commands.add('c_uploadDocument', () => {
+  cy.get('input[type=file]').selectFile(
+    'cypress/fixtures/kyc/testDriversLicense.jpeg',
+    { force: true }
+  )
 })

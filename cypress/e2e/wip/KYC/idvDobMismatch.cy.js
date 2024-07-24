@@ -4,7 +4,6 @@ describe('QATEST-23042 IDV DOB Mismatch by Smile Identity provider', () => {
   beforeEach(() => {
     cy.c_createCRAccount({ country_code: 'ke' })
     cy.c_login()
-    cy.findByTestId('dt_traders_hub').should('be.visible')
     cy.c_navigateToPoiResponsive('Kenya')
   })
 
@@ -25,10 +24,12 @@ describe('QATEST-23042 IDV DOB Mismatch by Smile Identity provider', () => {
       'be.visible'
     )
     cy.c_closeNotificationHeader()
-    cy.reload()
-    cy.findByText('Your identity verification failed because:').should(
-      'be.visible'
-    )
+    cy.c_waitUntilElementIsFound({
+      cyLocator: () =>
+        cy.findByText('Your identity verification failed because:'),
+      timeout: 4000,
+      maxRetries: 5,
+    })
     cy.findByTestId('DobMismatch')
       .contains(
         "The date of birth on your identity document doesn't match your profile."
