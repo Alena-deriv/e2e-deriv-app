@@ -1,5 +1,6 @@
 import BotBuilder from '../../../support/pageobjects/dbot/bot_builder_page'
 import BotDashboard from '../../../support/pageobjects/dbot/bot_dashboard_page'
+import charts from '../../../support/pageobjects/dbot/charts'
 
 describe('QATEST-4233, QATEST-4238, QATEST-4228: Verify toolbar on bot builder page', () => {
   const sizes = ['mobile', 'desktop']
@@ -38,6 +39,13 @@ describe('QATEST-4233, QATEST-4238, QATEST-4228: Verify toolbar on bot builder p
       cy.findByRole('button', { name: 'OK' }).click()
       cy.c_loadingCheck()
       cy.findAllByText('Martingale').should('not.exist')
+      if (!isMobile) {
+        cy.findAllByTestId('dt_toolbar_chart_button').click()
+        charts.selectSymbolOnCharts('Volatility 10 (1s) Index')
+        cy.findAllByTestId('dt_react_draggable_handler').should('be.visible')
+        cy.findByTestId('dt_react_draggable-close-modal').click()
+        cy.findByTestId('chart-modal-dialog').should('not.exist')
+      }
     })
   })
 })
