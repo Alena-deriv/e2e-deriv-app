@@ -34,6 +34,7 @@ describe('QATEST-99420, QATEST-4179: Import and run custom strategy', () => {
           return martingaleValues[call++]
         })
         cy.c_loadingCheck()
+        cy.findByRole('button', { name: 'Run' }).should('not.be.disabled')
         cy.c_runBot()
       })
 

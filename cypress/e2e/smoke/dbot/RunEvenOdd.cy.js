@@ -30,6 +30,7 @@ describe('QATEST-109419: Run custom strategy Even Odd', () => {
           force: true,
         })
       } else {
+        cy.findByRole('button', { name: 'Run' }).should('not.be.disabled')
         cy.findAllByTestId('dt_desktop_bot_list_action-open').first().click()
       }
       cy.c_runBot()
