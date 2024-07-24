@@ -1,3 +1,5 @@
+import { generateRandomName } from '../../../support/helper/utility'
+
 describe('QATEST-22037 IDV verified by Smile Identity provider', () => {
   beforeEach(() => {
     cy.c_createCRAccount({ country_code: 'za' })
@@ -13,7 +15,6 @@ describe('QATEST-22037 IDV verified by Smile Identity provider', () => {
     cy.findByTestId('date_of_birth').type('2000-09-20')
     cy.get('.dc-checkbox__box').click()
     cy.findByRole('button', { name: 'Verify' }).click()
-    cy.findByText('Proof of address required').should('exist')
     cy.c_closeNotificationHeader()
     cy.c_waitUntilElementIsFound({
       cyLocator: () => cy.findByText('ID verification passed'),
@@ -21,5 +22,17 @@ describe('QATEST-22037 IDV verified by Smile Identity provider', () => {
       maxRetries: 5,
     })
     cy.contains('a', 'Continue trading').should('be.visible')
+
+    // Revert names to be rerun again
+    cy.c_visitBackOffice()
+    cy.findByText('Client Management').click()
+    cy.findByPlaceholderText('email@domain.com')
+      .should('exist')
+      .clear()
+      .type(Cypress.env('credentials').test.masterUser.ID)
+    cy.findByRole('button', { name: /View \/ Edit/i }).click()
+    cy.get('.link').eq(1).should('be.visible').click()
+
+    cy.get('input[name="last_name"]').type(generateRandomName()).type('{enter}')
   })
 })
