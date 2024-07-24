@@ -1,5 +1,5 @@
 describe('QATEST-5918: Verify Change currency functionality for the account which has no balance', () => {
-  const size = ['small', 'desktop']
+  const sizes = ['mobile', 'desktop']
   let newCurrency = Cypress.env('accountCurrency').EUR
 
   beforeEach(() => {
@@ -7,10 +7,10 @@ describe('QATEST-5918: Verify Change currency functionality for the account whic
     cy.c_login()
   })
 
-  size.forEach((size) => {
-    it(`Should be able to change currency on ${size == 'small' ? 'mobile' : 'desktop'}`, () => {
-      const isMobile = size == 'small' ? true : false
-      cy.c_visitResponsive('/appstore/traders-hub', size)
+  sizes.forEach((size) => {
+    it(`Should be able to change currency on ${size}`, () => {
+      const isMobile = size == 'mobile' ? true : false
+      cy.c_visitResponsive('/appstore/traders-hub', { size: size })
       cy.findAllByTestId('dt_balance_text_container').should('have.length', '2')
       cy.c_checkTradersHubHomePage(isMobile)
       cy.findByTestId('dt_currency-switcher__arrow').click()

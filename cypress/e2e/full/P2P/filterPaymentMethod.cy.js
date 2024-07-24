@@ -69,16 +69,14 @@ function addOrderWithPM() {
 describe('QATEST-121392 - Filter for Payment Methods and Matching Ads', () => {
   beforeEach(() => {
     cy.clearAllLocalStorage()
-    cy.c_login({ user: 'p2pFilterPaymentMethodBase' })
-    cy.c_visitResponsive('/appstore/traders-hub', 'small')
+    cy.c_login({ user: 'p2pFilterPaymentMethodBase', size: 'mobile' })
   })
   it('Should filter for Payment Methods in Buy and Sell ad screen.', () => {
     cy.c_navigateToP2P()
     cy.c_clickMyAdTab()
     cy.c_createNewAd('sell')
     addOrderWithPM()
-    cy.c_login({ user: 'p2pFilterPaymentMethodSelector' })
-    cy.c_visitResponsive('/appstore/traders-hub', 'small')
+    cy.c_login({ user: 'p2pFilterPaymentMethodSelector', size: 'mobile' })
     cy.c_navigateToP2P()
     cy.c_clickMyAdTab()
     cy.findByText('Buy / Sell').should('be.visible').click()

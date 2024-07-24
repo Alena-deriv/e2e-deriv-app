@@ -5,17 +5,17 @@ declare global {
       /**
        * This command allows visiting a specified path in the application with a set viewport size.
        * The viewport size determines the responsiveness of the visit.
-       * It defaults to the 'viewPortSize' set in Cypress environment variables if not specified.
+       * It defaults to the 'defaultViewPortSize' set in Cypress environment variables if not specified.
        * @param path The relative URL path to visit.
-       * @param size The size of the viewport to simulate ('small', 'medium', or 'large'). Defaults to 'small' size.
-       * @example cy.c_visitResponsive('/cashier', 'small') // Visits the '/cashier' path with 'small' viewport size
+       * @param size The size of the viewport to simulate ('mobile', 'tablet', or 'desktop'). Defaults to 'desktop' size.
+       * @example cy.c_visitResponsive('/cashier', {size: 'mobile'}) // Visits the '/cashier' path with 'mobile' viewport size
        * @example cy.c_visitResponsive('/dashboard') // Uses the default size
        */
       c_visitResponsive(path: string, size?: string): void
 
       /**
        * This command is used for programmatically logging into the application with specified credentials and settings.
-       * It navigates to a given endpoint in 'large' screen mode and logs in with the provided user credentials,
+       * It navigates to a given endpoint in 'desktop' screen mode and logs in with the provided user credentials,
        * handling different configurations based on the `app` parameter.
        * @param options An object containing `user` and `app` keys. `user` defaults to 'masterUser', and `app` defaults to an empty string.
        *                `user` specifies the username to log in with, and `app` specifies the application area to navigate to after login.
@@ -28,7 +28,7 @@ declare global {
 
       /**
        * This command is used for OAuth login to the application programmatically.
-       * It navigates to the OAuth URL in 'large' screen mode and handles modal interactions
+       * It navigates to the OAuth URL in 'desktop' screen mode and handles modal interactions
        * before navigating to the appropriate section of the application based on the `app` parameter.
        * @param app The specific application area to navigate to after login, such as 'wallets', 'doughflow', 'demoonlywallet', or 'onramp'.
        * @example cy.c_doOAuthLogin() will navigate to Tradershub
@@ -38,7 +38,7 @@ declare global {
 
       /**
        * This command is used to log into the MT5 platform programmatically.
-       * It navigates to the MT5 base URL in 'large' screen mode, accepts the initial prompt,
+       * It navigates to the MT5 base URL in 'desktop' screen mode, accepts the initial prompt,
        * and then enters the login and password credentials before clicking the connect button.
        * @example cy.c_mt5login()
        */

@@ -6,9 +6,7 @@ describe('QATEST-37180 - MT5 Deposit & withdrawal for same fiat currency (USD-US
   beforeEach(() => {
     cy.clearCookies()
     cy.clearLocalStorage()
-    cy.c_visitResponsive('/appstore/traders-hub', 'large')
-    //cy.c_login()
-    cy.c_login({ user: 'cfdfundTransferUSD' })
+    cy.c_login({ user: 'cfdfundTransferUSD', size: 'desktop' })
     mt5_tradershub.checkMT5AccountisPresent()
   })
 

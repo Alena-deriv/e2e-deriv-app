@@ -1,7 +1,7 @@
 import charts from '../../../support/pageobjects/dbot/charts'
 
 describe('QATEST-99340: Verify feed is loading on charts tab', () => {
-  const size = ['small', 'desktop']
+  const sizes = ['mobile', 'desktop']
   beforeEach(() => {
     if (Cypress.config().baseUrl === Cypress.env('prodURL')) {
       cy.c_login({ user: 'dBot', rateLimitCheck: true })
@@ -10,10 +10,10 @@ describe('QATEST-99340: Verify feed is loading on charts tab', () => {
       cy.c_login()
     }
   })
-  size.forEach((size) => {
-    it(`Verify feed for real and demo account on ${size == 'small' ? 'mobile' : 'desktop'}`, () => {
-      const isMobile = size == 'small' ? true : false
-      cy.c_visitResponsive('appstore/traders-hub', size)
+  sizes.forEach((size) => {
+    it(`Verify feed for real and demo account on ${size}`, () => {
+      const isMobile = size == 'mobile' ? true : false
+      cy.c_visitResponsive('appstore/traders-hub', { size: size })
       //Wait for page to completely load
       cy.findAllByTestId('dt_balance_text_container').should('have.length', '2')
       cy.c_openDbotThub()

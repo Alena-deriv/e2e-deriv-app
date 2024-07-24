@@ -42,26 +42,26 @@ function performCryptoDepositFiatonRamp(platform) {
 describe('QATEST-98781 - Crypto deposit and fiat onramp', () => {
   //Prerequisites: Crypto wallet account with access to banxa provider in any qa box with app id 11780
   beforeEach(() => {
-    cy.c_login({ user: 'walletloginEmail' })
+    cy.c_login({ user: 'walletloginEmail', app: 'wallets' })
   })
 
   it('should be able to view crypto deposit details', () => {
-    cy.c_visitResponsive('/', 'large')
+    cy.c_visitResponsive('/', { size: 'desktop' })
     performCryptoDeposit('desktop')
   })
 
   it('should be able to deposit into crypto account through fiat onramp', () => {
-    cy.c_visitResponsive('/', 'large')
+    cy.c_visitResponsive('/', { size: 'desktop' })
     performCryptoDepositFiatonRamp('desktop')
   })
-  it('should be able to view crypto deposit details in responsive', () => {
-    cy.c_visitResponsive('/', 'small')
+  it('should be able to view crypto deposit details on mobile', () => {
+    cy.c_visitResponsive('/', { size: 'mobile' })
     cy.c_WaitUntilWalletsPageIsLoaded()
     performCryptoDeposit('mobile')
   })
 
-  it('should be able to deposit into crypto account through fiat onramp in responsive', () => {
-    cy.c_visitResponsive('/', 'small')
+  it('should be able to deposit into crypto account through fiat onramp on mobile', () => {
+    cy.c_visitResponsive('/', { size: 'mobile' })
     cy.c_WaitUntilWalletsPageIsLoaded()
     performCryptoDepositFiatonRamp('mobile')
   })

@@ -1,9 +1,9 @@
 describe('QATEST-154043 - Client with USD more than 3 months & Payment agent', () => {
   beforeEach(() => {
-    cy.c_login({ user: 'walletMigrationPA' })
+    cy.c_login({ user: 'walletMigrationPA', app: 'wallets' })
   })
   it('Client with USD more than 3 months & PA should not see  Wallets - Enable now banner', () => {
-    cy.c_visitResponsive('/', 'large')
+    cy.c_visitResponsive('/', { size: 'desktop' })
     cy.c_checkForBanner()
     cy.findByText('US Dollar').should('be.visible')
     cy.get('#dt_cashier_tab > .dc-text').should('be.visible').click()
@@ -18,8 +18,8 @@ describe('QATEST-154043 - Client with USD more than 3 months & Payment agent', (
     )
     cy.findByRole('button', { name: 'Transfer' }).should('be.disabled')
   })
-  it('Client with USD more than 3 months & PA should not see  Wallets - Enable now banner - Responsive', () => {
-    cy.c_visitResponsive('/', 'small')
+  it('Client with USD more than 3 months & PA should not see  Wallets - Enable now banner on mobile', () => {
+    cy.c_visitResponsive('/', { size: 'mobile' })
     cy.findAllByTestId('dt_balance_text_container').should('have.length', '2')
     cy.c_checkForBanner()
     cy.findByText('US Dollar').should('be.visible')
@@ -35,14 +35,14 @@ describe('QATEST-154043 - Client with USD more than 3 months & Payment agent', (
 })
 describe('QATEST-154263 - Client with USD more than 3 months & used PA in recently', () => {
   beforeEach(() => {
-    cy.c_login({ user: 'walletMigrationPAclient' })
+    cy.c_login({ user: 'walletMigrationPAclient', app: 'wallets' })
   })
   it('Should not see  Wallets - Enable now banner', () => {
-    cy.c_visitResponsive('/', 'large')
+    cy.c_visitResponsive('/', { size: 'desktop' })
     cy.c_checkForBanner()
   })
-  it('Responsive - Should not see  Wallets - Enable now banner', () => {
-    cy.c_visitResponsive('/', 'small')
+  it('Should not see  Wallets - Enable now banner on mobile', () => {
+    cy.c_visitResponsive('/', { size: 'mobile' })
     cy.findAllByTestId('dt_balance_text_container').should('have.length', '2')
     cy.c_checkForBanner('Deriv Trader', 'Deriv GO')
   })

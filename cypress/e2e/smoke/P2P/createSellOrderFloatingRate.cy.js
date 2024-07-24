@@ -16,7 +16,7 @@ let fiatCurrency = 'USD'
 let isSellAdUser = true
 const loginWithNewUser = (userAccount, isSellAdUserAccount) => {
   Cypress.prevAppId = 0
-  cy.c_login({ user: userAccount, rateLimitCheck: true })
+  cy.c_login({ user: userAccount, rateLimitCheck: true, size: 'mobile' })
   isSellAdUser = isSellAdUserAccount
 }
 
@@ -30,10 +30,6 @@ describe('QATEST-50478 - Place a Sell Order same currency ads - floating rate ad
     } else {
       loginWithNewUser('p2pFloatingSellOrder2', true)
     }
-    cy.c_visitResponsive('/appstore/traders-hub', 'small'),
-      {
-        rateLimitCheck: true,
-      }
   })
   it('Should be able to create a Buy type advert', () => {
     cy.c_navigateToP2P()

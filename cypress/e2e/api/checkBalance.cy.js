@@ -2,7 +2,7 @@ let balanceAmount = 10000
 
 describe('QATEST - 145407 - Checking the Balance', () => {
   it('should show balance call', () => {
-    cy.c_visitResponsive('/')
+    cy.c_visitResponsive('/', { size: 'desktop' })
     cy.c_createDemoAccount()
     cy.c_login()
     cy.task('wsConnect')

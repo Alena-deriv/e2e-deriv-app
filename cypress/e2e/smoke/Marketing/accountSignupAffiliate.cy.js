@@ -1,14 +1,14 @@
 import { generateEpoch } from '../../../support/helper/utility'
 
 describe('QATEST-122929 - Creating account with affiliate token', () => {
-  const size = ['desktop', 'small']
+  const sizes = ['desktop', 'mobile']
   let countryIDV = Cypress.env('countries').ID
   const tracking_Link_URL = `https://${Cypress.env('trackingLink')}${Cypress.env('trackingLinkToken')}`
 
-  size.forEach((size) => {
-    it(`affliate token should be attached to the account created (check in BO affiliate token) ${size == 'small' ? 'mobile' : 'desktop'}`, () => {
-      const isMobile = size == 'small' ? true : false
-      cy.c_visitResponsive(tracking_Link_URL, size)
+  sizes.forEach((size) => {
+    it(`affliate token should be attached to the account created (check in BO affiliate token) ${size}`, () => {
+      const isMobile = size == 'mobile' ? true : false
+      cy.c_visitResponsive(tracking_Link_URL, { size: size })
       cy.url().then((url) => {
         cy.log('The current URL is:', url)
         var longURL = new URL(url)
@@ -17,11 +17,13 @@ describe('QATEST-122929 - Creating account with affiliate token', () => {
       })
 
       const signUpEmail = `sanity${generateEpoch()}affiliate@deriv.com`
-      cy.c_setEndpoint(signUpEmail, size)
-      cy.c_demoAccountSignup(countryIDV, signUpEmail, size)
+      cy.c_setEndpoint(signUpEmail, { size: size })
+      cy.c_demoAccountSignup(countryIDV, signUpEmail, {
+        size: size,
+      })
 
       /* Visit BO */
-      cy.c_visitResponsive('/', 'large')
+      cy.c_visitResponsive('/', { size: 'desktop' })
       cy.c_visitBackOffice()
       cy.findByText('Client Management').click()
       cy.findByPlaceholderText('email@domain.com')

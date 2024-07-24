@@ -30,10 +30,10 @@ Cypress.Commands.add('c_openPositionsPanel', () => {
   cy.findAllByTestId('dt_positions_toggle').click()
 })
 
-const screenSizes = ['small', 'desktop']
+const sizes = ['mobile', 'desktop']
 
-screenSizes.forEach((screenSize) => {
-  describe(`QATEST-116807 - Verify maximum open positions setting for self exclusion: ${screenSize}`, () => {
+sizes.forEach((size) => {
+  describe(`QATEST-116807 - Verify maximum open positions setting for self exclusion: ${size}`, () => {
     beforeEach(() => {
       cy.clearAllCookies()
       cy.clearAllLocalStorage()
@@ -42,31 +42,42 @@ screenSizes.forEach((screenSize) => {
       cy.log(cypressContext)
 
       if (!cypressContext.includes('Turbos')) {
-        cy.c_login({ user: 'selfExclusionOptions', rateLimitCheck: true })
+        cy.c_login({
+          user: 'selfExclusionOptions',
+          rateLimitCheck: true,
+          size: size,
+        })
       } else {
-        cy.c_login({ user: 'selfExclusion', rateLimitCheck: true })
+        cy.c_login({
+          user: 'selfExclusion',
+          rateLimitCheck: true,
+          size: size,
+        })
       }
 
-      cy.c_visitResponsive('account/self-exclusion', screenSize, {
+      cy.c_visitResponsive('account/self-exclusion', {
         rateLimitCheck: true,
+        size: size,
       })
 
       cy.c_setSelfExclusionMaxOptionsTo(0)
-      cy.c_visitResponsive('/', screenSize, {
+      cy.c_visitResponsive('/', {
         rateLimitCheck: true,
+        size: size,
       })
       cy.findAllByRole('button', { name: 'Open' }).first().click()
       cy.c_openPositionsPanel()
       cy.c_clearTrades()
 
-      if (screenSize == 'small') {
+      if (size == 'mobile') {
         cy.findByTestId('dt_modal_header_close').should('be.visible').click()
       }
     })
 
     it('validates maximum open positions setting for trade type [Options - Turbos]', () => {
-      cy.c_visitResponsive('account/self-exclusion', screenSize, {
+      cy.c_visitResponsive('account/self-exclusion', {
         rateLimitCheck: true,
+        size: size,
       })
 
       cy.log('Making sure that Maximum open positions')
@@ -74,8 +85,9 @@ screenSizes.forEach((screenSize) => {
 
       cy.c_setSelfExclusionMaxOptionsTo(1)
 
-      cy.c_visitResponsive('/', screenSize, {
+      cy.c_visitResponsive('/', {
         rateLimitCheck: true,
+        size: size,
       })
 
       cy.findAllByRole('button', { name: 'Open' }).first().click()
@@ -87,7 +99,7 @@ screenSizes.forEach((screenSize) => {
       cy.log('TURBOS OPTION VISIBLE')
       cy.get('#dt_contract_turboslong_item').click()
 
-      if (screenSize == 'small') {
+      if (size == 'mobile') {
         cy.get('#duration_amount_selector').click()
         cy.contains('.trade-params__header-label', 'Duration').click()
         cy.contains('.dc-tabs__item', 'Minutes').click()
@@ -98,7 +110,7 @@ screenSizes.forEach((screenSize) => {
 
       cy.get('#dt_purchase_turboslong_button').click()
 
-      if (screenSize == 'small') {
+      if (size == 'mobile') {
         cy.c_openPositionsPanel()
         cy.get('.dc-contract-card-item__footer').should('have.length', 1)
         cy.findByTestId('dt_modal_header_close').should('be.visible').click()
@@ -112,12 +124,12 @@ screenSizes.forEach((screenSize) => {
         'Sorry, you cannot hold more than 1 contracts at a given time. Please wait until some contracts have closed and try again.'
       ).should('be.visible')
 
-      if (screenSize != 'small') {
+      if (size != 'mobile') {
         cy.log('CLOSE THE TRADE PANEL ON MOBILE RESOLUTION')
         cy.findByRole('button', { name: 'OK' }).click()
       }
 
-      if (screenSize == 'small') {
+      if (size == 'mobile') {
         cy.c_openPositionsPanel()
       }
       cy.log('VALIDATE THE NUMBER OF OPEN TRADE POSITIONS')
@@ -126,8 +138,9 @@ screenSizes.forEach((screenSize) => {
     })
 
     it('validates maximum open positions setting for trade type [Multipliers - Multipliers]', () => {
-      cy.c_visitResponsive('account/self-exclusion', screenSize, {
+      cy.c_visitResponsive('account/self-exclusion', {
         rateLimitCheck: true,
+        size: size,
       })
 
       cy.log('Making sure that Maximum open positions')
@@ -135,8 +148,9 @@ screenSizes.forEach((screenSize) => {
 
       cy.c_setSelfExclusionMaxOptionsTo(1)
 
-      cy.c_visitResponsive('/', screenSize, {
+      cy.c_visitResponsive('/', {
         rateLimitCheck: true,
+        size,
       })
 
       cy.findAllByRole('button', { name: 'Open' }).first().click()
@@ -150,7 +164,7 @@ screenSizes.forEach((screenSize) => {
 
       cy.get('#dt_purchase_multup_button').click()
 
-      if (screenSize == 'small') {
+      if (size == 'mobile') {
         cy.c_openPositionsPanel()
         cy.get('.dc-contract-card-item__footer').should('have.length', 1)
         cy.findByTestId('dt_modal_header_close').should('be.visible').click()
@@ -164,13 +178,13 @@ screenSizes.forEach((screenSize) => {
         'Sorry, you cannot hold more than 1 contracts at a given time. Please wait until some contracts have closed and try again.'
       ).should('be.visible')
 
-      if (screenSize != 'small') {
+      if (size != 'mobile') {
         cy.findByRole('button', { name: 'OK' }).click()
       }
 
       cy.log('Going to validate the number of elements appearing')
 
-      if (screenSize == 'small') {
+      if (size == 'mobile') {
         cy.c_openPositionsPanel()
       }
       cy.log('VALIDATE THE NUMBER OF OPEN TRADE POSITIONS')

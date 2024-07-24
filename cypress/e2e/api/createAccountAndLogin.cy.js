@@ -1,7 +1,7 @@
 describe('QATEST-145406 - Test API account creation and Login', () => {
   beforeEach(() => {
     cy.log('<E2EOAuthUrl - beforeEach>' + Cypress.env('oAuthUrl'))
-    cy.c_visitResponsive('/')
+    cy.c_visitResponsive('/', { size: 'desktop' })
     cy.c_createCRAccount()
     cy.c_login()
   })

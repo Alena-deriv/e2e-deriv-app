@@ -1,16 +1,16 @@
 describe('QATEST-153921 -  Client without VRTC', () => {
   beforeEach(() => {
-    cy.c_login({ user: 'walletMigrationNoVRTC' })
+    cy.c_login({ user: 'walletMigrationNoVRTC', app: 'wallets' })
   })
   it('Client without VRTC should not see  Wallets - Enable now banner', () => {
-    cy.c_visitResponsive('/', 'large')
+    cy.c_visitResponsive('/', { size: 'desktop' })
     cy.c_checkForBanner()
     cy.findByText('US Dollar').should('be.visible')
     cy.c_switchToDemo()
     cy.findByTestId('dt_traders_hub').findByText('0.00').should('be.visible')
   })
-  it('Client without VRTC should not see  Wallets - Enable now banner - Responsive', () => {
-    cy.c_visitResponsive('/', 'small')
+  it('Client without VRTC should not see  Wallets - Enable now banner on Mobile', () => {
+    cy.c_visitResponsive('/', { size: 'mobile' })
     cy.c_checkForBanner()
     cy.findByText('US Dollar').should('be.visible')
     cy.c_closeNotificationHeader()
@@ -21,10 +21,10 @@ describe('QATEST-153921 -  Client without VRTC', () => {
 
 describe('QATEST-154139 -  Client with only VRTC', () => {
   beforeEach(() => {
-    cy.c_login({ user: 'walletMigrationVRTConly' })
+    cy.c_login({ user: 'walletMigrationVRTConly', app: 'wallets' })
   })
   it('Client with only VRTC should not see  Wallets - Enable now banner', () => {
-    cy.c_visitResponsive('/', 'large')
+    cy.c_visitResponsive('/', { size: 'desktop' })
     cy.c_checkForBanner()
     cy.findByText('demo', { exact: true }).should('be.visible')
     cy.c_switchToReal()
@@ -35,8 +35,8 @@ describe('QATEST-154139 -  Client with only VRTC', () => {
       'be.visible'
     )
   })
-  it('Responsive - Client with only VRTC should not see  Wallets - Enable now banner', () => {
-    cy.c_visitResponsive('/', 'small')
+  it('Client with only VRTC should not see  Wallets - Enable now banner on mobile', () => {
+    cy.c_visitResponsive('/', { size: 'mobile' })
     cy.findAllByTestId('dt_balance_text_container').should('have.length', '2')
     cy.c_checkForBanner()
     cy.findByText('demo', { exact: true }).should('be.visible')

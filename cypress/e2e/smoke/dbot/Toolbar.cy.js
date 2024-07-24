@@ -2,7 +2,7 @@ import BotBuilder from '../../../support/pageobjects/dbot/bot_builder_page'
 import BotDashboard from '../../../support/pageobjects/dbot/bot_dashboard_page'
 
 describe('QATEST-4233, QATEST-4238, QATEST-4228: Verify toolbar on bot builder page', () => {
-  const size = ['small', 'desktop']
+  const sizes = ['mobile', 'desktop']
   const botDashboard = new BotDashboard()
   const botBuilder = new BotBuilder()
   let strategyName = 'Stock_Netherland_25' + Math.random().toString()
@@ -11,10 +11,10 @@ describe('QATEST-4233, QATEST-4238, QATEST-4228: Verify toolbar on bot builder p
     cy.c_login({ user: 'dBot' })
   })
 
-  size.forEach((size) => {
-    it(`Import and Export strategy from toolbar on ${size == 'small' ? 'mobile' : 'desktop'}`, () => {
-      const isMobile = size == 'small' ? true : false
-      cy.c_visitResponsive('appstore/traders-hub', size)
+  sizes.forEach((size) => {
+    it(`Import and Export strategy from toolbar on ${size}`, () => {
+      const isMobile = size == 'mobile' ? true : false
+      cy.c_visitResponsive('appstore/traders-hub', { size: size })
       cy.findAllByTestId('dt_balance_text_container').should('have.length', '2')
       cy.c_openDbotThub()
       if (isMobile) cy.findByTestId('close-icon', { timeout: 7000 }).click()

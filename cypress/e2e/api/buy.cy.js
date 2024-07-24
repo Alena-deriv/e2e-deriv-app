@@ -3,7 +3,7 @@ let balanceAmount = 10000
 describe('QAA-1558 - To make a Buy API call', () => {
   it('Buy API Call', () => {
     cy.log('Creating a New Account')
-    cy.c_visitResponsive('/')
+    cy.c_visitResponsive('/', { size: 'desktop' })
     cy.c_createDemoAccount()
     cy.c_login()
     cy.task('wsConnect')

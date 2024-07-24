@@ -6,8 +6,7 @@ import {
 describe('QATEST-149355 POI through real account creation', () => {
   beforeEach(() => {
     cy.c_createDemoAccount({ country_code: 'gh' })
-    cy.c_login()
-    cy.viewport('iphone-xr')
+    cy.c_login({ size: 'mobile' })
   })
 
   it('Should submit IDV POI successfully', () => {

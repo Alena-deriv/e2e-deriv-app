@@ -50,13 +50,13 @@ function goToAcctSwitcherFromManagesetting(pageSetting) {
 
 describe('QATEST-129858 -  Validate account switcher ', () => {
   beforeEach(() => {
-    cy.c_login({ user: 'walletloginEmail' })
+    cy.c_login({ user: 'walletloginEmail', app: 'wallets' })
   })
   it(
     'Navigate to account switcher from Trade page &  Manage account settings page',
     { scrollBehavior: false },
     () => {
-      cy.c_visitResponsive('/', 'large')
+      cy.c_visitResponsive('/', { size: 'desktop' })
       goToAcctSwitcherFromTradepage('Desktop')
       cy.get('#dt_reports_tab').should('be.visible')
       validateAccountSwitcher('.account-switcher-wallet__looking-for-cfds')
@@ -66,10 +66,10 @@ describe('QATEST-129858 -  Validate account switcher ', () => {
   )
 
   it(
-    'Responsive - Navigate to account switcher from Trade page &  Manage account settings page',
+    'Navigate to account switcher from Trade page &  Manage account settings page on mobile',
     { scrollBehavior: false },
     () => {
-      cy.c_visitResponsive('/', 'small')
+      cy.c_visitResponsive('/', { size: 'mobile' })
       cy.findByText('Options').click()
       goToAcctSwitcherFromTradepage('Mobile')
       cy.get('#dt_positions_toggle').should('be.visible')

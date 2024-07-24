@@ -30,7 +30,7 @@ describe('QATEST-160111 Cashier lock when POI expire CR - High.', () => {
       'be.visible'
     )
     /* Visit BO */
-    cy.c_visitResponsive('/', 'large')
+    cy.c_visitResponsive('/', { size: 'desktop' })
     cy.c_visitBackOffice()
     cy.findByText('Client Management').click()
     cy.findByPlaceholderText('email@domain.com')
@@ -64,7 +64,7 @@ describe('QATEST-160111 Cashier lock when POI expire CR - High.', () => {
     cy.contains('Withdrawal Locked').should('be.visible')
     cy.contains('Cashier Locked').should('be.visible')
     /* Check cashier lock on FE */
-    cy.c_visitResponsive('/cashier/deposit', 'small')
+    cy.c_visitResponsive('/cashier/deposit', { size: 'mobile' })
     cy.findByText('Cashier is locked').should('be.visible')
     cy.findByText(
       'The identification documents you submitted have expired. Please submit valid identity documents to unlock Cashier.'

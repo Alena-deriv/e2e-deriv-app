@@ -13,13 +13,13 @@ const smartTraderProdUrl = Cypress.env('smartTraderUrl').prod
 const dBotProdUrl = `${Cypress.env('prodURL')}bot`
 const dBotStagingUrl = `${Cypress.env('stagingUrl')}bot`
 const derivGoProdUrl = `${Cypress.env('derivComProdURL')}deriv-go/`
-const size = ['small', 'desktop']
+const size = ['mobile', 'desktop']
 
 describe('QATEST-5948: Verify platforms navigations on Options and Multipliers', () => {
   size.forEach((size) => {
-    it(`Should navigate to correct platform on clicking Open button on ${size == 'small' ? 'mobile' : 'desktop'} and should remain logged in`, () => {
-      const isMobile = size == 'small' ? true : false
-      cy.c_uiLogin(size)
+    it(`Should navigate to correct platform on clicking Open button on ${size} and should remain logged in`, () => {
+      const isMobile = size == 'mobile' ? true : false
+      cy.c_uiLogin({ size: size })
       //Wait for page to completely load
       cy.findAllByTestId('dt_balance_text_container').should('have.length', '2')
       //Open Dtrader

@@ -17,7 +17,7 @@ function getCurrencyList() {
     })
 }
 describe('QATEST-5797, QATEST-5820: Add siblings accounts', () => {
-  const size = ['small', 'desktop']
+  const sizes = ['mobile', 'desktop']
   let country = Cypress.env('countries').CO
   let countryCode = 'co'
   let currencyCode = 'USD'
@@ -28,10 +28,10 @@ describe('QATEST-5797, QATEST-5820: Add siblings accounts', () => {
     cy.c_createDemoAccount({ country_code: countryCode })
     cy.c_login()
   })
-  size.forEach((size) => {
-    it(`Should Create siblings accounts from USD account on ${size == 'small' ? 'mobile' : 'desktop'}`, () => {
-      const isMobile = size == 'small' ? true : false
-      cy.c_visitResponsive('/', size)
+  sizes.forEach((size) => {
+    it(`Should Create siblings accounts from USD account on ${size}`, () => {
+      const isMobile = size == 'mobile' ? true : false
+      cy.c_visitResponsive('/', { size: size })
       //Wait for page to completely load
       cy.findAllByTestId('dt_balance_text_container').should('have.length', '2')
 

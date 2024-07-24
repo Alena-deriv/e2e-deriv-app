@@ -1,15 +1,15 @@
 describe('QATEST-5729: CFDs - Create a Swap-free demo account using existing MT5 account password', () => {
-  const size = ['small', 'desktop']
+  const sizes = ['mobile', 'desktop']
   let countryCode = 'co'
 
   beforeEach(() => {
     cy.c_createCRAccount({ country_code: countryCode })
     cy.c_login()
   })
-  size.forEach((size) => {
-    it(`Verify I can add a demo Swap-free account using exisiting MT5 derived account password on ${size == 'small' ? 'mobile' : 'desktop'}`, () => {
-      const isMobile = size == 'small' ? true : false
-      cy.c_visitResponsive('appstore/traders-hub', size)
+  sizes.forEach((size) => {
+    it(`Verify I can add a demo Swap-free account using exisiting MT5 derived account password on ${size}`, () => {
+      const isMobile = size == 'mobile' ? true : false
+      cy.c_visitResponsive('appstore/traders-hub', { size: size })
       cy.findAllByTestId('dt_balance_text_container').should('have.length', '2')
       cy.c_checkTradersHubHomePage(isMobile)
       cy.c_switchToDemo()

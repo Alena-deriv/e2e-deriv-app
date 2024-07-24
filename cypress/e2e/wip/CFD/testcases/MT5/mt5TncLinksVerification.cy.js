@@ -179,7 +179,7 @@ describe('QATEST-123240: Verify Mt5 Terms and Conditions for English and non-eng
 
   beforeEach(() => {
     cy.c_login()
-    cy.c_visitResponsive('/appstore/traders-hub', 'large')
+    cy.c_visitResponsive('/appstore/traders-hub', { size: 'desktop' })
     checkURLLanguage()
   })
 

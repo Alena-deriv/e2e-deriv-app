@@ -30,7 +30,7 @@ describe('QATEST-160108 Cashier lock when POI expire CR - Low', () => {
       'be.visible'
     )
     /* Visit BO */
-    cy.c_visitResponsive('/', 'large')
+    cy.c_visitResponsive('/', { size: 'desktop' })
     cy.c_visitBackOffice()
     cy.findByText('Client Management').click()
     cy.findByPlaceholderText('email@domain.com')
@@ -61,7 +61,7 @@ describe('QATEST-160108 Cashier lock when POI expire CR - Low', () => {
       .select('Low')
       .should('be.visible')
     /* Check no cashier lock on FE */
-    cy.c_visitResponsive('/cashier/deposit', 'small')
+    cy.c_visitResponsive('/cashier/deposit', { size: 'mobile' })
     cy.findByText('Deposit via bank wire, credit card, and e-wallet').should(
       'be.visible'
     )

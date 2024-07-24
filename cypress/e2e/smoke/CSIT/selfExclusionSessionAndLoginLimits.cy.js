@@ -3,9 +3,7 @@ const addDays = (n) => {
   myDate.setDate(myDate.getDate() + n)
   return myDate.toISOString().slice(0, 10)
 }
-
-const BO_URL = `https://${Cypress.env('configServer')}${Cypress.env('qaBOEndpoint')}`
-const size = ['small', 'desktop']
+const sizes = ['mobile', 'desktop']
 
 describe('QATEST-116798 Self Exclusion Session and login limits', () => {
   beforeEach(() => {
@@ -14,12 +12,12 @@ describe('QATEST-116798 Self Exclusion Session and login limits', () => {
     cy.c_login()
   })
 
-  size.forEach((size) => {
-    it(`Should login, set self exclusion, verify it's applied, check from BO side, remove it from BO and verify restrictions are removed from FE side on ${size == 'small' ? 'mobile' : 'desktop'}`, () => {
+  sizes.forEach((size) => {
+    it(`Should login, set self exclusion, verify it's applied, check from BO side, remove it from BO and verify restrictions are removed from FE side on ${size}`, () => {
       /* Sets self exclusion on FE */
-      cy.c_visitResponsive('/account/self-exclusion', size)
+      cy.c_visitResponsive('/account/self-exclusion', { size: size })
 
-      if (size == 'small') {
+      if (size == 'mobile') {
         cy.findByRole('heading', {
           name: 'Your session and login limits',
         }).scrollIntoView()
@@ -35,8 +33,7 @@ describe('QATEST-116798 Self Exclusion Session and login limits', () => {
       cy.findByRole('button', { name: 'Yes, log me out immediately' }).click()
 
       /* Checks self exclusion is saved on FE */
-      cy.c_login({ relogin: true })
-      cy.c_visitResponsive('/appstore/traders-hub', size)
+      cy.c_login({ relogin: true, size: size })
       cy.findByTestId('dt_dropdown_display', { timeout: 10000 }).should('exist')
       cy.findByTestId('dt_dropdown_display').click()
       cy.get('#real', { timeout: 10000 }).should('exist')
@@ -44,13 +41,13 @@ describe('QATEST-116798 Self Exclusion Session and login limits', () => {
       cy.findAllByTestId('dt_balance_text_container', {
         timeout: 20000,
       }).should('have.length', '2') // waits until Real account is loaded
-      cy.c_visitResponsive('/account/self-exclusion', size)
+      cy.c_visitResponsive('/account/self-exclusion', { size: size })
       cy.get('input[name="timeout_until"]').should('not.be.empty')
 
       /* Checks cannot create account */
-      cy.c_visitResponsive('/appstore/traders-hub', size)
+      cy.c_visitResponsive('/appstore/traders-hub', { size: size })
 
-      if (size == 'small') {
+      if (size == 'mobile') {
         cy.findByRole('button', { name: 'CFDs' }).click()
       }
 
@@ -73,13 +70,13 @@ describe('QATEST-116798 Self Exclusion Session and login limits', () => {
       )
 
       /* Checks Deposit is locked */
-      cy.c_visitResponsive('/cashier/deposit', size)
+      cy.c_visitResponsive('/cashier/deposit', { size: size })
       cy.get('.empty-state').should('be.visible')
 
       /* Checks Trade is unavailable */
       cy.c_visitResponsive(
         '/?chart_type=area&interval=1t&symbol=1HZ100V&trade_type=multiplier',
-        size
+        { size: size }
       )
       cy.findByRole(
         'button',
@@ -88,16 +85,15 @@ describe('QATEST-116798 Self Exclusion Session and login limits', () => {
       ).should('exist')
       cy.findByRole('button', { name: 'Up 10.00 USD' }).click()
 
-      if (size == 'small') {
+      if (size == 'mobile') {
         cy.get('[class="dc-toast__message"]').should('be.visible')
       } else {
         cy.get('.dc-modal-body').should('be.visible')
       }
 
       /* Visits BO */
-      cy.c_visitResponsive('/', size)
-      cy.visit(BO_URL)
-      cy.findByText('Please login.').click()
+      cy.c_visitResponsive('/', { size: size })
+      cy.c_visitBackOffice()
       cy.findByText('Client Management').click()
       cy.findByPlaceholderText('email@domain.com')
         .should('exist')
@@ -118,9 +114,9 @@ describe('QATEST-116798 Self Exclusion Session and login limits', () => {
       cy.get('[class="success"]').should('be.visible')
 
       /* Checks can create account */
-      cy.c_visitResponsive('/appstore/traders-hub', size)
+      cy.c_visitResponsive('/appstore/traders-hub', { size: size })
 
-      if (size == 'small') {
+      if (size == 'mobile') {
         cy.findByTestId('dt_dropdown_display', { timeout: 10000 }).should(
           'exist'
         )
@@ -149,7 +145,10 @@ describe('QATEST-116798 Self Exclusion Session and login limits', () => {
       )
 
       /* Checks Deposit is not locked */
-      cy.c_visitResponsive('/cashier/deposit', size, { rateLimitCheck: true })
+      cy.c_visitResponsive('/cashier/deposit', {
+        size: size,
+        rateLimitCheck: true,
+      })
       cy.findByText('Deposit via bank wire, credit card, and e-wallet').should(
         'be.visible'
       )
@@ -157,7 +156,7 @@ describe('QATEST-116798 Self Exclusion Session and login limits', () => {
       /* Checks Trade is available */
       cy.c_visitResponsive(
         '/?chart_type=area&interval=1t&symbol=1HZ100V&trade_type=multiplier',
-        size
+        { size: size }
       )
       cy.findByRole(
         'button',
@@ -166,7 +165,7 @@ describe('QATEST-116798 Self Exclusion Session and login limits', () => {
       ).should('exist')
       cy.findByRole('button', { name: 'Up 10.00 USD' }).click()
 
-      if (size == 'small') {
+      if (size == 'mobile') {
         cy.get('[class="dc-toast__message"]').should('not.be.visible')
       } else {
         cy.findByRole('heading', { name: 'Insufficient balance' }).should(

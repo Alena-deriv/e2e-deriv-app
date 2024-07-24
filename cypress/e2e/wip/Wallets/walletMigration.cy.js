@@ -49,7 +49,7 @@ function checkAccountNotMigrated() {
         if ($text.length) {
           cy.log('Account is migrated!')
           cy.c_walletLogout()
-          cy.c_visitResponsive('/', 'large')
+          cy.c_visitResponsive('/', { size: 'desktop' })
           cy.c_login({ user: `eligibleMigration${i}` })
         } else {
           cy.log('account is not migrated!')
@@ -64,7 +64,7 @@ describe('QATEST-154253 - Migration country eligibility', () => {
   })
 
   it('should be able to see the tour for Fiat Wallets', () => {
-    cy.c_visitResponsive('/', 'large')
+    cy.c_visitResponsive('/', { size: 'desktop' })
     checkAccountNotMigrated()
     cy.contains('Enjoy seamless transactions').should('be.visible')
     cy.get('#modal_root').findByRole('button', { name: 'Enable now' }).click()
@@ -74,8 +74,8 @@ describe('QATEST-154253 - Migration country eligibility', () => {
     checkWalletBanner('desktop')
   })
 
-  it('should be able to see the tour for Fiat Wallets in responsive', () => {
-    cy.c_visitResponsive('/', 'small')
+  it('should be able to see the tour for Fiat Wallets on mobile', () => {
+    cy.c_visitResponsive('/', { size: 'mobile' })
     checkAccountNotMigrated()
     cy.contains('Enjoy seamless transactions').should('be.visible')
     cy.get('#modal_root').findByRole('button', { name: 'Enable now' }).click()

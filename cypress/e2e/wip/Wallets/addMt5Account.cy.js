@@ -87,8 +87,7 @@ function existingAccountCheck(CFDtype) {
 }
 describe('QATEST-98638 - Add Real SVG MT5 account and QATEST-98818 Add demo SVG MT5 account and QATEST-115487 Add real BVI MT5 account', () => {
   beforeEach(() => {
-    cy.c_login({ user: 'walletloginEmail' })
-    cy.c_visitResponsive('/', 'large')
+    cy.c_login({ user: 'walletloginEmail', app: 'wallets', size: 'desktop' })
   })
 
   it('should be able to create mt5 svg account', () => {

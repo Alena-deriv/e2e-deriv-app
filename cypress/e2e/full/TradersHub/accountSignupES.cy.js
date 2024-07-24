@@ -3,17 +3,21 @@ import { generateEpoch } from '../../../support/helper/utility'
 describe('QATEST-146444: Verify Sign-up Flow in ES Language', () => {
   let country = 'España'
   let language = 'spanish'
-  let size = 'small'
+  let size = 'mobile'
   let nationalIDNum = Cypress.env('nationalIDNum').ES
   let taxIDNum = Cypress.env('taxIDNum').ES
   let currency = Cypress.env('accountCurrency').USD
 
   it('Verify I can sign-up using ES language', () => {
     const signUpEmail = `sanity${generateEpoch()}es@deriv.com`
-    cy.c_setEndpoint(signUpEmail, size, {
+    cy.c_setEndpoint(signUpEmail, {
       language: language,
+      size: size,
     })
-    cy.c_demoAccountSignup(country, signUpEmail, size, { language: language })
+    cy.c_demoAccountSignup(country, signUpEmail, {
+      language: language,
+      size: size,
+    })
     cy.c_generateRandomName().then((firstName) => {
       cy.c_personalDetails(
         firstName,

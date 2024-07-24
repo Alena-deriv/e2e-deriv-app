@@ -1,15 +1,15 @@
 describe('QATEST-125246 Verify the hyperlinks on Traders Hub', () => {
-  const size = ['small', 'desktop']
+  const sizes = ['mobile', 'desktop']
   let countryCode = 'co'
 
   beforeEach(() => {
     cy.c_createCRAccount({ country_code: countryCode })
     cy.c_login()
   })
-  size.forEach((size) => {
-    it(`Should validate the hyperlinks in tradershub for EN ${size == 'small' ? 'mobile' : 'desktop'}`, () => {
-      const isMobile = size == 'small' ? true : false
-      cy.c_visitResponsive('/', size)
+  sizes.forEach((size) => {
+    it(`Should validate the hyperlinks in tradershub for EN ${size}`, () => {
+      const isMobile = size == 'mobile' ? true : false
+      cy.c_visitResponsive('/', { size: size })
       if (isMobile) {
         cy.findAllByTestId('dt_balance_text_container').should(
           'have.length',

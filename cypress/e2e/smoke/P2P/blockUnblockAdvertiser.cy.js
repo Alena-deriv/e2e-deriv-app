@@ -162,11 +162,10 @@ describe('QATEST-2871 - Block and unblock user from advertisers profile page', (
     cy.clearAllLocalStorage()
     cy.clearAllSessionStorage()
     cy.clearAllCookies()
-    cy.c_login({ user: 'p2pStandardAccountWithoutAds' })
-    cy.c_visitResponsive('/appstore/traders-hub', 'small')
+    cy.c_login({ user: 'p2pStandardAccountWithoutAds', size: 'mobile' })
   })
 
-  it('Should be able to block and unblock the advertiser from profile page in responsive mode.', () => {
+  it('Should be able to block and unblock the advertiser from profile page in mobile.', () => {
     cy.c_navigateToP2P()
     cy.get('.buy-sell-row__advertiser-name--text')
       .first()

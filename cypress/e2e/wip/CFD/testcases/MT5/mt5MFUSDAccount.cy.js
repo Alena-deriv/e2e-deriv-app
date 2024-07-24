@@ -7,7 +7,7 @@ describe('QATEST-20324 - Create all MF Demo CFDs accounts via Traders Hub', () =
     cy.clearCookies()
     cy.clearLocalStorage()
     cy.c_login()
-    cy.c_visitResponsive('/appstore/traders-hub', 'large')
+    cy.c_visitResponsive('/appstore/traders-hub', { size: 'desktop' })
   })
   it('Should be able to successfully create mt5 MF demo account', () => {
     cy.log("Create MF MT5  Demo Account via Trader's Hub")

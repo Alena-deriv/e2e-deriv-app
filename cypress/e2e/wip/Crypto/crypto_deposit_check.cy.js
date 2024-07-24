@@ -1,7 +1,7 @@
 describe('QATEST-715 - Load crypto deposit page', () => {
   beforeEach(() => {
     cy.c_login({ user: 'allcrypto' })
-    cy.c_visitResponsive('/appstore/traders-hub', 'large')
+    cy.c_visitResponsive('/appstore/traders-hub', { size: 'desktop' })
   })
 
   it('should be able to create crypto account from Traders Hub.', () => {

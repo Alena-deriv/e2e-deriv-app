@@ -3,7 +3,7 @@ import { generateEpoch } from '../../../support/helper/utility'
 
 describe('QATEST-24427,5533,5827 - Cypress test for ROW account sign up', () => {
   let nationalIDNumIDV
-  const size = ['small', 'desktop']
+  const sizes = ['mobile', 'desktop']
   let countryIDV = Cypress.env('countries').KE
   let taxIDNumIDV = Cypress.env('taxIDNum').KE
   let countryOnfido = Cypress.env('countries').CO
@@ -11,14 +11,14 @@ describe('QATEST-24427,5533,5827 - Cypress test for ROW account sign up', () => 
   let taxIDNumOnfido = Cypress.env('taxIDNum').CO
   let currency = Cypress.env('accountCurrency').USD
 
-  size.forEach((size) => {
-    it(`New account sign up ROW - Onfido supported country on ${size == 'small' ? 'mobile' : 'desktop'}`, () => {
-      const isMobile = size == 'small' ? true : false
+  sizes.forEach((size) => {
+    it(`New account sign up ROW - Onfido supported country on ${size}`, () => {
+      const isMobile = size == 'mobile' ? true : false
       const signUpEmail = `sanity${generateEpoch()}onfido${
         Cypress.isProd ? '@cypressderivapp.mailisk.net' : '@deriv.com'
       }`
-      cy.c_setEndpoint(signUpEmail, size)
-      cy.c_demoAccountSignup(countryOnfido, signUpEmail, size)
+      cy.c_setEndpoint(signUpEmail, { size: size })
+      cy.c_demoAccountSignup(countryOnfido, signUpEmail, { size: size })
       if (isMobile) cy.findByTestId('dt_dc_mobile_dialog_close_btn').click()
       else cy.findByTestId('dt_modal_close_icon').click()
       cy.findByText('Take me to Demo account').should('be.visible')
@@ -49,15 +49,15 @@ describe('QATEST-24427,5533,5827 - Cypress test for ROW account sign up', () => 
       })
     })
   })
-  size.forEach((size) => {
-    it(`New account sign up ROW - IDV supported country on ${size == 'small' ? 'mobile' : 'desktop'}`, () => {
+  sizes.forEach((size) => {
+    it(`New account sign up ROW - IDV supported country on ${size}`, () => {
       nationalIDNumIDV = generateRandomNumber()
-      const isMobile = size == 'small' ? true : false
+      const isMobile = size == 'mobile' ? true : false
       const signUpEmail = `sanity${generateEpoch()}idv${
         Cypress.isProd ? '@cypressderivapp.mailisk.net' : '@deriv.com'
       }`
-      cy.c_setEndpoint(signUpEmail, size)
-      cy.c_demoAccountSignup(countryIDV, signUpEmail, size)
+      cy.c_setEndpoint(signUpEmail, { size: size })
+      cy.c_demoAccountSignup(countryIDV, signUpEmail, { size: size })
       if (isMobile) cy.findByTestId('dt_dc_mobile_dialog_close_btn').click()
       else cy.findByTestId('dt_modal_close_icon').click()
       cy.findByText('Take me to Demo account').should('be.visible')

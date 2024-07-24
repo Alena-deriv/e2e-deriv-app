@@ -2,13 +2,13 @@ import { derivApp } from '../../../support/locators'
 
 const username = Cypress.env('credentials').production.masterUser.ID
 const password = Cypress.env('credentials').production.masterUser.PSWD
-const size = ['small', 'desktop']
+const sizes = ['mobile', 'desktop']
 
 describe('QATEST-103970: Verify user can successfully login and logout', () => {
-  size.forEach((size) => {
-    it(`I should be able to successfully login and logout from deriv app on ${size == 'small' ? 'mobile' : 'desktop'}`, () => {
-      const isMobile = size == 'small' ? true : false
-      cy.c_visitResponsive('/', size)
+  sizes.forEach((size) => {
+    it(`I should be able to successfully login and logout from deriv app on ${size}`, () => {
+      const isMobile = size == 'mobile' ? true : false
+      cy.c_visitResponsive('/', { size: size })
       cy.findByRole('button', { name: 'Log in' }).click()
       cy.findByLabelText('Email').type(username)
       cy.findByLabelText('Password').type(password, { log: false })

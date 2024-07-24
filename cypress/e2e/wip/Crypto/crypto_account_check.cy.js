@@ -27,18 +27,18 @@ const addcryptoaccount = (crypto, code) => {
 }
 
 describe('QATEST-707 - Create crypto account', () => {
-  const size = ['small', 'desktop']
+  const sizes = ['mobile', 'desktop']
   let country = Cypress.env('countries').CO
   let nationalIDNum = Cypress.env('nationalIDNum').CO
   let taxIDNum = Cypress.env('taxIDNum').CO
   let currency = Cypress.env('accountCurrency').USD
 
-  size.forEach((size) => {
-    it(`should be able to create crypto account from Traders Hub on ${size == 'small' ? 'mobile' : 'desktop'}`, () => {
-      const isMobile = size == 'small' ? true : false
+  sizes.forEach((size) => {
+    it(`should be able to create crypto account from Traders Hub on ${size}`, () => {
+      const isMobile = size == 'mobile' ? true : false
       const signUpEmail = `sanity${generateEpoch()}crypto@deriv.com`
-      cy.c_setEndpoint(signUpEmail, size)
-      cy.c_demoAccountSignup(country, signUpEmail, size)
+      cy.c_setEndpoint(signUpEmail, { size: size })
+      cy.c_demoAccountSignup(country, signUpEmail, { size: size })
       cy.findByText('Add a Deriv account').should('be.visible')
       cy.c_generateRandomName().then((firstName) => {
         cy.c_personalDetails(

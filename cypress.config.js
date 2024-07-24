@@ -27,7 +27,7 @@ const websocketURL = `wss://${process.env.E2E_STD_CONFIG_SERVER}/websockets/v3`
 let connection
 let api
 let newAppId = null
-//const gViewPortSize = {small: 'phone-xr', large: 'macbook-16'} //TODO Use enum
+//const gViewPortSize = {mobile: 'phone-xr', tablet: 'ipad-2' desktop: 'macbook-16'} //TODO Use enum
 
 module.exports = defineConfig({
   e2e: {
@@ -460,9 +460,8 @@ module.exports = defineConfig({
     RegionROW: '/?region=za',
     skipROWTests: false,
     email: 'test@example.com',
-    viewPortSize: 'small',
+    defaultViewPortSize: 'mobile',
     baseUrl: process.env.CYPRESS_BASE_URL,
-    walletEmail: process.env.E2E_DERIV_LOGIN_WALLET,
     p2pbuyloginEmail: process.env.E2E_P2P_BUY,
     p2psellloginEmail: process.env.E2E_P2P_SELL,
     prodServer: process.env.E2E_PROD_SERVER,

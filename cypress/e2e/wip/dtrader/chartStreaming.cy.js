@@ -2,7 +2,7 @@ import '../../../support/dtrader'
 
 describe('QATEST-6247 - Verify if chart streaming is working with feeds', () => {
   beforeEach(() => {
-    cy.c_visitResponsive('', 'large')
+    cy.c_visitResponsive('', { size: 'desktop' })
     localStorage.setItem('config.server_url', Cypress.env('configServer'))
     localStorage.setItem('config.app_id', Cypress.env('configAppId'))
   })

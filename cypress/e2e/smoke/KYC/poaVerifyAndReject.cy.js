@@ -27,7 +27,7 @@ describe('QATEST-4835 POA Verified/Rejected', () => {
     cy.c_closeNotificationHeader()
 
     /* Visit BO */
-    cy.c_visitResponsive('/', 'large')
+    cy.c_visitResponsive('/', { size: 'desktop' })
     cy.c_visitBackOffice()
     cy.findByText('Client Management').click()
     cy.findByPlaceholderText('email@domain.com')
@@ -50,7 +50,7 @@ describe('QATEST-4835 POA Verified/Rejected', () => {
       .type('{enter}')
 
     /* Back to Deriv to make final assertions */
-    cy.c_visitResponsive('/account/proof-of-address', 'small')
+    cy.c_visitResponsive('/account/proof-of-address', { size: 'mobile' })
     cy.contains('Your proof of address is verified').should('be.visible')
     cy.c_closeNotificationHeader()
   })
@@ -73,7 +73,7 @@ describe('QATEST-4835 POA Verified/Rejected', () => {
     cy.c_closeNotificationHeader()
 
     /* Visit BO */
-    cy.c_visitResponsive('/', 'large')
+    cy.c_visitResponsive('/', { size: 'desktop' })
     cy.c_visitBackOffice()
     cy.findByText('Client Management').click()
     cy.findByPlaceholderText('email@domain.com')
@@ -96,7 +96,7 @@ describe('QATEST-4835 POA Verified/Rejected', () => {
       .type('{enter}')
 
     /* Back to Deriv to make final assertions */
-    cy.c_visitResponsive('/account/proof-of-address', 'small')
+    cy.c_visitResponsive('/account/proof-of-address', { size: 'mobile' })
     cy.contains('We could not verify your proof of address').should(
       'be.visible'
     )

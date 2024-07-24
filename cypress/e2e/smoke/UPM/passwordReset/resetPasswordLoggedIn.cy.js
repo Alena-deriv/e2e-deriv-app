@@ -4,13 +4,13 @@ describe('QATEST-173426, QATEST-173432: Verify user should be able to reset pass
   let pswdResetUrl
   const oldPassword = Cypress.env('credentials').test.masterUser.PSWD
   const newPassword = Cypress.env('credentials').production.masterUser.PSWD
-  const size = ['small', 'desktop']
+  const sizes = ['mobile', 'desktop']
   const tradersHubSharedLocators = derivApp.tradersHubPage.sharedLocators
 
   const createMt5Account = (size) => {
-    cy.c_visitResponsive('/', size)
+    cy.c_visitResponsive('/', { size: size })
     cy.findAllByTestId('dt_balance_text_container').should('have.length', '2')
-    if (size === 'small') cy.findByRole('button', { name: 'CFDs' }).click()
+    if (size === 'mobile') cy.findByRole('button', { name: 'CFDs' }).click()
     cy.findByTestId('dt_trading-app-card_real_standard')
       .findByTestId('dt_platform-name')
       .should('have.text', 'Standard')
@@ -39,8 +39,8 @@ describe('QATEST-173426, QATEST-173432: Verify user should be able to reset pass
     )
   }
 
-  const resetPassword = () => {
-    cy.c_visitResponsive('/account/passwords', size)
+  const resetPassword = (size) => {
+    cy.c_visitResponsive('/account/passwords', { size: size })
     cy.findAllByRole('button', { name: 'Change password' }).first().click()
     cy.findByText(`We’ve sent you an email`).should('be.visible')
     cy.findByText(
@@ -55,7 +55,7 @@ describe('QATEST-173426, QATEST-173432: Verify user should be able to reset pass
       }
     )
     cy.then(() => {
-      cy.c_visitResponsive(pswdResetUrl, size)
+      cy.c_visitResponsive(pswdResetUrl, { size: size })
     })
     tradersHubSharedLocators
       .resetPasswordModal()
@@ -85,18 +85,18 @@ describe('QATEST-173426, QATEST-173432: Verify user should be able to reset pass
     })
     cy.c_login()
   })
-  size.forEach((size) => {
-    it(`Should be able to reset password when user has only CR account on ${size === 'small' ? 'mobile' : 'desktop'}`, () => {
-      resetPassword()
+  sizes.forEach((size) => {
+    it(`Should be able to reset password when user has only CR account on ${size}`, () => {
+      resetPassword(size)
       cy.c_validateLogin(userEmail, newPassword, oldPassword)
       cy.findAllByText(`Trader's Hub`).should('be.visible')
       cy.findAllByTestId('dt_balance_text_container').should('have.length', '2')
     })
   })
-  size.forEach((size) => {
-    it(`Should be able to reset password when user has CR and MT5 account on ${size === 'small' ? 'mobile' : 'desktop'}`, () => {
+  sizes.forEach((size) => {
+    it(`Should be able to reset password when user has CR and MT5 account on ${size}`, () => {
       createMt5Account(size)
-      resetPassword()
+      resetPassword(size)
       cy.c_validateLogin(userEmail, newPassword, oldPassword)
       cy.findAllByText(`Trader's Hub`).should('be.visible')
       cy.findAllByTestId('dt_balance_text_container').should('have.length', '2')

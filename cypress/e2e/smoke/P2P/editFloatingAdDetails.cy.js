@@ -6,8 +6,7 @@ describe('QATEST-2488 - Edit Advert Details - Float Rate', () => {
   beforeEach(() => {
     cy.clearAllLocalStorage()
     cy.clearAllSessionStorage()
-    cy.c_login({ user: 'p2pFloating' })
-    cy.c_visitResponsive('/appstore/traders-hub', 'small')
+    cy.c_login({ user: 'p2pFloating', size: 'mobile' })
   })
   it('Should be able to edit buy type advert and verify all fields and messages for floating rate.', () => {
     cy.c_navigateToP2P()

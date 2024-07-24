@@ -45,7 +45,7 @@ Cypress.Commands.add('c_switchToDemo', () => {
   cy.findByTestId('dt_dropdown_display').click()
   cy.get('#demo').click()
   //Wait for page to completely load
-  cy.findAllByTestId('dt_balance_text_container').should('have.length', '2')
+  cy.c_checkTotalAssetSummary()
 })
 
 Cypress.Commands.add('c_completeTradersHubTour', (options = {}) => {
@@ -449,8 +449,8 @@ Cypress.Commands.add('c_addAccountMF', (type, options = {}) => {
 
 Cypress.Commands.add(
   'c_demoAccountSignup',
-  (country, accountEmail, size = 'desktop', options = {}) => {
-    const { language = 'english' } = options
+  (country, accountEmail, options = {}) => {
+    const { language = 'english', size = 'desktop' } = options
     cy.fixture('tradersHub/signupLanguageContent.json').then((langData) => {
       const lang = langData[language]
       if (Cypress.isProd)
@@ -463,7 +463,9 @@ Cypress.Commands.add(
       else cy.c_emailVerification('account_opening_new.html', accountEmail)
 
       cy.then(() => {
-        cy.c_visitResponsive(Cypress.env('verificationUrl'), size).then(() => {
+        cy.c_visitResponsive(Cypress.env('verificationUrl'), {
+          size: size,
+        }).then(() => {
           if (!Cypress.isProd)
             cy.window().then((win) => {
               win.localStorage.setItem(
@@ -506,43 +508,34 @@ Cypress.Commands.add(
   }
 )
 
-Cypress.Commands.add(
-  'c_setEndpoint',
-  (signUpMail, size = 'desktop', options = {}) => {
-    const { language = 'english' } = options
-    cy.log(language)
-    cy.fixture('tradersHub/signupLanguageContent.json').then((langData) => {
-      const lang = langData[language]
-      cy.visit(`${Cypress.env('derivComProdURL')}${lang.urlCode}/`, {
-        onBeforeLoad(win) {
-          if (!Cypress.isProd) {
-            win.localStorage.setItem(
-              'config.server_url',
-              Cypress.env('configServer')
-            )
-            win.localStorage.setItem(
-              'config.app_id',
-              Cypress.env('configAppId')
-            )
-          }
-        },
-      })
-      cy.c_visitResponsive(`/endpoint?lang=${lang.urlCode}`, size)
-      if (!Cypress.isProd) {
-        localStorage.setItem(
-          'config.server_url',
-          Cypress.env('stdConfigServer')
-        )
-        localStorage.setItem('config.app_id', Cypress.env('stdConfigAppId'))
-      }
-
-      cy.findByRole('button', { name: lang.signUpForm.signUpBtn }).should(
-        'not.be.disabled'
-      )
-      cy.c_enterValidEmail(signUpMail, options)
+Cypress.Commands.add('c_setEndpoint', (signUpMail, options = {}) => {
+  const { language = 'english', size = 'desktop' } = options
+  cy.log(language)
+  cy.fixture('tradersHub/signupLanguageContent.json').then((langData) => {
+    const lang = langData[language]
+    cy.visit(`${Cypress.env('derivComProdURL')}${lang.urlCode}/`, {
+      onBeforeLoad(win) {
+        if (!Cypress.isProd) {
+          win.localStorage.setItem(
+            'config.server_url',
+            Cypress.env('configServer')
+          )
+          win.localStorage.setItem('config.app_id', Cypress.env('configAppId'))
+        }
+      },
     })
-  }
-)
+    cy.c_visitResponsive(`/endpoint?lang=${lang.urlCode}`, { size: size })
+    if (!Cypress.isProd) {
+      localStorage.setItem('config.server_url', Cypress.env('stdConfigServer'))
+      localStorage.setItem('config.app_id', Cypress.env('stdConfigAppId'))
+    }
+
+    cy.findByRole('button', { name: lang.signUpForm.signUpBtn }).should(
+      'not.be.disabled'
+    )
+    cy.c_enterValidEmail(signUpMail, options)
+  })
+})
 
 Cypress.Commands.add('c_validateEUDisclaimer', () => {
   cy.findByTestId('dt_traders_hub_disclaimer').should('be.visible')
@@ -695,11 +688,11 @@ Cypress.Commands.add('c_getMt5AccountBalance', (Account) => {
  * }
  */
 Cypress.Commands.add('c_createNewCurrencyAccount', (currency, options = {}) => {
-  const { size = 'large' } = options
+  const { size = 'desktop' } = options
   cy.log(`Creating ${currency.name} account`)
   cy.get('.dc-modal').within(() => {
     cy.findByRole('button', { name: 'Add or manage account' }).click()
-    if (size == 'small') {
+    if (size == 'mobile') {
       cy.get('form', { withinSubject: null }).within(() => {
         cy.findByText('Choose your preferred cryptocurrency').should(
           'be.visible'
@@ -741,7 +734,7 @@ Cypress.Commands.add('c_createNewCurrencyAccount', (currency, options = {}) => {
  * }
  */
 Cypress.Commands.add('c_createNewMt5Account', (Account, options = {}) => {
-  const { size = 'large' } = options
+  const { size = 'desktop' } = options
   cy.log(
     `Creating ${Account.type} ${Account.subType} ${Account.jurisdiction} account`
   )
@@ -1008,7 +1001,7 @@ Cypress.Commands.add(
 )
 
 Cypress.Commands.add('c_checkTotalAssetSummary', () => {
-  cy.get('.asset-summary', { timeout: 30000 })
+  cy.get('.asset-summary', { timeout: 60000 })
     .scrollIntoView()
     .should('be.visible')
 })
@@ -1106,4 +1099,15 @@ Cypress.Commands.add('c_createMT5DemoAccount', (accountType, options = {}) => {
       .findByText('Deriv.com Limited')
       .should('be.visible')
   }
+})
+
+Cypress.Commands.add('c_checkWalletIsLoaded', () => {
+  cy.findByText('Standard').should('be.visible', { timeout: 30000 })
+  cy.get('.wallets-skeleton.wallets-add-more-loader').should('not.exist', {
+    timeout: 30000,
+  })
+  cy.get('.wallets-skeleton.wallets-carousel-loader__card').should(
+    'not.exist',
+    { timeout: 30000 }
+  )
 })

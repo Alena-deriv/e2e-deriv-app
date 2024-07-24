@@ -3,7 +3,9 @@ import BotDashboard from '../../../support/pageobjects/dbot/bot_dashboard_page'
 describe('QATEST-4126: Log in Deriv Bot platform page from deriv.com', () => {
   const botDashboard = new BotDashboard()
   beforeEach(() => {
-    cy.c_visitResponsive(`${Cypress.env('derivComProdURL')}/dbot`, 'desktop')
+    cy.c_visitResponsive(`${Cypress.env('derivComProdURL')}dbot`, {
+      size: 'desktop',
+    })
     cy.findByText('Automated bot trading. No coding required.').should('exist')
   })
 
@@ -21,7 +23,9 @@ describe('QATEST-4126: Log in Deriv Bot platform page from deriv.com', () => {
       cy.findAllByTestId('dt_balance_text_container').should('have.length', '2')
       cy.c_openDbotThub()
       botDashboard.botBuilderDash.should('be.visible')
-      cy.c_visitResponsive(`${Cypress.env('derivComProdURL')}dbot`, 'desktop')
+      cy.c_visitResponsive(`${Cypress.env('derivComProdURL')}dbot`, {
+        size: 'desktop',
+      })
       cy.get('.tab-for-buttons')
         .eq(1)
         .should('contain.text', 'Trade now')

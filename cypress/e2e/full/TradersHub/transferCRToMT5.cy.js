@@ -56,7 +56,7 @@ describe('QATEST-6064 Validate the transfer from CR to MT5 when CR account is ha
     cy.c_login()
   })
   it('Should validate the transfer functionality from CR to MT5 account when CR account is having balance in desktop ', () => {
-    cy.c_visitResponsive('/appstore/traders-hub', 'large')
+    cy.c_visitResponsive('/appstore/traders-hub', { size: 'desktop' })
     cy.findAllByTestId('dt_balance_text_container').should('have.length', '2')
     //Only create new mt5 account if it doesn't exist
     cy.findByTestId('dt_traders_hub')
@@ -78,7 +78,7 @@ describe('QATEST-6064 Validate the transfer from CR to MT5 when CR account is ha
   })
 
   it('Should validate the transfer functionality from CR to MT5 account when CR account is having balance in mobile ', () => {
-    cy.c_visitResponsive('/appstore/traders-hub', 'small')
+    cy.c_visitResponsive('/appstore/traders-hub', { size: 'mobile' })
     //Wait for page to load
     cy.findByTestId('dt_trading-app-card_real_deriv-trader')
       .findByText('Deriv Trader')
@@ -95,13 +95,13 @@ describe('QATEST-6060 Validate the transfer from CR to MT5 when CR account is no
     cy.c_login()
   })
   it('Should validate the transfer functionality from CR to MT5 account when CR account is not having balance in desktop ', () => {
-    cy.c_visitResponsive('/appstore/traders-hub', 'large')
+    cy.c_visitResponsive('/appstore/traders-hub', { size: 'desktop' })
     createMT5Account()
     validateTransferwithZeroBalance()
   })
 
   it('Should validate the transfer functionality from CR to MT5 account when CR account is not having balance in mobile ', () => {
-    cy.c_visitResponsive('/appstore/traders-hub', 'small')
+    cy.c_visitResponsive('/appstore/traders-hub', { size: 'mobile' })
     //Wait for page to load
     cy.findByTestId('dt_trading-app-card_real_deriv-trader')
       .findByText('Deriv Trader')

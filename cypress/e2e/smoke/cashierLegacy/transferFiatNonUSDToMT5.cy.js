@@ -21,17 +21,18 @@ const fromAccount = {
 }
 const amountToTransfer = 10.0
 
-const screenSizes = ['desktop', 'small']
+const sizes = ['desktop', 'mobile']
 
-screenSizes.forEach((screenSize) => {
-  describe(`QATEST-34982 - Transfer: Perform Transfer from Fiat non-USD to MT5 in screen size: ${screenSize}`, () => {
+sizes.forEach((size) => {
+  describe(`QATEST-34982 - Transfer: Perform Transfer from Fiat non-USD to MT5 in screen size: ${size}`, () => {
     beforeEach(() => {
       cy.clearAllSessionStorage()
-      cy.c_login({ user: 'cashierLegacyNonUSD', rateLimitCheck: true })
-      cy.c_visitResponsive('appstore/traders-hub', screenSize, {
+      cy.c_login({
+        user: 'cashierLegacyNonUSD',
         rateLimitCheck: true,
+        size: size,
       })
-      if (screenSize == 'small') {
+      if (size == 'mobile') {
         cy.findByRole('button', { name: 'CFDs' }).should('be.visible')
       } else {
         cy.findByText('CFDs').should('be.visible')
@@ -40,7 +41,7 @@ screenSizes.forEach((screenSize) => {
       cy.c_closeNotificationHeader()
       cy.c_verifyActiveCurrencyAccount(fromAccount, { closeModalAtEnd: false })
       cy.c_getCurrencyBalance(fromAccount, { modalAlreadyOpened: true })
-      if (screenSize == 'small') {
+      if (size == 'mobile') {
         cy.findByRole('button', { name: 'CFDs' }).click()
       }
       cy.c_checkMt5AccountExists(toAccount)
@@ -50,15 +51,16 @@ screenSizes.forEach((screenSize) => {
             `c_is${toAccount.subType}${toAccount.jurisdiction}AccountCreated`
           ) == 'false'
         ) {
-          cy.c_createNewMt5Account(toAccount, { size: screenSize })
+          cy.c_createNewMt5Account(toAccount, { size: size })
         }
       })
       cy.c_closeNotificationHeader()
       cy.c_getMt5AccountBalance(toAccount)
     })
     it(`should transfer amount from Non USD Fiat to MT5 account.`, () => {
-      cy.c_visitResponsive('/cashier/account-transfer/', screenSize, {
+      cy.c_visitResponsive('/cashier/account-transfer/', {
         rateLimitCheck: true,
+        size: size,
       })
       cy.c_loadingCheck()
       cy.c_rateLimit({
@@ -74,9 +76,9 @@ screenSizes.forEach((screenSize) => {
         toAccount: toAccount,
         withExtraVerifications: true,
         transferAmount: amountToTransfer,
-        size: screenSize,
+        size: size,
       })
-      if (screenSize == 'small') {
+      if (size == 'mobile') {
         derivApp.commonPage.mobileLocators.header.hamburgerMenuButton().click()
         derivApp.commonPage.mobileLocators.sideMenu.sidePanel().within(() => {
           derivApp.commonPage.mobileLocators.sideMenu.tradersHubButton().click()
@@ -94,7 +96,7 @@ screenSizes.forEach((screenSize) => {
       })
       cy.c_getCurrencyBalance(fromAccount, { closeModalAtEnd: true })
       cy.c_getCurrentCurrencyBalance()
-      if (screenSize == 'small') {
+      if (size == 'mobile') {
         cy.findByRole('button', { name: 'CFDs' }).should('be.visible').click()
       }
       cy.c_getMt5AccountBalance(toAccount)

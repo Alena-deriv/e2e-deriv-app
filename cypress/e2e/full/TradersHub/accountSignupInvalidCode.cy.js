@@ -1,18 +1,18 @@
 import { generateEpoch } from '../../../support/helper/utility'
 
 describe('QATEST-5547: Verify signup with invalid verification code', () => {
-  const size = ['small', 'desktop']
+  const sizes = ['mobile', 'desktop']
   let country = Cypress.env('countries').CO
 
-  size.forEach((size) => {
-    it(`Verify user cant proceed to signup with invalid verification code on ${size == 'small' ? 'mobile' : 'desktop'}`, () => {
+  sizes.forEach((size) => {
+    it(`Verify user cant proceed to signup with invalid verification code on ${size}`, () => {
       const signUpEmail = `sanity${generateEpoch()}invl@deriv.com`
-      cy.c_setEndpoint(signUpEmail, size)
+      cy.c_setEndpoint(signUpEmail, { size: size })
       cy.c_emailVerification('account_opening_new.html', signUpEmail)
       cy.then(() => {
         cy.c_visitResponsive(
           `${Cypress.env('derivComProdURL')}signup-success/?email=${signUpEmail}`,
-          size
+          { size: size }
         )
         cy.findByText(new RegExp(signUpEmail)).should('be.visible')
         cy.findByRole('link', {
@@ -24,8 +24,10 @@ describe('QATEST-5547: Verify signup with invalid verification code', () => {
         cy.findByRole('button', {
           name: 'Try again',
         }).click()
-        cy.c_setEndpoint(signUpEmail, size)
-        cy.c_visitResponsive(Cypress.env('verificationUrl'), size).then(() => {
+        cy.c_setEndpoint(signUpEmail, { size: size })
+        cy.c_visitResponsive(Cypress.env('verificationUrl'), {
+          size: size,
+        }).then(() => {
           cy.window().then((win) => {
             win.localStorage.setItem(
               'config.server_url',
@@ -50,12 +52,12 @@ describe('QATEST-5547: Verify signup with invalid verification code', () => {
         cy.findByRole('button', {
           name: 'Create new account',
         }).should('be.enabled')
-        cy.c_visitResponsive('/', size)
-        cy.c_uiLogin(
-          size,
-          signUpEmail,
-          Cypress.env('credentials').test.masterUser.PSWD
-        )
+        cy.c_visitResponsive('/', { size: size })
+        cy.c_uiLogin({
+          username: signUpEmail,
+          password: Cypress.env('credentials').test.masterUser.PSWD,
+          size: size,
+        })
         cy.findByText(
           `Your email and/or password is incorrect. Perhaps you signed up with a social account?`
         ).should('be.visible')

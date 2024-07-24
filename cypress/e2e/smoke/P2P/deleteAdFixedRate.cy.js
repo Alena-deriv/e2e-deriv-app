@@ -6,8 +6,7 @@ describe('QATEST-2482 - Delete Advert - Fixed Rate', () => {
   beforeEach(() => {
     cy.clearAllLocalStorage()
     cy.clearAllSessionStorage()
-    cy.c_login({ user: 'p2pFixedRate' })
-    cy.c_visitResponsive('/appstore/traders-hub', 'small')
+    cy.c_login({ user: 'p2pFixedRate', size: 'mobile' })
   })
 
   it('Should be able to delete newly created advert for fixed rate.', () => {

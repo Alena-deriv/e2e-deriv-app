@@ -12,16 +12,16 @@ Cypress.Commands.add('c_navigateToPoi', (country) => {
 Cypress.Commands.add('c_navigateToPoiResponsive', (country, options = {}) => {
   const { runFor = '' } = options
   if (runFor == 'p2p') {
-    cy.c_visitResponsive('/appstore/traders-hub', 'small')
+    cy.c_visitResponsive('/appstore/traders-hub', { size: 'mobile' })
   }
-  cy.c_visitResponsive('/account/proof-of-identity', 'small')
+  cy.c_visitResponsive('/account/proof-of-identity', { size: 'mobile' })
   cy.c_closeNotificationHeader()
   cy.get('select[name="country_input"]').select(country)
   cy.contains('button', 'Next').click()
 })
 
 Cypress.Commands.add('c_navigateToPoaResponsive', () => {
-  cy.c_visitResponsive('/account/proof-of-address', 'small')
+  cy.c_visitResponsive('/account/proof-of-address', { size: 'mobile' })
   cy.c_closeNotificationHeader()
 })
 
@@ -48,8 +48,9 @@ Cypress.Commands.add('c_onfidoSecondRun', (country) => {
   cy.findByText('Confirm').click()
 })
 
-Cypress.Commands.add('c_resetData', () => {
-  cy.c_visitResponsive('/', 'large')
+Cypress.Commands.add('c_resetData', (options = {}) => {
+  const { size = 'desktop' } = options
+  cy.c_visitResponsive('/', { size: size })
   cy.c_visitBackOffice()
   cy.findByText('Client Management').click()
   cy.findByPlaceholderText('email@domain.com')
@@ -64,7 +65,8 @@ Cypress.Commands.add('c_resetData', () => {
     .type('{enter}')
 })
 
-Cypress.Commands.add('c_verifyAccount', () => {
+Cypress.Commands.add('c_verifyAccount', (options = {}) => {
+  const { size = 'mobile' } = options
   const CPFDocumentNumber = generateCPFNumber()
   cy.get('select[name="document_type"]').select('CPF')
   cy.findByLabelText('Enter your document number')
@@ -78,7 +80,7 @@ Cypress.Commands.add('c_verifyAccount', () => {
     maxRetries: 6,
   })
   cy.c_closeNotificationHeader()
-  cy.c_visitResponsive('/account/proof-of-identity', 'small')
+  cy.c_visitResponsive('/account/proof-of-identity', { size: size })
   cy.contains('ID verification passed').should('be.visible')
   cy.contains('a', 'Continue trading').should('be.visible')
 })

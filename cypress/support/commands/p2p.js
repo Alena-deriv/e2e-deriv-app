@@ -556,7 +556,8 @@ Cypress.Commands.add('c_postAd', () => {
   cy.findByRole('button', { name: 'Ok' }).should('be.enabled').click()
 })
 
-Cypress.Commands.add('c_removeExistingAds', (adType) => {
+Cypress.Commands.add('c_removeExistingAds', (adType, options = {}) => {
+  const { size = 'mobile' } = options
   cy.get('.my-ads-table__row .dc-dropdown-container')
     .its('length')
     .then((numberOfAds) => {
@@ -589,7 +590,7 @@ Cypress.Commands.add('c_removeExistingAds', (adType) => {
   cy.findByText('Payment methods').should('be.visible')
   cy.c_deleteAllPM()
   cy.findByRole('button', { name: /Add/ }).should('be.visible')
-  cy.c_visitResponsive('/cashier/p2p', 'small')
+  cy.c_visitResponsive('/cashier/p2p', { size: size })
   cy.c_clickMyAdTab()
 })
 
@@ -1180,7 +1181,7 @@ Cypress.Commands.add('c_waitForPayment', () => {
 Cypress.Commands.add(
   'c_confirmOrder',
   (nicknameAndAmount, orderType, emailAddress, options = {}) => {
-    const { checkChat = 'false' } = options
+    const { checkChat = 'false', size = 'mobile' } = options
     cy.findByText('Confirm payment').should('be.visible').click()
     cy.findByText(
       "Don't risk your funds with cash transactions. Use bank transfers or e-wallets instead."
@@ -1203,7 +1204,9 @@ Cypress.Commands.add(
       )
 
       cy.then(() => {
-        cy.c_visitResponsive(Cypress.env('verificationUrl'), 'small')
+        cy.c_visitResponsive(Cypress.env('verificationUrl'), {
+          size: size,
+        })
       })
       cy.log(`nicknameAndAmount.amount is ${nicknameAndAmount.amount}`)
       const transactionText =

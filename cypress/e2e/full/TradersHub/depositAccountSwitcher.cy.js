@@ -1,15 +1,15 @@
 describe('QATEST-54262 - Verify deposit functionality from account switcher', () => {
-  const size = ['small', 'desktop']
+  const sizes = ['mobile', 'desktop']
 
   beforeEach(() => {
     cy.c_createCRAccount()
     cy.c_login()
   })
 
-  size.forEach((size) => {
-    it(`Should validate the deposit button from account switcher on ${size == 'small' ? 'mobile' : 'desktop'}`, () => {
-      const isMobile = size == 'small' ? true : false
-      cy.c_visitResponsive('/appstore/traders-hub', size)
+  sizes.forEach((size) => {
+    it(`Should validate the deposit button from account switcher on ${size}`, () => {
+      const isMobile = size == 'mobile' ? true : false
+      cy.c_visitResponsive('/appstore/traders-hub', { size: size })
       cy.c_checkTradersHubHomePage(isMobile)
       cy.c_switchToReal()
       cy.c_closeNotificationHeader()

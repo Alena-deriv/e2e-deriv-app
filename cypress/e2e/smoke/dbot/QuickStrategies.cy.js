@@ -3,16 +3,15 @@ import QuickStrategy from '../../../support/pageobjects/dbot/quick_strategy'
 import RunPanel from '../../../support/pageobjects/dbot/run_panel'
 
 describe('QATEST-4212: Verify Martingale Quick Strategy', () => {
-  const size = ['small', 'desktop']
+  const sizes = ['mobile', 'desktop']
   const runPanel = new RunPanel()
   const botBuilder = new BotBuilder()
   const quickStrategy = new QuickStrategy()
 
-  size.forEach((size) => {
-    it(`Run Martingale Quick Strategy on ${size == 'small' ? 'mobile' : 'desktop'}`, () => {
-      const isMobile = size == 'small' ? true : false
-      cy.c_login({ user: 'dBot' })
-      cy.c_visitResponsive('appstore/traders-hub', size)
+  sizes.forEach((size) => {
+    it(`Run Martingale Quick Strategy on ${size}`, () => {
+      const isMobile = size == 'mobile' ? true : false
+      cy.c_login({ user: 'dBot', size: size })
       //Wait for page to completely load
       cy.findAllByTestId('dt_balance_text_container').should('have.length', '2')
       cy.c_openDbotThub()

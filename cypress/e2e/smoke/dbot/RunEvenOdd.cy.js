@@ -3,17 +3,16 @@ import BotDashboard from '../../../support/pageobjects/dbot/bot_dashboard_page'
 import RunPanel from '../../../support/pageobjects/dbot/run_panel'
 
 describe('QATEST-109419: Run custom strategy Even Odd', () => {
-  const size = ['small', 'desktop']
+  const sizes = ['mobile', 'desktop']
   const botDashboard = new BotDashboard()
   const runPanel = new RunPanel()
   const botBuilder = new BotBuilder()
 
-  size.forEach((size) => {
-    it(`Run Even and Odd Purchase on ${size == 'small' ? 'mobile' : 'desktop'}`, () => {
-      const isMobile = size == 'small' ? true : false
+  sizes.forEach((size) => {
+    it(`Run Even and Odd Purchase on ${size}`, () => {
+      const isMobile = size == 'mobile' ? true : false
       cy.clearAllLocalStorage()
-      cy.c_login({ user: 'dBot' })
-      cy.c_visitResponsive('appstore/traders-hub', size)
+      cy.c_login({ user: 'dBot', size: size })
       //Wait for page to completely load
       cy.findAllByTestId('dt_balance_text_container').should('have.length', '2')
       cy.c_openDbotThub()

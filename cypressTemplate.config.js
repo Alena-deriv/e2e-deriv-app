@@ -1,8 +1,6 @@
 const { defineConfig } = require('cypress')
 require('dotenv').config()
 
-//const gViewPortSize = {small: 'phone-xr', large: 'macbook-16'} //TODO Use enum
-
 module.exports = defineConfig({
   e2e: {
     projectId: 'rjvf4u',
@@ -15,13 +13,13 @@ module.exports = defineConfig({
     chromeWebSecurity: false,
   },
   env: {
-    testSizes: ['small', 'large'],
+    testSizes: ['mobile', 'desktop'],
     prodURL: 'https://app.deriv.com/',
     RegionEU: '/?region=at',
     RegionROW: '/?region=za',
     skipROWTests: false,
     email: 'test@example.com',
-    viewPortSize: 'small',
+    defaultViewPortSize: 'mobile',
     loginEmail: process.env.E2E_DERIV_LOGIN,
     loginPassword: process.env.E2E_DERIV_PASSWORD,
     loginEmailProd: process.env.E2E_DERIV_LOGIN_PROD,

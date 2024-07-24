@@ -4,8 +4,11 @@ let maxOrder = 10
 
 describe('QATEST-145642 - Copy Ad - Fixed Rate - Sell Ad', () => {
   beforeEach(() => {
-    cy.c_login({ user: 'p2pCopyAdFixedRateSellAd', rateLimitCheck: true })
-    cy.c_visitResponsive('/appstore/traders-hub', 'small')
+    cy.c_login({
+      user: 'p2pCopyAdFixedRateSellAd',
+      rateLimitCheck: true,
+      size: 'mobile',
+    })
   })
 
   it('Should be able to copy an already existing sell type advert successfully.', () => {

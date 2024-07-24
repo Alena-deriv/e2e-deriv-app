@@ -18,8 +18,7 @@ describe('QATEST-2425 - Create a Sell type Advert - Fixed Rate', () => {
   beforeEach(() => {
     cy.clearAllLocalStorage()
     cy.clearAllSessionStorage()
-    cy.c_login({ user: 'p2pFixedRate' })
-    cy.c_visitResponsive('/appstore/traders-hub', 'small')
+    cy.c_login({ user: 'p2pFixedRate', size: 'mobile' })
   })
   it('Should be able to create sell type advert and verify all fields and messages for fixed rate.', () => {
     cy.c_navigateToP2P()

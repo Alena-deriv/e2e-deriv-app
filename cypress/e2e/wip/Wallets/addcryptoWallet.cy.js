@@ -75,15 +75,15 @@ function checkWalletAccountSwitcher(walletname) {
 
 describe('QATEST-98773 - Add crypto wallet account', () => {
   beforeEach(() => {
-    cy.c_login({ user: 'walletloginEmail' })
+    cy.c_login({ user: 'walletloginEmail', app: 'wallets' })
   })
 
   it('should be able to add more wallets', () => {
-    cy.c_visitResponsive('/', 'large')
+    cy.c_visitResponsive('/', { size: 'desktop' })
     addcryptowallet('desktop')
   })
-  it('should be able to add more wallets in Responsive', () => {
-    cy.c_visitResponsive('/', 'small')
+  it('should be able to add more wallets on mobile', () => {
+    cy.c_visitResponsive('/', { size: 'mobile' })
     cy.c_WaitUntilWalletsPageIsLoaded()
     addcryptowallet('mobile')
   })

@@ -18,13 +18,15 @@ function checkNickname(nickname, message, buttonState) {
 describe('QATEST-2292, QATEST-2316, QATEST-2324, QATEST-2300, QATEST-2308, QATEST-2334 - Verify nickname validation checks during advertiser registration, including duplicates, special characters, length, repetition, and for correct nickname.', () => {
   beforeEach(() => {
     cy.c_createCRAccount({ country_code: 'br' })
-    cy.c_login()
+    cy.c_login({ size: 'mobile' })
     cy.c_navigateToPoiResponsive('Brazil', { runFor: 'p2p' })
     cy.c_verifyAccount()
-    cy.c_visitResponsive('/appstore/traders-hub', 'small')
+    cy.c_visitResponsive('/appstore/traders-hub', {
+      size: 'mobile',
+    })
   })
 
-  it('Should be able to set a nickname for P2P in responsive mode.', () => {
+  it('Should be able to set a nickname for P2P on mobile.', () => {
     cy.c_navigateToP2P()
     cy.findByText('My profile').should('be.visible').click()
     cy.findByText('Verify your P2P account').should('be.visible')
@@ -69,7 +71,7 @@ describe('QATEST-2292, QATEST-2316, QATEST-2324, QATEST-2300, QATEST-2308, QATES
         'selected'
       )
     })
-    cy.c_visitResponsive('/appstore/traders-hub', 'small')
+    cy.c_visitResponsive('/appstore/traders-hub', { size: 'mobile' })
     cy.c_navigateToP2P()
     cy.findByText('My profile').should('be.visible').click()
     cy.findByRole('heading', { name: 'What’s your nickname?' }).should(

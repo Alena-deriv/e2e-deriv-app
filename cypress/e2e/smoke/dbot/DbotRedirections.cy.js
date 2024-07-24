@@ -1,16 +1,16 @@
 import { derivApp } from '../../../support/locators'
 
 describe('QATEST-136582: Redirection to other pages from dbot', () => {
-  const size = ['small', 'desktop']
+  const sizes = ['mobile', 'desktop']
   beforeEach(() => {
     Cypress.prevAppId = 0 //TODO:Update once BOT-1926 is done
     cy.c_login({ user: 'dBot', rateLimitCheck: true })
   })
 
-  size.forEach((size) => {
-    it(`Redirect to deposit page from Dbot on ${size == 'small' ? 'mobile' : 'desktop'}`, () => {
-      const isMobile = size == 'small' ? true : false
-      cy.c_visitResponsive('appstore/traders-hub', size)
+  sizes.forEach((size) => {
+    it(`Redirect to deposit page from Dbot on ${size}`, () => {
+      const isMobile = size == 'mobile' ? true : false
+      cy.c_visitResponsive('appstore/traders-hub', { size: size })
       cy.findAllByTestId('dt_balance_text_container').should('have.length', '2')
       cy.c_openDbotThub()
       cy.c_rateLimit()
@@ -29,9 +29,9 @@ describe('QATEST-136582: Redirection to other pages from dbot', () => {
       )
     })
 
-    it(`Switching from Dbot to Dtrader on ${size == 'small' ? 'mobile' : 'desktop'}`, () => {
-      const isMobile = size == 'small' ? true : false
-      cy.c_visitResponsive('appstore/traders-hub', size)
+    it(`Switching from Dbot to Dtrader on ${size}`, () => {
+      const isMobile = size == 'mobile' ? true : false
+      cy.c_visitResponsive('appstore/traders-hub', { size: size })
       cy.findAllByTestId('dt_balance_text_container').should('have.length', '2')
       cy.c_openDbotThub()
       if (isMobile) cy.findByTestId('close-icon', { timeout: 7000 }).click()

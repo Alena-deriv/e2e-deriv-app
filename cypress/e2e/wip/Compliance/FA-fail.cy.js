@@ -1,18 +1,18 @@
 import { generateEpoch } from '../../../support/helper/utility'
 
 describe('QATEST-5168 MF financial assessment (Appropriateness Test) - Fail scenario but successful account creation', () => {
-  const size = ['small', 'desktop']
+  const sizes = ['mobile', 'desktop']
   let country = Cypress.env('countries').ES
   let nationalIDNum = Cypress.env('nationalIDNum').ES
   let taxIDNum = Cypress.env('taxIDNum').ES
   let currency = Cypress.env('accountCurrency').USD
 
-  size.forEach((size) => {
-    it(`should check FA on ${size == 'small' ? 'mobile' : 'desktop'}`, () => {
-      const isMobile = size == 'small' ? true : false
+  sizes.forEach((size) => {
+    it(`should check FA on ${size}`, () => {
+      const isMobile = size == 'mobile' ? true : false
       const signUpEmail = `sanity${generateEpoch()}mf@deriv.com`
-      cy.c_setEndpoint(signUpEmail, size)
-      cy.c_demoAccountSignup(country, signUpEmail, size)
+      cy.c_setEndpoint(signUpEmail, { size: size })
+      cy.c_demoAccountSignup(country, signUpEmail, { size: size })
       cy.c_generateRandomName().then((firstName) => {
         cy.c_personalDetails(
           firstName,

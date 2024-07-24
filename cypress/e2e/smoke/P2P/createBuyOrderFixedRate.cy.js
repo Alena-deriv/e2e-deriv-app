@@ -15,7 +15,7 @@ let fiatCurrency = 'USD'
 let isSellAdUser = true
 const loginWithNewUser = (userAccount, isSellAdUserAccount) => {
   Cypress.prevAppId = 0
-  cy.c_login({ user: userAccount, rateLimitCheck: true })
+  cy.c_login({ user: userAccount, rateLimitCheck: true, size: 'mobile' })
   isSellAdUser = isSellAdUserAccount
 }
 
@@ -29,10 +29,6 @@ describe('QATEST-2542 Place a Buy Order with same currency ads - Fixed rate', ()
     } else {
       loginWithNewUser('p2pFixedRatePKBuyOrder2', true)
     }
-    cy.c_visitResponsive('/appstore/traders-hub', 'small'),
-      {
-        rateLimitCheck: true,
-      }
   })
   it('Should be able to create sell type advert and verify all fields and messages for fixed rate.', () => {
     cy.c_navigateToP2P()

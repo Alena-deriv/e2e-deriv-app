@@ -41,12 +41,12 @@ function fiat_transfer(to_account) {
 describe('QATEST-141444 Fiat to Cryptpo wallet transfer and QATEST-98808 - View Fiat transaction', () => {
   //Prerequisites: Fiat wallet account in any qa box with 10,000.00 USD balance and BTC, ETH and LTC wallets
   beforeEach(() => {
-    cy.c_login({ user: 'walletloginEmail' })
+    cy.c_login({ user: 'walletloginEmail', app: 'wallets' })
   })
 
   it('should be able to perform transfer from fiat account', () => {
     cy.log('Transfer from Fiat account')
-    cy.c_visitResponsive('/', 'large')
+    cy.c_visitResponsive('/', { size: 'desktop' })
     cy.findAllByText(/Wallet/, { timeout: 10000 }).should('exist')
     cy.findByText('Transfer').first().click()
     fiat_transfer('Options')
@@ -57,7 +57,7 @@ describe('QATEST-141444 Fiat to Cryptpo wallet transfer and QATEST-98808 - View 
 
   it('should be able to view transactions of fiat account', () => {
     cy.log('View Transactions of Fiat account')
-    cy.c_visitResponsive('/', 'large')
+    cy.c_visitResponsive('/', { size: 'desktop' })
     cy.findAllByText(/Wallet/, { timeout: 10000 }).should('exist')
     cy.findByText('Transfer').first().click()
     cy.findByText('Transactions').first().click()
@@ -85,9 +85,9 @@ describe('QATEST-141444 Fiat to Cryptpo wallet transfer and QATEST-98808 - View 
       .first()
       .should('be.visible')
   })
-  it('should be able to perform transfer from fiat account in responsive', () => {
+  it('should be able to perform transfer from fiat account on mobile', () => {
     cy.log('Transfer from Fiat account')
-    cy.c_visitResponsive('/', 'small')
+    cy.c_visitResponsive('/', { size: 'mobile' })
     cy.c_WaitUntilWalletsPageIsLoaded()
     cy.findByText('Transfer').parent().click()
     fiat_transfer('Options')
@@ -95,9 +95,9 @@ describe('QATEST-141444 Fiat to Cryptpo wallet transfer and QATEST-98808 - View 
     fiat_transfer('ETH Wallet')
     fiat_transfer('LTC Wallet')
   })
-  it('should be able to view transactions of fiat account in responsive', () => {
+  it('should be able to view transactions of fiat account on mobile', () => {
     cy.log('View Transactions of Fiat account')
-    cy.c_visitResponsive('/', 'small')
+    cy.c_visitResponsive('/', { size: 'mobile' })
     cy.c_WaitUntilWalletsPageIsLoaded()
     cy.findByText('Transfer').parent().click()
     cy.findByText('Transactions').first().click()

@@ -30,8 +30,8 @@ describe('QATEST-4785 High risk onfido supported country.', () => {
       maxRetries: 5,
     })
     /* Visit BO */
-    cy.c_visitResponsive('/', 'large')
-    cy.c_visitBackOffice({ login: true })
+    cy.c_visitResponsive('/', { size: 'desktop' })
+    cy.c_visitBackOffice()
     cy.findByText('Client Management').click()
     cy.findByPlaceholderText('email@domain.com')
       .should('exist')
@@ -47,7 +47,7 @@ describe('QATEST-4785 High risk onfido supported country.', () => {
       'not.exist'
     )
     /* Check no cashier lock on FE */
-    cy.c_visitResponsive('/cashier/deposit', 'small')
+    cy.c_visitResponsive('/cashier/deposit', { size: 'mobile' })
     cy.findByText('Deposit via bank wire, credit card, and e-wallet').should(
       'be.visible'
     )
@@ -56,7 +56,7 @@ describe('QATEST-4785 High risk onfido supported country.', () => {
       should ask for POA only 
       Should ask for FA 
     */
-    cy.c_visitResponsive('/', 'small')
+    cy.c_visitResponsive('/', { size: 'mobile' })
     cy.c_closeNotificationHeader()
     cy.findByRole('button', { name: 'CFDs' }).click()
     cy.findByTestId('dt_trading-app-card_real_standard')

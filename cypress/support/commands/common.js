@@ -7,12 +7,23 @@ Cypress.isProd = Cypress.config().baseUrl === Cypress.env('prodURL')
 /**
  * Custom command that allows us to use baseUrl + path and detect whether this is a responsive run or not.
  */
-Cypress.Commands.add('c_visitResponsive', (path, size, options = {}) => {
-  const { rateLimitCheck = false, enablePasskey = false } = options
-  if (size === undefined) size = Cypress.env('viewPortSize')
-  if (size == 'small') cy.viewport('iphone-xr')
-  else if (size == 'medium') cy.viewport('ipad-2')
-  else cy.viewport('macbook-16')
+Cypress.Commands.add('c_visitResponsive', (path, options = {}) => {
+  const {
+    rateLimitCheck = false,
+    enablePasskey = false,
+    size = Cypress.env('defaultViewPortSize'),
+  } = options
+  if (size == 'mobile') {
+    cy.viewport('iphone-xr')
+  } else if (size == 'tablet') {
+    cy.viewport('ipad-2')
+  } else if (size == 'desktop') {
+    cy.viewport('macbook-16')
+  } else {
+    throw new Error(
+      'Incorrect Size provided please provide oneof the following: mobile, tablet or desktop'
+    )
+  }
 
   cy.visit(path)
   cy.log(`rateLimitCheck flag is set to: ${rateLimitCheck}`)
@@ -45,8 +56,8 @@ Cypress.Commands.add('c_visitResponsive', (path, size, options = {}) => {
     }).should('be.visible', { timeout: 30000 })
   }
 
-  if (path.includes('traders-hub') || path === '/') {
-    if (size == 'small')
+  if (path.includes('traders-hub') || path === '/' || path === '') {
+    if (size == 'mobile')
       cy.findAllByText("Trader's Hub").should('have.length', '1')
     else cy.findAllByText("Trader's Hub").should('have.length', '2')
     cy.log('Trader Hub Selected')
@@ -65,6 +76,7 @@ Cypress.Commands.add('c_login', (options = {}) => {
     rateLimitCheck = false,
     enablePasskey = false,
     relogin = false,
+    size = Cypress.env('defaultViewPortSize'),
   } = options
   const { loginEmail, loginPassword } = setLoginUser(user, {
     backEndProd: backEndProd,
@@ -75,9 +87,10 @@ Cypress.Commands.add('c_login', (options = {}) => {
   if (relogin) {
     Cypress.env('oAuthUrl', '<empty>')
   }
-  cy.c_visitResponsive('/endpoint', 'large', {
+  cy.c_visitResponsive('/endpoint', {
     rateLimitCheck: rateLimitCheck,
     enablePasskey: enablePasskey,
+    size: size,
   })
   cy.c_setDerivAppEndpoint(app, backEndProd, user).then(() => {
     if (Cypress.env('oAuthUrl') == '<empty>') {
@@ -91,6 +104,7 @@ Cypress.Commands.add('c_login', (options = {}) => {
           cy.c_doOAuthLogin(app, {
             rateLimitCheck: rateLimitCheck,
             enablePasskey: enablePasskey,
+            size: size,
           })
         },
         loginEmail,
@@ -101,6 +115,7 @@ Cypress.Commands.add('c_login', (options = {}) => {
       cy.c_doOAuthLogin(app, {
         rateLimitCheck: rateLimitCheck,
         enablePasskey: enablePasskey,
+        size: size,
       })
     }
   })
@@ -150,10 +165,15 @@ Cypress.Commands.add('c_setDerivAppEndpoint', (app, backEndProd, user) => {
 })
 
 Cypress.Commands.add('c_doOAuthLogin', (app, options = {}) => {
-  const { rateLimitCheck = false, enablePasskey = false } = options
-  cy.c_visitResponsive(Cypress.env('oAuthUrl'), 'large', {
+  const {
+    rateLimitCheck = false,
+    enablePasskey = false,
+    size = Cypress.env('defaultViewPortSize'),
+  } = options
+  cy.c_visitResponsive(Cypress.env('oAuthUrl'), {
     rateLimitCheck: rateLimitCheck,
     enablePasskey: enablePasskey,
+    size: size,
   })
   cy.document().then((doc) => {
     const launchModal = doc.querySelector('[data-test-id="launch-modal"]')
@@ -173,42 +193,23 @@ Cypress.Commands.add('c_doOAuthLogin', (app, options = {}) => {
         cy.log('Completed trading assessment!!!')
       }
     })
-  cy.get('#modal_root, .modal-root', { timeout: 10000 }).then(($element) => {
-    if ($element.children().length > 0) {
-      cy.contains('Continue').then(($element) => {
-        if ($element.length) {
-          cy.wrap($element).click()
-        }
-        //To redirect to wallet page
-        if (
-          app == 'wallets' ||
-          app == 'doughflow' ||
-          app == 'demoonlywallet' ||
-          app == 'onramp'
-        ) {
-          cy.findByRole('banner').should('be.visible')
-        } else {
-          cy.findAllByText("Trader's Hub").should('have.length', '2')
-        }
-      })
-    } else {
-      //when deriv charts popup is not available and if we need to redirect to wallet page
-      if (
-        app == 'wallets' ||
-        app == 'doughflow' ||
-        app == 'demoonlywallet' ||
-        app == 'onramp'
-      ) {
-        cy.findByRole('banner').should('be.visible')
-      } else {
-        cy.findAllByText("Trader's Hub").should('have.length', '2')
-      }
-    }
-  })
+
+  if (size == 'desktop') {
+    cy.findAllByText("Trader's Hub").should('have.length', '2')
+  } else {
+    cy.findAllByText("Trader's Hub").should('have.length', '1')
+  }
+  if (app != 'wallets') {
+    cy.c_checkTotalAssetSummary()
+  } else if (app == 'wallets') {
+    cy.c_checkWalletIsLoaded()
+  }
 })
 
 Cypress.Commands.add('c_mt5login', () => {
-  cy.c_visitResponsive(Cypress.env('mt5BaseUrl') + '/terminal', 'large')
+  cy.c_visitResponsive(Cypress.env('mt5BaseUrl') + '/terminal', {
+    size: 'desktop',
+  })
   cy.findByRole('button', { name: 'Accept' }).click()
   cy.findByPlaceholderText('Enter Login').click()
   cy.findByPlaceholderText('Enter Login').type(
@@ -466,8 +467,9 @@ Cypress.Commands.add('c_walletLogout', () => {
   Usage cy.c_createCRAccount({country_code: 'gh', other_keys: 'value'}) or you may not pass in anything to go with default.
   Works for CR countries as well as DIEL - non-EU account.
 */
-Cypress.Commands.add('c_createCRAccount', (clientData) => {
-  cy.c_visitResponsive('/')
+Cypress.Commands.add('c_createCRAccount', (clientData, options = {}) => {
+  const { size = Cypress.env('defaultViewPortSize') } = options
+  cy.c_visitResponsive('/', { size: size })
   // Call Verify Email and then set the Verification code in env
   try {
     cy.task('wsConnect')
@@ -497,8 +499,9 @@ Cypress.Commands.add('c_createCRAccount', (clientData) => {
   Usage cy.c_createMFAccount({country_code: 'de', other_keys: 'value'}) or you may not pass in anything to go with default.
   Works for MF countries as well as DIEL - EU account.
 */
-Cypress.Commands.add('c_createMFAccount', (clientData) => {
-  cy.c_visitResponsive('/')
+Cypress.Commands.add('c_createMFAccount', (clientData, options = {}) => {
+  const { size = Cypress.env('defaultViewPortSize') } = options
+  cy.c_visitResponsive('/', { size: size })
   // Call Verify Email and then set the Verification code in env
   try {
     cy.task('wsConnect')
@@ -528,8 +531,9 @@ Cypress.Commands.add('c_createMFAccount', (clientData) => {
   Usage cy.c_createDemoAccount({country_code: 'ke'}) or you may not pass in anything to go with default.
   Works either CR or MF countries.
 */
-Cypress.Commands.add('c_createDemoAccount', (clientData) => {
-  cy.c_visitResponsive('/')
+Cypress.Commands.add('c_createDemoAccount', (clientData, options = {}) => {
+  const { size = Cypress.env('defaultViewPortSize') } = options
+  cy.c_visitResponsive('/', { size: size })
   // Call Verify Email and then set the Verification code in env
   try {
     cy.task('wsConnect')
@@ -752,20 +756,18 @@ Cypress.Commands.add(
   }
 )
 
-Cypress.Commands.add(
-  'c_uiLogin',
-  (
-    size = 'large',
+Cypress.Commands.add('c_uiLogin', (options = {}) => {
+  const {
     username = Cypress.env('credentials').production.masterUser.ID,
-    password = Cypress.env('credentials').production.masterUser.PSWD
-  ) => {
-    cy.c_visitResponsive('/', size)
-    cy.findByRole('button', { name: 'Log in' }).click()
-    cy.findByLabelText('Email').type(username)
-    cy.findByLabelText('Password').type(password, { log: false })
-    cy.findByRole('button', { name: 'Log in' }).click()
-  }
-)
+    password = Cypress.env('credentials').production.masterUser.PSWD,
+    size = Cypress.env('defaultViewPortSize'),
+  } = options
+  cy.c_visitResponsive('/', { size: size })
+  cy.findByRole('button', { name: 'Log in' }).click()
+  cy.findByLabelText('Email').type(username)
+  cy.findByLabelText('Password').type(password, { log: false })
+  cy.findByRole('button', { name: 'Log in' }).click()
+})
 
 /**
  * Method to perform Authorization and Create Application ID

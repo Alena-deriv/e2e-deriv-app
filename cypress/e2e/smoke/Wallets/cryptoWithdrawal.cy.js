@@ -1,5 +1,5 @@
 function sendWithdrawEmail(size) {
-  if (size === 'small') {
+  if (size === 'mobile') {
     cy.c_switchWalletsAccountResponsive('BTC')
     cy.findByRole('button', { name: /withdrawal/i })
       .should('be.visible')
@@ -22,7 +22,7 @@ function sendWithdrawEmail(size) {
 }
 
 function verifyEmailandPerformWithdraw(size) {
-  if (size === 'small') {
+  if (size === 'mobile') {
     cy.c_switchWalletsAccountResponsive('BTC')
   } else {
     cy.c_switchWalletsAccount('BTC')
@@ -38,7 +38,7 @@ function verifyEmailandPerformWithdraw(size) {
 
     cy.c_visitResponsive(
       `/wallet/withdrawal?verification=${verification_code}`,
-      size
+      { size: size }
     )
 
     cy.findByText('Transaction status').should('be.visible')
@@ -84,25 +84,25 @@ function verifyEmailandPerformWithdraw(size) {
 }
 
 describe('QATEST-98698 - Crypto withdraw success', () => {
-  const size = ['desktop', 'small']
+  const sizes = ['desktop', 'mobile']
 
   beforeEach(() => {
-    cy.c_login({ user: 'walletloginEmail' })
+    cy.c_login({ user: 'walletloginEmail', app: 'wallets' })
   })
 
-  size.forEach((size) => {
-    it(`should be able to send withdrawal verification link on ${size == 'small' ? 'mobile' : 'desktop'}`, () => {
+  sizes.forEach((size) => {
+    it(`should be able to send withdrawal verification link on ${size}`, () => {
       cy.log('Send Crypto Withdrawal Verification')
 
-      cy.c_visitResponsive('/', size)
+      cy.c_visitResponsive('/', { size: size })
       cy.findAllByText(/Wallet/, { timeout: 10000 }).should('exist')
       sendWithdrawEmail(size)
     })
 
-    it(`should be able to access crypto withdrawal page and perform withdrawal on ${size == 'small' ? 'mobile' : 'desktop'}`, () => {
+    it(`should be able to access crypto withdrawal page and perform withdrawal on ${size}`, () => {
       cy.log('Access Crypto Withdrawal Content Through Email Link')
 
-      cy.c_visitResponsive('/', size)
+      cy.c_visitResponsive('/', { size: size })
       cy.findAllByText(/Wallet/, { timeout: 10000 }).should('exist')
       verifyEmailandPerformWithdraw(size)
     })

@@ -2,7 +2,7 @@ let oldAppId = 0
 
 describe('QATEST - 148419 - Register a New Application / App ID', () => {
   it('configAppId should be different to original env var.', () => {
-    cy.c_visitResponsive('/')
+    cy.c_visitResponsive('/', { size: 'desktop' })
     cy.c_createDemoAccount()
     cy.c_login()
 

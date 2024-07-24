@@ -19,8 +19,7 @@ describe('QATEST-2718 - Verify sorting of Buy and Sell ads by Exchange Rate', ()
   beforeEach(() => {
     cy.clearAllLocalStorage()
     cy.clearAllSessionStorage()
-    cy.c_login({ user: 'p2pSortFunctionality' })
-    cy.c_visitResponsive('/appstore/traders-hub', 'small')
+    cy.c_login({ user: 'p2pSortFunctionality', size: 'mobile' })
   })
 
   it('Should be able to sort Buy and Sell ads by Exchange Rate.', () => {

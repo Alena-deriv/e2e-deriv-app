@@ -36,11 +36,10 @@ function editPaymentMethod() {
 describe('QATEST-2831 - My Profile page - Edit Payment Method', () => {
   beforeEach(() => {
     cy.clearAllLocalStorage()
-    cy.c_login({ user: 'p2pStandardAccountWithoutAds' })
-    cy.c_visitResponsive('/appstore/traders-hub', 'small')
+    cy.c_login({ user: 'p2pStandardAccountWithoutAds', size: 'mobile' })
   })
 
-  it('Should be able to edit the existing payment method in responsive mode.', () => {
+  it('Should be able to edit the existing payment method in mobile.', () => {
     cy.c_navigateToP2P()
     cy.findByText('My profile').click()
     cy.findByText('Available Deriv P2P balance').should('be.visible')

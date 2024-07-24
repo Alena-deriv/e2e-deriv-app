@@ -27,12 +27,12 @@ describe('QATEST-115357 - BO General Sanity - Update/Save client details', () =>
 
     /* Verifies changes are reflected on FE side - desktop */
     cy.c_login()
-    cy.c_visitResponsive('/account/personal-details', 'large')
+    cy.c_visitResponsive('/account/personal-details', { size: 'desktop' })
     cy.findByTestId('dt_first_name').should('contain.value', firstName)
     cy.findByTestId('dt_last_name').should('contain.value', lastName)
 
     /* Verifies changes are reflected on FE side - mobile */
-    cy.c_visitResponsive('/account/personal-details', 'small')
+    cy.c_visitResponsive('/account/personal-details', { size: 'mobile' })
     cy.findByTestId('dt_first_name').should('contain.value', firstName)
     cy.findByTestId('dt_last_name').should('contain.value', lastName)
   })

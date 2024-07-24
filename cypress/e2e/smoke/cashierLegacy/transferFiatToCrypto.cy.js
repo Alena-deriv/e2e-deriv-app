@@ -18,17 +18,18 @@ const fromAccount = {
 }
 const amountToTransfer = 10.0
 
-const screenSizes = ['large', 'small']
+const sizes = ['desktop', 'mobile']
 
-screenSizes.forEach((screenSize) => {
-  describe(`QATEST-20036 - Transfer: Enter USD amount when Transfer Fiat to Crypto in screen size: ${screenSize}`, () => {
+sizes.forEach((size) => {
+  describe(`QATEST-20036 - Transfer: Enter USD amount when Transfer Fiat to Crypto in screen size: ${size}`, () => {
     beforeEach(() => {
       cy.clearAllSessionStorage()
-      cy.c_login({ user: 'cashierLegacy', rateLimitCheck: true })
-      cy.c_visitResponsive('appstore/traders-hub', screenSize, {
+      cy.c_login({
+        user: 'cashierLegacy',
         rateLimitCheck: true,
+        size: size,
       })
-      if (screenSize == 'small') {
+      if (size == 'mobile') {
         cy.findByRole('button', { name: 'Options' }).should('be.visible')
       } else {
         cy.findByText('Options').should('be.visible')
@@ -45,7 +46,7 @@ screenSizes.forEach((screenSize) => {
           sessionStorage.getItem(`c_is${toAccount.code}AccountCreated`) ==
           'false'
         ) {
-          cy.c_createNewCurrencyAccount(toAccount, { size: screenSize })
+          cy.c_createNewCurrencyAccount(toAccount, { size: size })
         } else if (
           sessionStorage.getItem(`c_is${toAccount.code}AccountCreated`) ==
           'true'
@@ -62,8 +63,9 @@ screenSizes.forEach((screenSize) => {
       cy.c_getCurrentCurrencyBalance()
     })
     it(`should transfer amount from Fiat to Crypto account.`, () => {
-      cy.c_visitResponsive('/cashier/account-transfer/', screenSize, {
+      cy.c_visitResponsive('/cashier/account-transfer/', {
         rateLimitCheck: true,
+        size: size,
       })
       cy.c_loadingCheck()
       cy.c_rateLimit({
@@ -79,9 +81,9 @@ screenSizes.forEach((screenSize) => {
         toAccount: toAccount,
         withExtraVerifications: true,
         transferAmount: amountToTransfer,
-        size: screenSize,
+        size: size,
       })
-      if (screenSize == 'small') {
+      if (size == 'mobile') {
         derivApp.commonPage.mobileLocators.header.hamburgerMenuButton().click()
         derivApp.commonPage.mobileLocators.sideMenu.sidePanel().within(() => {
           derivApp.commonPage.mobileLocators.sideMenu.tradersHubButton().click()

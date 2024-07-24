@@ -1,15 +1,15 @@
 describe('QATEST-6032: Create MT5 account without using the existing MT5 password for the user(negative scenario)', () => {
-  const size = ['small', 'desktop']
+  const sizes = ['mobile', 'desktop']
   let countryCode = 'co'
 
   beforeEach(() => {
     cy.c_createCRAccount({ country_code: countryCode })
     cy.c_login()
   })
-  size.forEach((size) => {
-    it(`Verify the negative scenario of adding MT5 financial account with wrong password when there is already an MT5 Standard account added on ${size == 'small' ? 'mobile' : 'desktop'}`, () => {
-      const isMobile = size == 'small' ? true : false
-      cy.c_visitResponsive('appstore/traders-hub', size)
+  sizes.forEach((size) => {
+    it(`Verify the negative scenario of adding MT5 financial account with wrong password when there is already an MT5 Standard account added on ${size}`, () => {
+      const isMobile = size == 'mobile' ? true : false
+      cy.c_visitResponsive('appstore/traders-hub', { size: size })
       cy.c_checkTradersHubHomePage(isMobile)
       if (isMobile) cy.findByRole('button', { name: 'CFDs' }).click()
       cy.findByTestId('dt_trading-app-card_real_standard')

@@ -1,5 +1,5 @@
 describe('QATEST-5813: Add USD account for existing BTC account', () => {
-  const size = ['small', 'desktop']
+  const sizes = ['mobile', 'desktop']
   let countryCode = 'co'
   let cryptoCurrency = 'BTC'
   let fiatCurrency = Cypress.env('accountCurrency').USD
@@ -11,10 +11,10 @@ describe('QATEST-5813: Add USD account for existing BTC account', () => {
     })
     cy.c_login()
   })
-  size.forEach((size) => {
-    it(`Should create a new crypto account and add USD account on ${size == 'small' ? 'mobile' : 'dekstop'}`, () => {
-      const isMobile = size == 'small' ? true : false
-      cy.c_visitResponsive('/', size)
+  sizes.forEach((size) => {
+    it(`Should create a new crypto account and add USD account on ${size}`, () => {
+      const isMobile = size == 'mobile' ? true : false
+      cy.c_visitResponsive('/', { size: size })
       //Wait for page to completely load
       cy.findAllByTestId('dt_balance_text_container').should('have.length', '2')
       cy.c_checkTradersHubHomePage(isMobile)

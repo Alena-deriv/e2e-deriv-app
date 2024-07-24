@@ -1,5 +1,5 @@
 describe('QATEST-169019: Verify user can change currency after duplicate account lock from BO', () => {
-  const size = ['small', 'desktop']
+  const sizes = ['mobile', 'desktop']
   const oldCurrency = Cypress.env('accountCurrency').USD
   const newCurrency = Cypress.env('accountCurrency').EUR
 
@@ -33,11 +33,13 @@ describe('QATEST-169019: Verify user can change currency after duplicate account
     cy.c_login()
   })
 
-  size.forEach((size) => {
-    it(`Should be able to successfully change currency on ${size == 'small' ? 'mobile' : 'desktop'}`, () => {
-      const isMobile = size == 'small' ? true : false
-      cy.c_visitResponsive('/', size)
-      cy.findAllByTestId('dt_balance_text_container').should('have.length', '2')
+  sizes.forEach((size) => {
+    it(`Should be able to successfully change currency on ${size}`, () => {
+      const isMobile = size == 'mobile' ? true : false
+      cy.c_visitResponsive('/', {
+        size: size,
+      })
+      cy.c_checkTotalAssetSummary()
       cy.c_switchToReal()
       cy.findByText('Add a Deriv account').should('be.visible')
       if (isMobile) {
@@ -49,8 +51,8 @@ describe('QATEST-169019: Verify user can change currency after duplicate account
       }
       cy.findByText('Take me to Demo account').should('be.visible')
       cy.findByText('I will setup my real account later.').should('be.visible')
-      cy.findByRole('button', { name: 'Yes' }).click()
-      cy.findAllByTestId('dt_balance_text_container').should('have.length', '2')
+      cy.findByRole('button', { name: 'Yes' }).should('be.visible').click()
+      cy.c_checkTotalAssetSummary()
       cy.c_switchToReal()
       cy.findByText('Add a Deriv account').should('be.visible')
       if (isMobile)
@@ -84,7 +86,7 @@ describe('QATEST-169019: Verify user can change currency after duplicate account
       cy.findByRole('button', { name: 'Maybe later' })
         .should('be.visible')
         .click()
-      cy.findAllByTestId('dt_balance_text_container').should('have.length', '2')
+      cy.c_checkTotalAssetSummary()
       cy.findByTestId('dt_currency-switcher__arrow').click()
       cy.findByText('Select account').should('be.visible')
       cy.get('.currency-selection-modal__body').should(

@@ -1,15 +1,15 @@
 describe('QATEST-5708 - Create a new Demo cTrader account', () => {
-  const size = ['small', 'desktop']
+  const sizes = ['mobile', 'desktop']
 
   beforeEach(() => {
     cy.c_createCRAccount()
     cy.c_login()
   })
 
-  size.forEach((size) => {
-    it(`Should create a new demo cTrader account on ${size == 'small' ? 'mobile' : 'desktop'}`, () => {
-      const isMobile = size == 'small' ? true : false
-      cy.c_visitResponsive('appstore/traders-hub', size)
+  sizes.forEach((size) => {
+    it(`Should create a new demo cTrader account on ${size}`, () => {
+      const isMobile = size == 'mobile' ? true : false
+      cy.c_visitResponsive('appstore/traders-hub', { size: size })
       cy.c_checkTradersHubHomePage(isMobile)
       cy.c_closeNotificationHeader()
       cy.c_switchToDemo()

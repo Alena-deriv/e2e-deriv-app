@@ -8,7 +8,7 @@ Cypress.Commands.add('c_TransferBetweenAccounts', (options = {}) => {
     toAccount = {},
     withExtraVerifications = false,
     transferAmount = 10,
-    size = 'large',
+    size = 'desktop',
     sameCurrency = false,
   } = options
   const fromAccountBalance = {

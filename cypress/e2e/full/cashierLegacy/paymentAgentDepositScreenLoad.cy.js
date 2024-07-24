@@ -11,15 +11,14 @@ const cryptoAccount = {
   code: 'BTC',
 }
 
-const screenSizes = ['large', 'small']
+const sizes = ['mobile', 'desktop']
 
-screenSizes.forEach((screenSize) => {
-  describe(`QATEST-165256 - PA: Crypto Deposit screen should load fine for Payment Agent in screen size: ${screenSize}`, () => {
+sizes.forEach((size) => {
+  describe(`QATEST-165256 - PA: Crypto Deposit screen should load fine for Payment Agent in screen size: ${size}`, () => {
     beforeEach(() => {
       cy.clearAllSessionStorage()
-      cy.c_login({ user: 'cashierLegacyPA' })
-      cy.c_visitResponsive('appstore/traders-hub', screenSize)
-      if (screenSize == 'small') {
+      cy.c_login({ user: 'cashierLegacyPA', size: size })
+      if (size == 'mobile') {
         cy.findByRole('button', { name: 'Options' }).should('be.visible')
       } else {
         cy.findByText('Options').should('be.visible')
@@ -38,7 +37,7 @@ screenSizes.forEach((screenSize) => {
           sessionStorage.getItem(`c_is${cryptoAccount.code}AccountCreated`) ==
           'false'
         ) {
-          cy.c_createNewCurrencyAccount(cryptoAccount, { size: screenSize })
+          cy.c_createNewCurrencyAccount(cryptoAccount, { size: size })
         } else if (
           sessionStorage.getItem(`c_is${cryptoAccount.code}AccountCreated`) ==
           'true'
@@ -52,7 +51,7 @@ screenSizes.forEach((screenSize) => {
       })
       cy.c_checkTotalAssetSummary()
       cy.c_verifyActiveCurrencyAccount(cryptoAccount)
-      if (screenSize == 'small') {
+      if (size == 'mobile') {
         derivApp.commonPage.mobileLocators.header.hamburgerMenuButton().click()
         derivApp.commonPage.mobileLocators.sideMenu.sidePanel().within(() => {
           derivApp.commonPage.mobileLocators.sideMenu.cashierButton().click()

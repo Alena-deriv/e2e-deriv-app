@@ -1,20 +1,20 @@
 import { generateEpoch } from '../../../support/helper/utility'
 
 describe('QATEST-5569: Verify MF Signup flow', () => {
-  let size = ['small', 'desktop']
+  let sizes = ['mobile', 'desktop']
   let country = Cypress.env('countries').ES
   let nationalIDNum = Cypress.env('nationalIDNum').ES
   let taxIDNum = Cypress.env('taxIDNum').ES
   let currency = Cypress.env('accountCurrency').EUR
 
-  size.forEach((size) => {
-    it(`Verify I can signup for an MF demo and real account on ${size == 'small' ? 'mobile' : 'desktop'}`, () => {
-      const isMobile = size == 'small' ? true : false
+  sizes.forEach((size) => {
+    it(`Verify I can signup for an MF demo and real account on ${size}`, () => {
+      const isMobile = size == 'mobile' ? true : false
       const signUpEmail = `sanity${generateEpoch()}mf${
         Cypress.isProd ? '@cypressderivapp.mailisk.net' : '@deriv.com'
       }`
-      cy.c_setEndpoint(signUpEmail, size)
-      cy.c_demoAccountSignup(country, signUpEmail, size)
+      cy.c_setEndpoint(signUpEmail, { size: size })
+      cy.c_demoAccountSignup(country, signUpEmail, { size: size })
       cy.c_generateRandomName().then((firstName) => {
         cy.c_personalDetails(
           firstName,

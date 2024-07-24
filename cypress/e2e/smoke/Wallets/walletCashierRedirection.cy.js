@@ -1,9 +1,8 @@
 describe('QATEST-139905 - Mobile wallet card redirection', () => {
   beforeEach(() => {
-    cy.c_login({ user: 'walletloginEmail' })
+    cy.c_login({ user: 'walletloginEmail', app: 'wallets', size: 'mobile' })
   })
-  it('should be able to switch and open deposit, withdraw and transfer in all the available wallets in Responsive', () => {
-    cy.c_visitResponsive('/', 'small')
+  it('should be able to switch and open deposit, withdraw and transfer in all the available wallets in Mobile', () => {
     switchAllAvailableWallets()
   })
 })

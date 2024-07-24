@@ -28,8 +28,8 @@ describe('QATEST-4760 Onfido Expired document.', () => {
       maxRetries: 5,
     })
     /* Access BO */
-    cy.c_visitResponsive('/', 'large')
-    cy.c_visitBackOffice({ login: true })
+    cy.c_visitResponsive('/', { size: 'desktop' })
+    cy.c_visitBackOffice()
     cy.findByText('Client Management').click()
     cy.findByPlaceholderText('email@domain.com')
       .should('exist')
@@ -48,12 +48,12 @@ describe('QATEST-4760 Onfido Expired document.', () => {
       'not.exist'
     )
     /* Check no cashier lock on FE */
-    cy.c_visitResponsive('/cashier/deposit', 'small')
+    cy.c_visitResponsive('/cashier/deposit', { size: 'mobile' })
     cy.findByText('Deposit via bank wire, credit card, and e-wallet').should(
       'be.visible'
     )
     /* Check on POI page */
-    cy.c_visitResponsive('/account/proof-of-identity', 'small')
+    cy.c_visitResponsive('/account/proof-of-identity', { size: 'mobile' })
     cy.contains('Your document has expired.').should('be.visible')
     cy.c_closeNotificationHeader()
   })

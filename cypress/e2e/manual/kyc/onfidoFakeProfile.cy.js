@@ -6,7 +6,7 @@ describe('QATEST-4777 Onfido fake profile.', () => {
     cy.c_login()
   })
   it('Should show unwelcome login ID in BO.', () => {
-    cy.c_visitResponsive('/account/personal-details', 'small')
+    cy.c_visitResponsive('/account/personal-details', { size: 'mobile' })
     cy.findByTestId('dt_first_name')
       .clear()
       .type(generateRandomName({ fakeProfile: true }))
@@ -20,8 +20,8 @@ describe('QATEST-4777 Onfido fake profile.', () => {
       'Please submit your proof of identity and proof of address to verify your account and continue trading.'
     ).should('be.visible')
     /* Access BO to check Un welcome Login ID status is there */
-    cy.c_visitResponsive('/', 'large')
-    cy.c_visitBackOffice({ login: true })
+    cy.c_visitResponsive('/', { size: 'desktop' })
+    cy.c_visitBackOffice()
     cy.findByText('Client Management').click()
     cy.findByPlaceholderText('email@domain.com')
       .should('exist')
@@ -34,7 +34,7 @@ describe('QATEST-4777 Onfido fake profile.', () => {
     )
     cy.contains('fake profile info - pending POI').should('be.visible')
     /*submit poi */
-    cy.c_visitResponsive('/account/personal-details', 'small')
+    cy.c_visitResponsive('/account/personal-details', { size: 'mobile' })
     cy.get('.notifications-toggle__icon-wrapper').click()
     cy.findByText('Go to my account settings').click()
     cy.get('select[name="country_input"]').select('Colombia')
@@ -69,7 +69,7 @@ describe('QATEST-4777 Onfido fake profile.', () => {
     })
     cy.c_closeNotificationHeader()
     /* submit POA */
-    cy.c_visitResponsive('/account/proof-of-address', 'small')
+    cy.c_visitResponsive('/account/proof-of-address', { size: 'mobile' })
     cy.findByRole('button', { name: 'Save and submit' }).should(
       'not.be.enabled'
     )
@@ -89,7 +89,7 @@ describe('QATEST-4777 Onfido fake profile.', () => {
       'Please submit your proof of identity and proof of address to verify your account and continue trading.'
     ).should('not.exist')
     /* Check BO again, no Unwelcome Login ID status should be present */
-    cy.c_visitResponsive('/', 'large')
+    cy.c_visitResponsive('/', { size: 'desktop' })
     cy.c_visitBackOffice({ login: false })
     cy.findByText('Client Management').click()
     cy.findByPlaceholderText('email@domain.com')

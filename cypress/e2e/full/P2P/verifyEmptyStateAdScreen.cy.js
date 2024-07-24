@@ -1,7 +1,6 @@
 describe('QATEST-2538 Empty State/Buy Sell Page', () => {
   beforeEach(() => {
-    cy.c_login({ user: 'p2pVerifyEmptyStateAdScreen' })
-    cy.c_visitResponsive('/appstore/traders-hub', 'small')
+    cy.c_login({ user: 'p2pVerifyEmptyStateAdScreen', size: 'mobile' })
   })
 
   it('Should be able to see an empty state of ads and verify message is displayed.', () => {

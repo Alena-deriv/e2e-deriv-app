@@ -91,10 +91,10 @@ function switchBetweenDemoandReal() {
 
 describe('QATEST-157196 Demo and Real Wallet Switcher', () => {
   beforeEach(() => {
-    cy.c_login({ user: 'walletloginEmail' })
+    cy.c_login({ user: 'walletloginEmail', app: 'wallets' })
   })
   it('Check demo and Real wallet swticher', () => {
-    cy.c_visitResponsive('/', 'large', { rateLimitCheck: true })
+    cy.c_visitResponsive('/', { rateLimitCheck: true, size: 'desktop' })
     fiatWalletcheck() //User should always login to Real fiat wallet dashboard.
     //Clik on all availbale wallets in wallet swticher
     cy.findByTestId('dt_wallets_textfield_icon_right')
@@ -163,10 +163,10 @@ describe('QATEST-157196 Demo and Real Wallet Switcher', () => {
     fiatWalletcheck()
   })
   it(
-    'Responsive - Check demo and Real wallet switcher',
+    'Check demo and Real wallet switcher on mobile',
     { scrollBehavior: false },
     () => {
-      cy.c_visitResponsive('/', 'small')
+      cy.c_visitResponsive('/', { size: 'mobile' })
       cy.c_WaitUntilWalletsPageIsLoaded()
       //User should always login to Real fiat wallet dashboard.
       verifyMobileHomePage()

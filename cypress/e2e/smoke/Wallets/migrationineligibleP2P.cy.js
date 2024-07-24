@@ -1,9 +1,9 @@
 describe('QATEST-154042 -  Client with USD more than 3 months, but registered for P2P', () => {
   beforeEach(() => {
-    cy.c_login({ user: 'walletMigrationP2P' })
+    cy.c_login({ user: 'walletMigrationP2P', app: 'wallets' })
   })
   it('P2P registered client should not see  Wallets - Enable now banner', () => {
-    cy.c_visitResponsive('/', 'large')
+    cy.c_visitResponsive('/', { size: 'desktop' })
     cy.c_checkForBanner()
     cy.findByText('US Dollar').should('be.visible')
     cy.get('#dt_cashier_tab > .dc-text').should('be.visible').click()
@@ -14,8 +14,8 @@ describe('QATEST-154042 -  Client with USD more than 3 months, but registered fo
     cy.findByRole('button', { name: 'Ad details' }).should('be.visible')
     cy.findByRole('button', { name: 'My counterparties' }).should('be.visible')
   })
-  it('Responsive - P2P registered client should not see  Wallets - Enable now banner', () => {
-    cy.c_visitResponsive('/', 'small')
+  it('P2P registered client should not see  Wallets - Enable now banner on mobile', () => {
+    cy.c_visitResponsive('/', { size: 'mobile' })
     cy.findAllByTestId('dt_balance_text_container').should('have.length', '2')
     cy.c_checkForBanner()
     cy.findByText('US Dollar').should('be.visible')

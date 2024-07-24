@@ -4,19 +4,19 @@ import { generateEpoch } from '../../../support/helper/utility'
  DIEL users have to create CR account first. 
 Moved to WIP for now since the feature is still under feature flag.*/
 describe.skip('QATEST-6211: Verify DIEL Signup flow - MF + CR', () => {
-  const size = ['small', 'desktop']
+  const sizes = ['mobile', 'desktop']
   const country = Cypress.env('countries').ZA
   const nationalIDNum = Cypress.env('nationalIDNum').ZA
   const taxIDNum = Cypress.env('taxIDNum').ZA
   const euCurrency = Cypress.env('accountCurrency').EUR
 
-  size.forEach((size) => {
-    it(`Verify I can signup for a DIEL demo and real account on ${size == 'small' ? 'mobile' : 'desktop'}`, () => {
-      const isMobile = size == 'small' ? true : false
+  sizes.forEach((size) => {
+    it(`Verify I can signup for a DIEL demo and real account on ${size}`, () => {
+      const isMobile = size == 'mobile' ? true : false
       const signUpEmail = `sanity${generateEpoch()}dielmfcr@deriv.com`
-      cy.c_setEndpoint(signUpEmail, size)
+      cy.c_setEndpoint(signUpEmail, { size: size })
       Cypress.env('citizenship', country)
-      cy.c_demoAccountSignup(country, signUpEmail, size)
+      cy.c_demoAccountSignup(country, signUpEmail, { size: size })
       if (isMobile) cy.findByTestId('dt_dc_mobile_dialog_close_btn').click()
       else cy.findByTestId('dt_modal_close_icon').click()
       cy.findByText('Take me to Demo account').should('be.visible')

@@ -4,7 +4,7 @@ describe('QATEST-173757: Verify user should be able to reset password when logge
   let pswdResetUrl
   const oldPassword = Cypress.env('credentials').test.masterUser.PSWD
   const newPassword = Cypress.env('credentials').production.masterUser.PSWD
-  const size = ['small', 'desktop']
+  const sizes = ['mobile', 'desktop']
   const tradersHubSharedLocators = derivApp.tradersHubPage.sharedLocators
 
   beforeEach(() => {
@@ -12,8 +12,8 @@ describe('QATEST-173757: Verify user should be able to reset password when logge
       userEmail = Cypress.env('credentials').test.masterUser.ID
     })
   })
-  size.forEach((size) => {
-    it(`Should be able to reset password when user is logged out on ${size === 'small' ? 'mobile' : 'desktop'}`, () => {
+  sizes.forEach((size) => {
+    it(`Should be able to reset password when user is logged out on ${size}`, () => {
       cy.visit('/endpoint', {
         onBeforeLoad(win) {
           win.localStorage.setItem(
@@ -38,10 +38,9 @@ describe('QATEST-173757: Verify user should be able to reset password when logge
           )
         },
       })
-      cy.c_visitResponsive(
-        `${Cypress.env('derivComProdURL')}reset-password`,
-        size
-      )
+      cy.c_visitResponsive(`${Cypress.env('derivComProdURL')}reset-password`, {
+        size: size,
+      })
       cy.get('input#email-reset-password').clear().type(userEmail)
       cy.findByRole('button', { name: 'Reset my password' }).click()
       cy.findByText(
@@ -53,7 +52,7 @@ describe('QATEST-173757: Verify user should be able to reset password when logge
         }
       )
       cy.then(() => {
-        cy.c_visitResponsive(pswdResetUrl, size)
+        cy.c_visitResponsive(pswdResetUrl, { size: size })
       })
       tradersHubSharedLocators
         .resetPasswordModal()

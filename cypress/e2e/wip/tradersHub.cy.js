@@ -1,7 +1,7 @@
 describe('QATEST-5778, QATEST-5781, QATEST-5615', () => {
   beforeEach(() => {
     cy.c_login()
-    cy.c_visitResponsive('/appstore/traders-hub', 'large')
+    cy.c_visitResponsive('/appstore/traders-hub', { size: 'desktop' })
   })
 
   it('should be able to use account selector to verify Real and Demo pages.', () => {

@@ -1,8 +1,7 @@
 describe('QATEST-2853 - Ad details', () => {
   beforeEach(() => {
     cy.clearAllLocalStorage()
-    cy.c_login({ user: 'p2pStandardAccountWithoutAds' })
-    cy.c_visitResponsive('/appstore/traders-hub', 'small')
+    cy.c_login({ user: 'p2pStandardAccountWithoutAds', size: 'mobile' })
   })
 
   it('Should be able to either ad or update ad details in the my profile tab.', () => {

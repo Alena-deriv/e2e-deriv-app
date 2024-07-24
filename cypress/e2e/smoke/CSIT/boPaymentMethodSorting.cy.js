@@ -71,7 +71,7 @@ function prepareTestData() {
 
 describe('QATEST-140196 - Sorting using category in BO Doughflow payment methods management page', () => {
   it('Should check sorting of Payment Methods in BO', () => {
-    cy.c_visitResponsive('/', 'large')
+    cy.c_visitResponsive('/', { size: 'desktop' })
     cy.c_visitBackOffice()
     cy.visit(PMpage)
     prepareTestData()

@@ -8,7 +8,7 @@ describe('QATEST-4249: Bot Builder - Search block menu', () => {
     }
   })
   it('Should login from app.deriv.com, opening DBot and checking of valid/invalid requests in Search bar', () => {
-    cy.c_visitResponsive('/bot#bot_builder', 'large')
+    cy.c_visitResponsive('/bot#bot_builder', { size: 'desktop' })
     cy.c_skipTour()
     cy.findByPlaceholderText('Search')
       .type('Trading')

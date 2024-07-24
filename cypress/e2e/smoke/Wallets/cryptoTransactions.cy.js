@@ -65,7 +65,7 @@ describe('QATEST-98789 - Transfer to crypto accounts and QATEST-98794 View Crypt
   let transferAmount = '0.00003000'
   beforeEach(() => {
     Cypress.prevAppId = 0
-    cy.c_login({ user: 'walletloginEmail' })
+    cy.c_login({ user: 'walletloginEmail', app: 'wallets' })
   })
 
   it(
@@ -74,7 +74,7 @@ describe('QATEST-98789 - Transfer to crypto accounts and QATEST-98794 View Crypt
     () => {
       cy.log('Transfer from Crypto account')
       cy.findAllByText(/Wallet/, { timeout: 10000 }).should('exist')
-      cy.c_visitResponsive('/', 'large')
+      cy.c_visitResponsive('/', { size: 'desktop' })
       cy.c_setupTradeAccount('BTC', false)
       cy.c_switchWalletsAccount('BTC')
       cy.contains('Transfer').click()
@@ -87,7 +87,7 @@ describe('QATEST-98789 - Transfer to crypto accounts and QATEST-98794 View Crypt
 
   it('should be able to view transactions of crypto account', () => {
     cy.log('View Transactions of Crypto account')
-    cy.c_visitResponsive('/', 'large')
+    cy.c_visitResponsive('/', { size: 'desktop' })
     cy.findAllByText(/Wallet/, { timeout: 10000 }).should('exist')
     cy.c_switchWalletsAccount('BTC')
     cy.contains('Transfer').click()
@@ -112,9 +112,9 @@ describe('QATEST-98789 - Transfer to crypto accounts and QATEST-98794 View Crypt
     cy.contains(`-${transferAmount}`).first().should('be.visible')
   })
 
-  it('should be able to perform transfer from crypto account in responsive', () => {
+  it('should be able to perform transfer from crypto account on mobile', () => {
     cy.log('Transfer from Crypto account')
-    cy.c_visitResponsive('/', 'small')
+    cy.c_visitResponsive('/', { size: 'mobile' })
     cy.findAllByText("Trader's Hub").should('have.length', '1')
     cy.c_WaitUntilWalletsPageIsLoaded()
     cy.c_rateLimit({ waitTimeAfterError: 15000, maxRetries: 5 })
@@ -126,9 +126,9 @@ describe('QATEST-98789 - Transfer to crypto accounts and QATEST-98794 View Crypt
     crypto_transfer('Options', transferAmount)
   })
 
-  it('should be able to view transactions of crypto account in responsive', () => {
+  it('should be able to view transactions of crypto account on mobile', () => {
     cy.log('View Transactions of Crypto account')
-    cy.c_visitResponsive('/', 'small')
+    cy.c_visitResponsive('/', { size: 'mobile' })
     cy.c_WaitUntilWalletsPageIsLoaded()
     cy.c_switchWalletsAccountResponsive('BTC')
     cy.contains('Transfer').parent().click()

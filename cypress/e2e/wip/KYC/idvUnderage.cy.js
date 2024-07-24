@@ -3,7 +3,7 @@ import { generateRandomName } from '../../../support/helper/utility'
 describe('QATEST-23076 IDV Underage', () => {
   // Note you will need to add QA provider to qabox
   beforeEach(() => {
-    cy.c_visitResponsive('small')
+    cy.c_visitResponsive('', { size: 'mobile' })
     cy.c_createCRAccount({ country_code: 'gh' })
     cy.c_login()
     cy.c_navigateToPoiResponsive('Republic of QA')

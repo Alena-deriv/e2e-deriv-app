@@ -75,8 +75,8 @@ function addDerivXaccount(status, accountType) {
 
 describe('QATEST-98821 - Add demo derivx account and QATEST-98824 add real derivx account', () => {
   it('should be able to add DerivX USD account', () => {
-    cy.c_login({ user: 'walletloginEmail' })
-    cy.c_visitResponsive('/', 'large')
+    cy.c_login({ user: 'walletloginEmail', app: 'wallets' })
+    cy.c_visitResponsive('/', { size: 'desktop' })
     existingAccountCheck('.wallets-balance__container').then((status) => {
       addDerivXaccount(status, 'Real')
     })
@@ -85,10 +85,10 @@ describe('QATEST-98821 - Add demo derivx account and QATEST-98824 add real deriv
       addDerivXaccount(status, 'Demo')
     })
   })
-  it('should be able to add DerivX USD account in responsive', () => {
+  it('should be able to add DerivX USD account on mobile', () => {
     cy.log('add derivx account')
-    cy.c_login({ user: 'walletloginEmailMobile' })
-    cy.c_visitResponsive('/', 'small')
+    cy.c_login({ user: 'walletloginEmailMobile', app: 'wallets' })
+    cy.c_visitResponsive('/', { size: 'mobile' })
     cy.c_WaitUntilWalletsPageIsLoaded()
     existingAccountCheck('.wallets-card__details-bottom').then((status) => {
       addDerivXaccount(status, 'Real')

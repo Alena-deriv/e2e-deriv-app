@@ -3,18 +3,18 @@ import BotBuilder from '../../../support/pageobjects/dbot/bot_builder_page'
 import BotDashboard from '../../../support/pageobjects/dbot/bot_dashboard_page'
 
 describe('QATEST-99420, QATEST-4179: Import and run custom strategy', () => {
-  const size = ['small', 'desktop']
+  const sizes = ['mobile', 'desktop']
   const botBuilder = new BotBuilder()
   const runPanel = new RunPanel()
   const dashboard = new BotDashboard()
   let totalPL
 
-  size.forEach((size) => {
-    it(`Run Martingale Old strategy on ${size == 'small' ? 'mobile' : 'desktop'}`, () => {
-      const isMobile = size == 'small'
+  sizes.forEach((size) => {
+    it(`Run Martingale Old strategy on ${size}`, () => {
+      const isMobile = size == 'mobile'
       cy.clearAllLocalStorage()
       cy.c_login({ user: 'dBot' })
-      cy.c_visitResponsive('appstore/traders-hub', size)
+      cy.c_visitResponsive('appstore/traders-hub', { size: size })
       //Wait for page to completely load
       cy.findAllByTestId('dt_balance_text_container').should('have.length', '2')
       cy.c_openDbotThub()

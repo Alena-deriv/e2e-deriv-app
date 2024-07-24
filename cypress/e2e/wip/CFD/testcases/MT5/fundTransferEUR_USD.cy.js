@@ -6,9 +6,7 @@ describe('QATEST-37204 - MT5 Deposit & withdrawal for different fiat currencies 
   beforeEach(() => {
     cy.clearCookies()
     cy.clearLocalStorage()
-    cy.c_visitResponsive('/appstore/traders-hub', 'large')
-    //cy.c_login()
-    cy.c_login({ user: 'cfdfundTransferEUR' })
+    cy.c_login({ user: 'cfdfundTransferEUR', size: 'desktop' })
     mt5_tradershub.checkMT5AccountisPresent()
   })
 
