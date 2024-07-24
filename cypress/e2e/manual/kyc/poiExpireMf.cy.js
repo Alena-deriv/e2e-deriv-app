@@ -22,7 +22,7 @@ describe('QATEST-4880 Types of cashier lock when POI expired - MF account', () =
     cy.c_submitPoa()
 
     /* Create MT5 account */
-    cy.c_visitResponsive('/', 'small')
+    cy.c_visitResponsive('/', { size: 'mobile' })
     cy.findByRole('button', { name: 'CFDs' }).click()
     cy.contains('button', 'Get').click()
     cy.findByText('Malta').should('be.visible').click()
@@ -60,14 +60,14 @@ describe('QATEST-4880 Types of cashier lock when POI expired - MF account', () =
     cy.contains('Cashier is locked').should('not.exist')
     cy.contains('POI has expired').should('be.visible')
     /* Check cashier lock on FE */
-    cy.c_visitResponsive('/cashier/deposit', 'small')
+    cy.c_visitResponsive('/cashier/deposit', { size: 'mobile' })
     cy.contains('Cashier is locked').should('be.visible')
     cy.contains(
       'The identification documents you submitted have expired. Please submit valid identity documents to unlock Cashier.'
     ).should('be.visible')
 
     /* Check that user can still continue trading */
-    cy.c_visitResponsive('/', 'small')
+    cy.c_visitResponsive('/', { size: 'mobile' })
     cy.findByRole('button', { name: 'Multipliers' }).click()
     cy.findByRole('button', { name: 'Open' }).click()
     cy.get('div.cq-symbol-select-btn')
