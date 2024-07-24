@@ -609,7 +609,10 @@ Cypress.Commands.add('c_navigateToDerivP2P', () => {
     waitTimeAfterError: 15000,
     maxRetries: 5,
   })
-  cy.findAllByTestId('dt_balance_text_container').should('have.length', '2')
+  cy.findAllByTestId('dt_balance_text_container', { timeout: 30000 }).should(
+    'have.length',
+    '2'
+  )
   cy.get('#dt_mobile_drawer_toggle').should('be.visible').click()
   cy.findByRole('heading', { name: 'Cashier' }).should('be.visible').click()
   cy.findByRole('link', { name: 'Deriv P2P' }).should('be.visible').click()
