@@ -304,6 +304,10 @@ module.exports = defineConfig({
           ID: process.env.E2E_LOGIN_ID_P2P_EMPTYSTATE,
           PSWD: process.env.E2E_QA_ACCOUNT_PASSWORD,
         },
+        p2pCopyAdFloatRateSellAd: {
+          ID: process.env.E2E_LOGIN_ID_P2P_FLOATRATE_COPY_SELLAD,
+          PSWD: process.env.E2E_QA_ACCOUNT_PASSWORD,
+        },
         p2pFilterPaymentMethodBase: {
           ID: process.env.E2E_P2P_FILTER_PM_BASE,
           PSWD: process.env.E2E_QA_ACCOUNT_PASSWORD,
