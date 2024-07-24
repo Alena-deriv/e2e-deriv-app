@@ -268,42 +268,61 @@ Cypress.Commands.add(
   }
 )
 
-Cypress.Commands.add('c_getExistingAdDetailsForValidation', (adType) => {
-  cy.findByTestId('dt_dropdown_container').should('be.visible').click()
-  cy.findByText('Edit').parent().click()
-  cy.findByTestId('offer_amount')
-    .invoke('val')
-    .then((offerAmount) => {
-      sessionStorage.setItem('c_offerAmount', offerAmount)
-    })
-  cy.findByTestId('fixed_rate_type')
-    .invoke('val')
-    .then((rateValue) => {
-      sessionStorage.setItem('c_rateValue', rateValue.trim())
-    })
-  if (adType == 'Sell') {
-    cy.findByTestId('contact_info')
+Cypress.Commands.add(
+  'c_getExistingAdDetailsForValidation',
+  (adType, rateType) => {
+    cy.findByTestId('dt_dropdown_container').should('be.visible').click()
+    cy.findByText('Edit').parent().click()
+    cy.findByTestId('offer_amount')
+      .invoke('val')
+      .then((offerAmount) => {
+        sessionStorage.setItem('c_offerAmount', offerAmount)
+      })
+    if (rateType == 'fixed') {
+      cy.findByTestId('fixed_rate_type')
+        .invoke('val')
+        .then((rateValue) => {
+          sessionStorage.setItem('c_rateValue', rateValue.trim())
+        })
+    } else if (rateType == 'float') {
+      if (adType == 'buy') {
+        cy.findByTestId('float_rate_type')
+          .invoke('val')
+          .then((rateValue) => {
+            sessionStorage.setItem('c_rateValue', rateValue.trim())
+          })
+      } else if (adType == 'sell') {
+        cy.findByTestId('float_rate_type')
+          .invoke('val')
+          .then((rateValue) => {
+            sessionStorage.setItem('c_rateValue', rateValue.trim())
+          })
+      }
+    }
+    if (adType == 'sell') {
+      cy.findByTestId('contact_info')
+        .invoke('text')
+        .then((contactInfo) => {
+          sessionStorage.setItem('c_contactInfo', contactInfo.trim())
+        })
+    }
+    cy.findByTestId('default_advert_description')
       .invoke('text')
-      .then((contactInfo) => {
-        sessionStorage.setItem('c_contactInfo', contactInfo.trim())
+      .then((instructions) => {
+        sessionStorage.setItem('c_instructions', instructions.trim())
+      })
+    cy.findByRole('button', { name: 'Next' }).should('be.enabled').click()
+    cy.findByText('Edit payment details').should('be.visible')
+    cy.get('span[name="order_completion_time"]')
+      .invoke('text')
+      .then((orderCompletionTime) => {
+        sessionStorage.setItem(
+          'c_orderCompletionTime',
+          orderCompletionTime.trim()
+        )
       })
   }
-  cy.findByTestId('default_advert_description')
-    .invoke('text')
-    .then((instructions) => {
-      sessionStorage.setItem('c_instructions', instructions.trim())
-    })
-  cy.findByRole('button', { name: 'Next' }).should('be.enabled').click()
-  cy.findByText('Edit payment details').should('be.visible')
-  cy.get('span[name="order_completion_time"]')
-    .invoke('text')
-    .then((orderCompletionTime) => {
-      sessionStorage.setItem(
-        'c_orderCompletionTime',
-        orderCompletionTime.trim()
-      )
-    })
-})
+)
 
 Cypress.Commands.add(
   'c_copyExistingAd',
@@ -312,8 +331,10 @@ Cypress.Commands.add(
     rateValue,
     instructions,
     orderCompletionTime,
-    contactDetails
+    contactDetails,
+    options = {}
   ) => {
+    const { floatRate = 'false' } = options
     cy.c_getAdTypeAndRateType().then(({ adType, rateType }) => {
       cy.findByTestId('offer_amount')
         .invoke('val')
@@ -323,6 +344,9 @@ Cypress.Commands.add(
             offerAmount === offerAmountFromCopyAdScreen
           )
         })
+      if (floatRate == 'true') {
+        rateType = 'Floating Rate'
+      }
       if (rateType == 'Fixed Rate') {
         cy.findByTestId('fixed_rate_type')
           .invoke('val')
@@ -397,6 +421,8 @@ Cypress.Commands.add(
         .clear()
         .type(parseFloat(offerAmount) + 1)
         .should('have.value', parseFloat(offerAmount) + 1)
+      cy.findByTestId('dt_edit_payment_methods').should('not.exist')
+      cy.findByTestId('dt_edit_counterparty conditions').should('not.exist')
       cy.findByRole('button', { name: 'Cancel' }).should('be.enabled').click()
       cy.findByText(
         "If you choose to cancel, the details you've entered will be lost."

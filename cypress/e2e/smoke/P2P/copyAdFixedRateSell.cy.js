@@ -19,7 +19,7 @@ describe('QATEST-145642 - Copy Ad - Fixed Rate - Sell Ad', () => {
         cy.c_createNewAd('sell')
         cy.c_inputAdDetails(fixedRate, minOrder, maxOrder, 'Sell', 'fixed')
       }
-      cy.c_getExistingAdDetailsForValidation('Sell')
+      cy.c_getExistingAdDetailsForValidation('Sell', 'fixed')
       cy.then(() => {
         cy.get('.wizard__main-step').prev().children().last().click()
         cy.contains('span[class="dc-text"]', 'Sell USD')
