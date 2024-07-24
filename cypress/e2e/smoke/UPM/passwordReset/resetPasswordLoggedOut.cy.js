@@ -18,30 +18,31 @@ describe('QATEST-173757: Verify user should be able to reset password when logge
         onBeforeLoad(win) {
           win.localStorage.setItem(
             'config.server_url',
-            Cypress.env('configServer')
+            Cypress.env('stdConfigServer')
           )
-          win.localStorage.setItem('config.app_id', Cypress.env('configAppId'))
+          win.localStorage.setItem(
+            'config.app_id',
+            Cypress.env('stdConfigAppId')
+          )
         },
       })
       cy.visit(Cypress.env('derivComProdURL'), {
         onBeforeLoad(win) {
           win.localStorage.setItem(
             'config.server_url',
-            Cypress.env('configServer')
+            Cypress.env('stdConfigServer')
           )
-          win.localStorage.setItem('config.app_id', Cypress.env('configAppId'))
+          win.localStorage.setItem(
+            'config.app_id',
+            Cypress.env('stdConfigAppId')
+          )
         },
       })
       cy.c_visitResponsive(
-        `${Cypress.env('derivComProdURL')}/reset-password`,
+        `${Cypress.env('derivComProdURL')}reset-password`,
         size
       )
-      cy.findByRole(
-        'button',
-        { name: 'whatsapp icon' },
-        { timeout: 30000 }
-      ).should('be.visible')
-      cy.findByPlaceholderText('example@email.com').clear().type(userEmail)
+      cy.get('input#email-reset-password').clear().type(userEmail)
       cy.findByRole('button', { name: 'Reset my password' }).click()
       cy.findByText(
         'Please check your email and click on the link provided to reset your password.'

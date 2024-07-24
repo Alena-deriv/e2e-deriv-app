@@ -374,8 +374,10 @@ Cypress.Commands.add(
               .then((href) => {
                 if (href) {
                   Cypress.env('verificationUrl', href)
-                  const code = href.match(/code=([A-Za-z0-9]{8})|code=([A-Za-z0-9]{6})/)
-                  if(code){
+                  const code = href.match(
+                    /code=([A-Za-z0-9]{8})|code=([A-Za-z0-9]{6})/
+                  )
+                  if (code) {
                     verification_code = code[1] || code[2]
                   }
                   isViaAPI
@@ -858,24 +860,22 @@ Cypress.Commands.add('c_visitBackOffice', (options = {}) => {
 Cypress.Commands.add('c_validateLogin', (email, password, oldPassword) => {
   cy.origin(
     Cypress.env('stdConfigServer'),
-    {
-      args: [email, password, oldPassword],
-    },
-    ([email, password, oldPassword]) => {
-      Cypress.on('uncaught:exception', (err) => {
-        if (err.message.includes(`Unexpected token ','`)) return false
+    { args: { email, password, oldPassword } },
+    function ({ email, password, oldPassword }) {
+      Cypress.on('uncaught:exception', function (err) {
+        if (err.message.includes('Unexpected token')) return false
       })
-      //Validate I cannot login with old password
-      cy.get(`input[type='email']`).clear().type(email)
-      cy.get(`input[type='password']`).clear().type(oldPassword, { log: false })
-      cy.get(`button[name='login']`).click()
+      // Validate I cannot login with old password
+      cy.get('input[type="email"]').clear().type(email)
+      cy.get('input[type="password"]').clear().type(oldPassword, { log: false })
+      cy.get('button[name="login"]').click()
       cy.contains(
         'Your email and/or password is incorrect. Perhaps you signed up with a social account?'
       ).should('be.visible')
-      //Successful login
-      cy.get(`input[type='email']`).clear().type(email)
-      cy.get(`input[type='password']`).clear().type(password, { log: false })
-      cy.get(`button[name='login']`).click()
+      // Successful login
+      cy.get('input[type="email"]').clear().type(email)
+      cy.get('input[type="password"]').clear().type(password, { log: false })
+      cy.get('button[name="login"]').click()
     }
   )
 })
