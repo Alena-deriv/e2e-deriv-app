@@ -597,8 +597,8 @@ Cypress.Commands.add('c_waitUntilElementIsFound', (options = {}) => {
       return
     } else if (!el && retry < maxRetries && !found) {
       cy.log(`Retrying... Attempt number: ${retry + 1}`)
-      cy.wait(timeout)
       cy.reload()
+      cy.wait(timeout)
       cy.c_loadingCheck()
       cy.c_closeNotificationHeader()
       cy.c_waitUntilElementIsFound({ ...options, retry: retry + 1 })

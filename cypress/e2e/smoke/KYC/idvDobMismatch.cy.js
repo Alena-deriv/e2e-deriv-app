@@ -1,5 +1,5 @@
 import { generateRandomName } from '../../../support/helper/utility'
-// When triggered multiple times, tests fail due to unverified account details, requiring manual checks; moving to WIP for a proper workaround.
+
 describe('QATEST-23042 IDV DOB Mismatch by Smile Identity provider', () => {
   beforeEach(() => {
     cy.c_createCRAccount({ country_code: 'ke' })
