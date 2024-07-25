@@ -451,7 +451,34 @@ Cypress.Commands.add(
   'c_demoAccountSignup',
   (country, accountEmail, options = {}) => {
     const { language = 'english', size = 'desktop' } = options
+    const maxTries = 5
+    let tries = 0
     cy.fixture('tradersHub/signupLanguageContent.json').then((langData) => {
+      const proceedViaModal = () => {
+        cy.findByText('US Dollar')
+          .should(() => {})
+          .then(($el) => {
+            if ($el.length) return
+          })
+        cy.findByText(lang.accounSignupModal.startYourJourneyHeading)
+          .should(() => {})
+          .then(($el) => {
+            if ($el.length) {
+              cy.log('Proceeding via go to real or demo account modal flow')
+              cy.findByRole('button', {
+                name: lang.accounSignupModal.realAccountCreationBtn,
+              }).click()
+              return
+            } else {
+              if (tries < maxTries) {
+                cy.log('Retrying for go to real or demo account modal...')
+                cy.wait(500)
+                proceedViaModal()
+                tries++
+              } else return
+            }
+          })
+      }
       const lang = langData[language]
       if (Cypress.isProd)
         cy.c_retrieveVerificationLinkUsingMailisk(
@@ -484,25 +511,7 @@ Cypress.Commands.add(
         cy.c_selectCountryOfResidence(country, options)
         cy.c_selectCitizenship(country, options)
         cy.c_enterPassword(options)
-        cy.window().then((win) => {
-          const gbFeaturesCache = win.localStorage.getItem('gbFeaturesCache')
-          if (gbFeaturesCache) {
-            const parsedCache = JSON.parse(gbFeaturesCache)
-            const data = parsedCache[0][1].data.features
-            if (data.show_setup_real_or_go_demo?.defaultValue) {
-              cy.findByText(
-                lang.accounSignupModal.startYourJourneyHeading
-              ).then(($el) => {
-                if ($el.length) {
-                  cy.log('Proceeding via account signup modal flow')
-                  cy.findByRole('button', {
-                    name: lang.accounSignupModal.realAccountCreationBtn,
-                  }).click()
-                }
-              })
-            }
-          }
-        })
+        proceedViaModal()
       })
     })
   }
