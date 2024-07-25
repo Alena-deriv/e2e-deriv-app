@@ -87,6 +87,16 @@ class BotBuilder {
     cy.get('.goog-menuitem.goog-option').contains('Derived').click()
   }
 
+  get volatilityHundredLogo() {
+    return cy.xpath(
+      "//*[name()='use' and contains(@*,'ic-underlying-1HZ100V')]"
+    )
+  }
+
+  get upDownRiseFallLogo() {
+    return cy.xpath("//*[name()='use' and contains(@*,'ic-tradetype-call')]")
+  }
+
   /**
    * Save a strategy from bot builder page
    * @param {*} strategyName File name
