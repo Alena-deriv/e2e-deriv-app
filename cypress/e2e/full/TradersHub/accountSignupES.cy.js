@@ -10,10 +10,6 @@ describe('QATEST-146444: Verify Sign-up Flow in ES Language', () => {
 
   it('Verify I can sign-up using ES language', () => {
     const signUpEmail = `sanity${generateEpoch()}es@deriv.com`
-    cy.c_setEndpoint(signUpEmail, {
-      language: language,
-      size: size,
-    })
     cy.c_demoAccountSignup(country, signUpEmail, {
       language: language,
       size: size,

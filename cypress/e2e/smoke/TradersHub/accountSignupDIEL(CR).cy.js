@@ -13,7 +13,7 @@ describe('QATEST-5554: Verify DIEL Signup flow - CR', () => {
       const isMobile = size == 'mobile' ? true : false
       const signUpEmail = `sanity${generateEpoch()}diel@deriv.com`
       nationalIDNum = generateRandomNumber(13)
-      cy.c_setEndpoint(signUpEmail, { size: size })
+
       Cypress.env('citizenship', country)
       cy.c_demoAccountSignup(country, signUpEmail, { size: size })
       cy.findByText('Add a Deriv account').should('be.visible')

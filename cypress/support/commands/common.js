@@ -63,6 +63,9 @@ Cypress.Commands.add('c_visitResponsive', (path, options = {}) => {
     cy.log('Trader Hub Selected')
   }
 
+  if (path.includes('action=signup')) {
+    cy.findByRole('dialog').should('be.visible')
+  }
   if (!enablePasskey) {
     cy.c_disablePasskey()
   }

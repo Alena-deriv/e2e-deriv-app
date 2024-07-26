@@ -62,10 +62,13 @@ Cypress.Commands.add('c_completeTradersHubTour', (options = {}) => {
 })
 
 Cypress.Commands.add('c_enterValidEmail', (signUpMail, options = {}) => {
-  const { language = 'english' } = options
+  const { language = 'english', size = 'mobile' } = options
   cy.fixture('tradersHub/signupLanguageContent.json').then((langData) => {
     const lang = langData[language]
-    cy.visit(`${Cypress.env('derivComProdURL')}${lang.urlCode}/signup/`)
+    cy.c_visitResponsive(
+      `${Cypress.env('derivComProdURL')}${lang.urlCode}/signup/`,
+      { size: size }
+    )
     cy.findByPlaceholderText(lang.signUpForm.emailTxtBox)
       .as('email')
       .should('be.visible')
@@ -449,10 +452,16 @@ Cypress.Commands.add('c_addAccountMF', (type, options = {}) => {
 
 Cypress.Commands.add(
   'c_demoAccountSignup',
-  (country, accountEmail, options = {}) => {
+  (country, signUpEmail, options = {}) => {
     const { language = 'english', size = 'desktop' } = options
     const maxTries = 5
     let tries = 0
+    if (Cypress.isProd)
+      signUpEmail = signUpEmail.replace(
+        '@deriv.com',
+        '@cypressderivapp.mailisk.net'
+      )
+    cy.log(`Running tests in ${language} language`)
     cy.fixture('tradersHub/signupLanguageContent.json').then((langData) => {
       const proceedViaModal = () => {
         cy.findByText('US Dollar')
@@ -480,14 +489,24 @@ Cypress.Commands.add(
           })
       }
       const lang = langData[language]
+      cy.c_setEndpoint(`${Cypress.env('derivComProdURL')}${lang.urlCode}/`, {
+        size: size,
+      })
+      cy.c_setEndpoint(`/endpoint?lang=${lang.urlCode}`, { size: size })
+      cy.c_visitResponsive('/', { size: size })
+      cy.findByRole('button', { name: lang.signUpForm.signUpBtn }).should(
+        'be.enabled'
+      )
+      cy.c_enterValidEmail(signUpEmail, options)
+
       if (Cypress.isProd)
         cy.c_retrieveVerificationLinkUsingMailisk(
-          accountEmail.split('@')[0],
+          signUpEmail.split('@')[0],
           'One more step to create your account',
           Math.floor((Date.now() - 3000) / 1000),
           60000
         )
-      else cy.c_emailVerification('account_opening_new.html', accountEmail)
+      else cy.c_emailVerification('account_opening_new.html', signUpEmail)
 
       cy.then(() => {
         cy.c_visitResponsive(Cypress.env('verificationUrl'), {
@@ -517,33 +536,32 @@ Cypress.Commands.add(
   }
 )
 
-Cypress.Commands.add('c_setEndpoint', (signUpMail, options = {}) => {
-  const { language = 'english', size = 'desktop' } = options
-  cy.log(language)
-  cy.fixture('tradersHub/signupLanguageContent.json').then((langData) => {
-    const lang = langData[language]
-    cy.visit(`${Cypress.env('derivComProdURL')}${lang.urlCode}/`, {
-      onBeforeLoad(win) {
-        if (!Cypress.isProd) {
-          win.localStorage.setItem(
-            'config.server_url',
-            Cypress.env('configServer')
-          )
-          win.localStorage.setItem('config.app_id', Cypress.env('configAppId'))
-        }
-      },
-    })
-    cy.c_visitResponsive(`/endpoint?lang=${lang.urlCode}`, { size: size })
-    if (!Cypress.isProd) {
-      localStorage.setItem('config.server_url', Cypress.env('stdConfigServer'))
-      localStorage.setItem('config.app_id', Cypress.env('stdConfigAppId'))
-    }
-
-    cy.findByRole('button', { name: lang.signUpForm.signUpBtn }).should(
-      'not.be.disabled'
+Cypress.Commands.add('c_setEndpoint', (path, options = {}) => {
+  const { size = Cypress.env('defaultViewPortSize') } = options
+  if (size == 'mobile') {
+    cy.viewport('iphone-xr')
+  } else if (size == 'tablet') {
+    cy.viewport('ipad-2')
+  } else if (size == 'desktop') {
+    cy.viewport('macbook-16')
+  } else {
+    throw new Error(
+      'Incorrect Size provided please provide one of the following: mobile, tablet or desktop'
     )
-    cy.c_enterValidEmail(signUpMail, options)
+  }
+  cy.visit(path, {
+    onBeforeLoad(win) {
+      if (!Cypress.isProd) {
+        win.localStorage.setItem(
+          'config.server_url',
+          Cypress.env('stdConfigServer')
+        )
+        win.localStorage.setItem('config.app_id', Cypress.env('stdConfigAppId'))
+      }
+    },
   })
+  cy.log(`Set server: ${Cypress.env('stdConfigServer')}`)
+  cy.log(`Set appID: ${Cypress.env('stdConfigAppId')}`)
 })
 
 Cypress.Commands.add('c_validateEUDisclaimer', () => {

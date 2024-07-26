@@ -37,7 +37,7 @@ describe('QATEST-707 - Create crypto account', () => {
     it(`should be able to create crypto account from Traders Hub on ${size}`, () => {
       const isMobile = size == 'mobile' ? true : false
       const signUpEmail = `sanity${generateEpoch()}crypto@deriv.com`
-      cy.c_setEndpoint(signUpEmail, { size: size })
+
       cy.c_demoAccountSignup(country, signUpEmail, { size: size })
       cy.findByText('Add a Deriv account').should('be.visible')
       cy.c_generateRandomName().then((firstName) => {

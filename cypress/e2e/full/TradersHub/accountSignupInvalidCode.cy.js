@@ -7,7 +7,11 @@ describe('QATEST-5547: Verify signup with invalid verification code', () => {
   sizes.forEach((size) => {
     it(`Verify user cant proceed to signup with invalid verification code on ${size}`, () => {
       const signUpEmail = `sanity${generateEpoch()}invl@deriv.com`
-      cy.c_setEndpoint(signUpEmail, { size: size })
+      cy.c_setEndpoint(`${Cypress.env('derivComProdURL')}`, {
+        size: size,
+      })
+      cy.c_setEndpoint(`/endpoint`, { size: size })
+      cy.c_enterValidEmail(signUpEmail, { size: size })
       cy.c_emailVerification('account_opening_new.html', signUpEmail)
       cy.then(() => {
         cy.c_visitResponsive(
@@ -24,7 +28,7 @@ describe('QATEST-5547: Verify signup with invalid verification code', () => {
         cy.findByRole('button', {
           name: 'Try again',
         }).click()
-        cy.c_setEndpoint(signUpEmail, { size: size })
+        cy.c_enterValidEmail(signUpEmail, { size: size })
         cy.c_visitResponsive(Cypress.env('verificationUrl'), {
           size: size,
         }).then(() => {

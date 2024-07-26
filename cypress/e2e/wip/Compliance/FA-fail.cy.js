@@ -11,7 +11,7 @@ describe('QATEST-5168 MF financial assessment (Appropriateness Test) - Fail scen
     it(`should check FA on ${size}`, () => {
       const isMobile = size == 'mobile' ? true : false
       const signUpEmail = `sanity${generateEpoch()}mf@deriv.com`
-      cy.c_setEndpoint(signUpEmail, { size: size })
+
       cy.c_demoAccountSignup(country, signUpEmail, { size: size })
       cy.c_generateRandomName().then((firstName) => {
         cy.c_personalDetails(

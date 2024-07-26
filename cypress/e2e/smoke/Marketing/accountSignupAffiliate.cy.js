@@ -17,7 +17,7 @@ describe('QATEST-122929 - Creating account with affiliate token', () => {
       })
 
       const signUpEmail = `sanity${generateEpoch()}affiliate@deriv.com`
-      cy.c_setEndpoint(signUpEmail, { size: size })
+
       cy.c_demoAccountSignup(countryIDV, signUpEmail, {
         size: size,
       })

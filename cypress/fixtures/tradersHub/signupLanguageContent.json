@@ -3,7 +3,7 @@
         "shortCode": "ES",
         "urlCode": "es",
         "signUpForm": {
-            "signUpBtn": "Iniciar sesión",
+            "signUpBtn": "Crear cuenta",
             "emailTxtBox": "Correo electrónico",
             "createDemoAccTxt": "Crear cuenta demo",
             "checkMailTxt": "Compruebe su correo electrónico"
