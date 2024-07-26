@@ -1,6 +1,6 @@
 describe('QATEST-153921 -  Client without VRTC', () => {
   beforeEach(() => {
-    cy.c_login({ user: 'walletMigrationNoVRTC', app: 'wallets' })
+    cy.c_login({ user: 'walletMigrationNoVRTC' })
   })
   it('Client without VRTC should not see  Wallets - Enable now banner', () => {
     cy.c_visitResponsive('/', { size: 'desktop' })
@@ -21,7 +21,7 @@ describe('QATEST-153921 -  Client without VRTC', () => {
 
 describe('QATEST-154139 -  Client with only VRTC', () => {
   beforeEach(() => {
-    cy.c_login({ user: 'walletMigrationVRTConly', app: 'wallets' })
+    cy.c_login({ user: 'walletMigrationVRTConly' })
   })
   it('Client with only VRTC should not see  Wallets - Enable now banner', () => {
     cy.c_visitResponsive('/', { size: 'desktop' })

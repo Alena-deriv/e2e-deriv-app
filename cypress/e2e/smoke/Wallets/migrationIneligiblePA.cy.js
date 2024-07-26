@@ -1,6 +1,6 @@
 describe('QATEST-154043 - Client with USD more than 3 months & Payment agent', () => {
   beforeEach(() => {
-    cy.c_login({ user: 'walletMigrationPA', app: 'wallets' })
+    cy.c_login({ user: 'walletMigrationPA' })
   })
   it('Client with USD more than 3 months & PA should not see  Wallets - Enable now banner', () => {
     cy.c_visitResponsive('/', { size: 'desktop' })
@@ -35,7 +35,7 @@ describe('QATEST-154043 - Client with USD more than 3 months & Payment agent', (
 })
 describe('QATEST-154263 - Client with USD more than 3 months & used PA in recently', () => {
   beforeEach(() => {
-    cy.c_login({ user: 'walletMigrationPAclient', app: 'wallets' })
+    cy.c_login({ user: 'walletMigrationPAclient' })
   })
   it('Should not see  Wallets - Enable now banner', () => {
     cy.c_visitResponsive('/', { size: 'desktop' })

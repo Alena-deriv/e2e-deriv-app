@@ -1,6 +1,6 @@
 describe('QATEST-154138 -  Client without currency added', () => {
   beforeEach(() => {
-    cy.c_login({ user: 'walletMigrationNoCurrency', app: 'wallets' })
+    cy.c_login({ user: 'walletMigrationNoCurrency' })
   })
   it('Client without currency added should not see  Wallets - Enable now banner', () => {
     cy.c_visitResponsive('/', { size: 'desktop' })

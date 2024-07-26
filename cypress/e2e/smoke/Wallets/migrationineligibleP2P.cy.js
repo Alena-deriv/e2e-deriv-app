@@ -1,6 +1,6 @@
 describe('QATEST-154042 -  Client with USD more than 3 months, but registered for P2P', () => {
   beforeEach(() => {
-    cy.c_login({ user: 'walletMigrationP2P', app: 'wallets' })
+    cy.c_login({ user: 'walletMigrationP2P' })
   })
   it('P2P registered client should not see  Wallets - Enable now banner', () => {
     cy.c_visitResponsive('/', { size: 'desktop' })
