@@ -446,7 +446,7 @@ Cypress.Commands.add(
 )
 
 Cypress.Commands.add('c_loadingCheck', () => {
-  cy.findByTestId('dt_initial_loader').should('not.exist')
+  cy.findByTestId('dt_initial_loader', { timeout: 60000 }).should('not.exist')
 })
 
 /**

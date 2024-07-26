@@ -344,6 +344,10 @@ module.exports = defineConfig({
           ID: process.env.E2E_LOGIN_ID_CASHIER_LEGACY_EUR_NON_CITIZENSHIP,
           PSWD: process.env.E2E_QA_ACCOUNT_PASSWORD,
         },
+        cashierLegacyDoughflow: {
+          ID: process.env.E2E_LOGIN_ID_CASHIER_LEGACY_DOUGHFLOW,
+          PSWD: process.env.E2E_QA_ACCOUNT_PASSWORD,
+        },
         diel: {
           ID: process.env.E2E_DIEL_LOGIN,
           PSWD: process.env.E2E_QA_ACCOUNT_PASSWORD,
@@ -486,6 +490,11 @@ module.exports = defineConfig({
     qaBoxLoginEmail: process.env.E2E_QABOX_LOGIN,
     qaBoxLoginPassword: process.env.E2E_QABOX_PASSWORD,
     qaBOEndpoint: '/d/backoffice/login.cgi',
+    cashierBoUrl: process.env.E2E_CASHIER_BO_URL,
+    cashierBoLogin: process.env.E2E_CASHIER_BO_LOGIN,
+    cashierBoPassword: process.env.E2E_CASHIER_BO_PASSWORD,
+    cashierCreditCard: '5100137278221112',
+    cashierCvvApprove: '568',
     mt5BaseUrl: process.env.E2E_MT5_BASEURL,
     mt5Password: process.env.E2E_QA_ACCOUNT_PASSWORD,
     configServer: process.env.E2E_CONFIG_SERVER,
