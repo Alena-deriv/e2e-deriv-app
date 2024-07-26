@@ -31,21 +31,6 @@ class RunPanel {
   get secondBeforePurchaseText() {
     return cy.get('div.journal__text.journal__text--info').eq(-2)
   }
-
-  transactionAfterFirstLoss = () => {
-    cy.findAllByTestId('dt_transactions_item')
-      .get('.transactions__profit--loss')
-      .last()
-      .parents('.data-list__row--wrapper')
-      .parent()
-      .prev()
-      .within(($el) => {
-        cy.findByTestId('dt_transactions_item').should(
-          'contain.text',
-          '2.00 USD'
-        )
-      })
-  }
 }
 
 export default RunPanel

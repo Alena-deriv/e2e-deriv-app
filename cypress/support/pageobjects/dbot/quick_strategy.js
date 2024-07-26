@@ -18,11 +18,11 @@ class QuickStrategy {
   }
 
   get quickStrategyProfit() {
-    return cy.xpath('//input[@name="profit"]')
+    return cy.findByTestId('dt_qs_profit')
   }
 
   get quickStrategyLoss() {
-    return cy.xpath('//input[@name="loss"]')
+    return cy.findByTestId('dt_qs_loss')
   }
 
   get quickStrategySize() {
@@ -55,6 +55,7 @@ class QuickStrategy {
 
   chooseTradeType = (isMobile = false) => {
     const index = isMobile ? 1 : 3
+    cy.findByTestId('dt_qs_tradetype').should('have.value', 'Rise/Fall').click()
     cy.findAllByTestId('dt_themed_scrollbars')
       .eq(index)
       .should('be.visible')
@@ -69,8 +70,8 @@ class QuickStrategy {
   }
 
   fillUpLossProfitTreshold = () => {
-    this.quickStrategyLoss.type('4')
-    this.quickStrategyProfit.type('9')
+    this.quickStrategyLoss.type('50')
+    this.quickStrategyProfit.type('50')
   }
 }
 
