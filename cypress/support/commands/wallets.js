@@ -139,3 +139,76 @@ Cypress.Commands.add('c_WaitUntilWalletsPageIsLoaded', () => {
     .parent()
     .closest('.wallets-added-mt5__details, .wallets-available-mt5__details')
 })
+Cypress.Commands.add(
+  'c_CreateMT5Account',
+  (mt5AccountType, jurisdiction, options = {}) => {
+    const { isMobile = false } = options
+    cy.get('span.wallets-text').contains(mt5AccountType).click()
+
+    cy.findByText(`Choose a jurisdiction`, { exact: true }).should('be.visible')
+    if (jurisdiction === 'St. Vincent & Grenadines') {
+      cy.findByText(jurisdiction).click()
+    } else if (jurisdiction === 'British Virgin Islands') {
+      cy.findByText(jurisdiction, { exact: true }).click()
+      cy.findByText('I confirm and accept Deriv (BVI) Ltd‘s').click()
+    }
+
+    cy.findByRole('button', { name: 'Next' }).click()
+
+    let expectedText
+    if (mt5AccountType === 'Standard') {
+      expectedText = 'Create a Deriv MT5'
+      cy.get('div').contains(expectedText).should('be.visible')
+      cy.findByPlaceholderText('Deriv MT5 password')
+        .click()
+        .type(Cypress.env('credentials').test.mt5User.PSWD)
+      cy.findByRole('button', { name: 'Create Deriv MT5 password' }).click()
+    } else {
+      expectedText = 'Enter your Deriv MT5 password'
+      cy.get('div').contains(expectedText).should('be.visible')
+      cy.findByPlaceholderText('Deriv MT5 password')
+        .click()
+        .type(Cypress.env('credentials').test.mt5User.PSWD)
+      cy.findByRole('button', { name: 'Add account' }).click()
+    }
+
+    cy.findByText(
+      `Transfer funds from your USD Wallet to your ${mt5AccountType} account to start trading.`
+    ).should('be.visible')
+
+    cy.get(`div:contains("MT5 ${mt5AccountType}USD Wallet0.00 USD")`)
+      .eq(2)
+      .should('be.visible')
+    if (isMobile) {
+      cy.findByRole('button', { name: 'OK' }).should('be.visible').click()
+    } else {
+      cy.findByRole('button', { name: 'Transfer funds' }).should('be.visible')
+      cy.findByRole('button', { name: 'Maybe later' })
+        .should('be.visible')
+        .click()
+    }
+  }
+)
+Cypress.Commands.add('c_migratetoWallet', (size) => {
+  cy.get('#modal_root div')
+    .filter((index, element) => {
+      return Cypress.$(element).text().includes('Introducing WalletsUse')
+    })
+    .eq(2)
+    .should('be.visible')
+
+  cy.findByRole('button', { name: 'Enable now' }).click()
+  cy.findByText("You're almost there!").should('be.visible')
+  cy.findByText(/To complete your Wallet setup/).should('be.visible')
+  cy.findByRole('button', { name: 'Log out' }).should('be.visible').click()
+
+  cy.c_login({ relogin: true, app: 'wallets' })
+
+  cy.c_visitResponsive('/', { size: size })
+
+  cy.findByText('Your Wallets are ready!').should('be.visible')
+  cy.findAllByText(/Explore the exciting new/).should('be.visible')
+  cy.findByRole('button', { name: 'Get started' }).should('be.visible').click()
+
+  cy.findAllByText(/Wallet/, { timeout: 10000 }).should('exist')
+})
